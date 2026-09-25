@@ -35,7 +35,7 @@
   top:38%!important;
   width:min(94vw,1360px)!important;
   height:min(70vh,720px)!important;
-  transform:translate(-50%,-50%) perspective(1100px) rotateX(54deg) rotateZ(-9deg)!important;
+  transform:translate(-50%,-50%) perspective(1100px) rotateX(44deg) rotateZ(-8deg)!important;
 }
 .v6AtlasField svg{z-index:1}
 .v6AtlasField .atlasParticle{z-index:3}
@@ -51,7 +51,7 @@
   display:flex;
   align-items:center;
   gap:9px;
-  transform:translate(-50%,-50%) rotateZ(9deg) rotateX(-54deg);
+  transform:translate(-50%,-50%) rotateZ(8deg) rotateX(-44deg);
   transform-origin:center;
   white-space:nowrap;
   pointer-events:none;
@@ -77,7 +77,7 @@
   z-index:12;
   left:50%;
   top:94%;
-  transform:translate(-50%,-50%) rotateZ(9deg) rotateX(-54deg);
+  transform:translate(-50%,-50%) rotateZ(8deg) rotateX(-44deg);
   display:flex;
   align-items:center;
   gap:10px;
@@ -241,13 +241,13 @@
   filter:drop-shadow(0 0 12px white) drop-shadow(0 0 34px rgba(115,160,255,.44));
   animation:v6WaypointCraft 7.3s cubic-bezier(.18,.58,.25,1) both;
 }
-.v6 .v6Waypoint .v3WorldCopy{bottom:3.8%}
+.v6 .v6Waypoint .v3WorldCopy{bottom:3.8%}\n.v6 .v6Waypoint .v3WorldCopy h2{font-size:clamp(62px,8.2vw,124px);letter-spacing:.1em;padding-left:.1em}
 @keyframes v6BeaconFloat{0%,100%{transform:translate(-50%,-50%) scale(.96)}50%{transform:translate(-50%,-54%) scale(1.04)}}
 @keyframes v6BeaconRing{0%{opacity:.65;transform:scale(.82)}100%{opacity:0;transform:scale(1.38)}}
 @keyframes v6InputResolve{
   0%,10%{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.92);opacity:.22}
   35%{opacity:.85}
-  67%{transform:translate(calc(var(--x)*.18),calc(var(--y)*.18)) rotate(0) scale(.78);opacity:.8}
+  67%{transform:translate(10px,-6px) rotate(0) scale(.78);opacity:.8}
   82%,100%{transform:translate(0,0) rotate(0) scale(.18);opacity:0}
 }
 @keyframes v6RouteReveal{
@@ -294,7 +294,7 @@
   .v6AtlasField{top:35%!important;width:118vw!important;height:58vh!important}
   .v6AtlasAnchor span{font-size:8px;padding:5px 7px}
   .v6AtlasLegend{display:none}
-  .v6AtlasAnchor.anchor-0{transform:translate(-50%,-50%) rotateZ(9deg) rotateX(-54deg) translateX(10px)}
+  .v6AtlasAnchor.anchor-0{transform:translate(-50%,-50%) rotateZ(8deg) rotateX(-44deg) translateX(10px)}
   .v6WaypointWorld{top:36%;width:110vw;height:55vh}
   .v6Beacon .waypoint-mark{width:120px;height:120px}
   .v6WaypointInputs .wi{font-size:8px;padding:6px 8px}
