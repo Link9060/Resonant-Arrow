@@ -1,7 +1,10 @@
 /* Organization */
 .orderScene,.moduleScene,.orbitReveal,.landingScene{overflow:hidden}
-.formingPlanet,.landingPlanet{position:absolute;inset:0}
-.formingPlanet{opacity:0;transform:scale(.72);filter:blur(10px);animation:planetForm 3.2s .6s cubic-bezier(.16,1,.3,1) forwards}
+.landingPlanet{position:absolute;inset:0}
+.persistentPlanet{position:absolute;inset:0;z-index:3;pointer-events:none;transition:opacity 1.4s ease,transform 1.8s cubic-bezier(.16,1,.3,1),filter 1.4s ease}
+.persistentPlanet.pstate-5{opacity:0;transform:scale(.72);filter:blur(10px);animation:planetForm 3.2s .6s cubic-bezier(.16,1,.3,1) forwards}
+.persistentPlanet.pstate-6{opacity:.58;transform:scale(.9);filter:none}
+.persistentPlanet.pstate-7{opacity:1;transform:scale(1);filter:none}
 .orderSweep{position:absolute;z-index:20;left:-15%;top:0;width:22%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.11),transparent);filter:blur(14px);transform:skewX(-9deg);animation:orderSweep 4.8s 1.2s ease-in-out both}
 .orderCopy{position:absolute;z-index:32;left:50%;bottom:7%;transform:translateX(-50%);width:min(820px,90vw);text-align:center}
 .orderCopy small{font-size:8px;letter-spacing:.42em;opacity:0;animation:softReveal 1s 1.4s forwards}
@@ -12,7 +15,6 @@
 @keyframes orderSweep{0%{transform:translateX(-30vw) skewX(-9deg);opacity:0}24%{opacity:1}100%{transform:translateX(145vw) skewX(-9deg);opacity:0}}
 
 /* Module story */
-.moduleScene>.orbitExactShell{opacity:.58;transform:scale(.9)}
 .moduleEyebrow{position:absolute;z-index:35;left:50%;top:7.5%;transform:translateX(-50%);font-size:8px;letter-spacing:.46em;color:rgba(255,255,255,.36)}
 .moduleStories{position:absolute;z-index:40;inset:0;pointer-events:none}
 .moduleStory{position:absolute;width:min(420px,37vw);padding:24px 26px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(135deg,rgba(255,255,255,.065),rgba(255,255,255,.018));backdrop-filter:blur(16px);box-shadow:0 30px 90px rgba(0,0,0,.38);opacity:0}
@@ -26,7 +28,6 @@
 @keyframes moduleBeat{0%{opacity:0;transform:translateY(18px) scale(.96);filter:blur(8px)}18%,78%{opacity:1;transform:none;filter:none}100%{opacity:.16;transform:scale(.985);filter:blur(.5px)}}
 
 /* Orbit reveal */
-.orbitReveal>.orbitExactShell{animation:orbitRevealIn 2.2s cubic-bezier(.16,1,.3,1) both}
 .orbitRevealCopy{position:absolute;z-index:35;left:50%;bottom:6.5%;transform:translateX(-50%);text-align:center;width:min(720px,90vw)}
 .orbitRevealCopy small{font-size:8px;letter-spacing:.46em;color:rgba(255,255,255,.35)}
 .orbitRevealCopy h2{font-size:clamp(64px,9vw,135px);line-height:.9;letter-spacing:.22em;padding-left:.22em;margin:12px 0 18px}
