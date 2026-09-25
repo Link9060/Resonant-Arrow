@@ -27,7 +27,7 @@ export function LostArrowCanvas({mode='wander'}){
     const ctx=canvas?.getContext('2d');
     if(!ctx)return;
 
-    let frame=0,last=performance.now(),started=performance.now(),size=fit(canvas,ctx);
+    let frame=0,last=performance.now(),started=performance.now(),size=fit(canvas,ctx),paused=document.hidden;
     const rnd=seeded(9060);
     const count=96;
     const path=new Path2D(ARROW_MARK_PATH);
@@ -47,7 +47,13 @@ export function LostArrowCanvas({mode='wander'}){
     }));
 
     const resize=()=>{size=fit(canvas,ctx)};
+    const visibility=()=>{
+      paused=document.hidden;
+      last=performance.now();
+      if(!paused&&!frame)frame=requestAnimationFrame(loop);
+    };
     addEventListener('resize',resize,{passive:true});
+    document.addEventListener('visibilitychange',visibility);
 
     function drawArrow(a,alpha,scale,rot,x,y){
       ctx.save();
@@ -63,6 +69,8 @@ export function LostArrowCanvas({mode='wander'}){
     }
 
     function loop(now){
+      frame=0;
+      if(paused)return;
       const dt=Math.min(.034,Math.max(0,(now-last)/1000));
       last=now;
       const elapsed=(now-started)/1000;
@@ -116,6 +124,7 @@ export function LostArrowCanvas({mode='wander'}){
     return()=>{
       cancelAnimationFrame(frame);
       removeEventListener('resize',resize);
+      document.removeEventListener('visibilitychange',visibility);
     };
   },[]);
 
@@ -132,9 +141,10 @@ export function SpaceFieldCanvas({scene}){
     const ctx=canvas?.getContext('2d');
     if(!ctx)return;
 
-    let frame=0,last=performance.now(),size=fit(canvas,ctx);
+    let frame=0,last=performance.now(),size=fit(canvas,ctx),paused=document.hidden;
     const rnd=seeded(5005);
-    const points=Array.from({length:520},()=>({
+    const lowPower=matchMedia('(max-width: 700px)').matches||((navigator.hardwareConcurrency||8)<=4);
+    const points=Array.from({length:lowPower?280:520},()=>({
       x:(rnd()-.5)*2.2,
       y:(rnd()-.5)*2.2,
       z:.04+rnd()*.96,
@@ -143,7 +153,13 @@ export function SpaceFieldCanvas({scene}){
     }));
 
     const resize=()=>{size=fit(canvas,ctx)};
+    const visibility=()=>{
+      paused=document.hidden;
+      last=performance.now();
+      if(!paused&&!frame)frame=requestAnimationFrame(loop);
+    };
     addEventListener('resize',resize,{passive:true});
+    document.addEventListener('visibilitychange',visibility);
 
     function config(s){
       if(s===2)return{speed:.36,alpha:.24,streak:1.2};
@@ -156,6 +172,8 @@ export function SpaceFieldCanvas({scene}){
     }
 
     function loop(now){
+      frame=0;
+      if(paused)return;
       const dt=Math.min(.034,Math.max(0,(now-last)/1000));
       last=now;
       const cfg=config(sceneRef.current);
@@ -196,6 +214,7 @@ export function SpaceFieldCanvas({scene}){
     return()=>{
       cancelAnimationFrame(frame);
       removeEventListener('resize',resize);
+      document.removeEventListener('visibilitychange',visibility);
     };
   },[]);
 
