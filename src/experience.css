@@ -295,3 +295,23 @@ button:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:5px}
  .ax-module-copy p{font-size:13px;max-width:90vw}
  .ax-atlas-anchor span{font-size:9px}.ax-ravin-steps span{font-size:9px}.ax-relay-end{font-size:9px}.ax-waypoint-inputs span{font-size:9px}
 }
+
+/* CINEMATIC COHESION PASS */
+.ax-scene{contain:layout paint}
+.ax-module{background:radial-gradient(ellipse at 50% 35%,rgba(70,105,185,.045),transparent 48%)}
+.ax-module-copy{padding:16px 22px 24px}
+.ax-module-copy h2{text-wrap:balance}
+.ax-atlas-map,.ax-ravin-world,.ax-relay-world,.ax-waypoint-world{will-change:transform,opacity;animation:axWorldArrive 1.35s cubic-bezier(.16,1,.3,1) both}
+.ax-atlas-map{animation-name:axAtlasArrive}
+.ax-ravin-core:after{content:"";position:absolute;inset:-9px;border-radius:50%;border:1px solid rgba(255,255,255,.28);animation:axCoreHeartbeat 2.2s ease-in-out infinite}
+.ax-relay-tower{filter:drop-shadow(0 0 28px rgba(118,160,255,.12))}
+.ax-waypoint-route .route{animation:axRouteEnergy 1.7s linear infinite}
+.ax-waypoint-route .point{animation:axRoutePoint 1.8s ease-in-out infinite}
+.ax-waypoint-route .p2{animation-delay:.22s}.ax-waypoint-route .p3{animation-delay:.44s}
+.ax-orbit-stage{will-change:transform,filter,opacity}
+.ax-final-copy h1,.ax-direction-copy strong{font-kerning:normal}
+@keyframes axWorldArrive{from{opacity:0;transform:translate(-50%,-50%) scale(.86);filter:blur(9px)}to{opacity:1;transform:translate(-50%,-50%) scale(1);filter:none}}
+@keyframes axAtlasArrive{from{opacity:0;transform:translate(-50%,-50%) perspective(1100px) rotateX(52deg) rotateZ(-12deg) scale(.82);filter:blur(8px)}to{opacity:1;transform:translate(-50%,-50%) perspective(1100px) rotateX(44deg) rotateZ(-8deg) scale(1);filter:none}}
+@keyframes axCoreHeartbeat{0%,100%{transform:scale(.78);opacity:.14}50%{transform:scale(1.45);opacity:.56}}
+@keyframes axRouteEnergy{0%{filter:brightness(.8);opacity:.55}50%{filter:brightness(1.6);opacity:1}100%{filter:brightness(.8);opacity:.55}}
+@keyframes axRoutePoint{0%,100%{transform:translate(-50%,-50%) scale(.72);opacity:.55}50%{transform:translate(-50%,-50%) scale(1.35);opacity:1}}
