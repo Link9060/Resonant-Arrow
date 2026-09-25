@@ -5,7 +5,7 @@ function seeded(seed){
   return()=>{s=(Math.imul(s,1664525)+1013904223)|0;return(s>>>0)/4294967296};
 }
 
-export function PixelField(){
+export function PixelField({className=''}){
   const items=useMemo(()=>{
     const rnd=seeded(1741);
     return Array.from({length:220},(_,i)=>({
@@ -20,7 +20,7 @@ export function PixelField(){
     }));
   },[]);
 
-  return <div className="pixelField" aria-hidden="true">
+  return <div className={'pixelField '+className} aria-hidden="true">
     {items.map(p=><i key={p.id} style={{
       '--a':p.a+'rad',
       '--d':p.d+'px',
