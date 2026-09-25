@@ -32,7 +32,7 @@ export function OrbitPlanet({
     const ctx=canvas.getContext('2d');
     if(!ctx)return;
 
-    let frame=0,running=true,width=1,height=1,last=performance.now();
+    let frame=0,running=true,width=1,height=1,last=performance.now(),paused=document.hidden;
     let yaw=0,craftAngle=-.8;
     const pointer={x:0,y:0,inside:false};
 
@@ -45,6 +45,8 @@ export function OrbitPlanet({
     const leave=()=>{pointer.inside=false};
     shell.addEventListener('pointermove',move);
     shell.addEventListener('pointerleave',leave);
+    const onVisibility=()=>{paused=document.hidden;last=performance.now();if(!paused&&!frame)frame=requestAnimationFrame(draw)};
+    document.addEventListener('visibilitychange',onVisibility);
 
     const resize=()=>{
       const b=shell.getBoundingClientRect();
@@ -57,7 +59,8 @@ export function OrbitPlanet({
     resize();
 
     const draw=now=>{
-      if(!running)return;
+      frame=0;
+      if(!running||paused)return;
       const dt=Math.min(.05,Math.max(0,(now-last)/1000));
       last=now;
       const time=now/1000;
@@ -143,6 +146,7 @@ export function OrbitPlanet({
       observer.disconnect();
       shell.removeEventListener('pointermove',move);
       shell.removeEventListener('pointerleave',leave);
+      document.removeEventListener('visibilitychange',onVisibility);
     };
   },[active,introMix,renderer,showCraft,showDestinations]);
 
