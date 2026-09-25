@@ -3,6 +3,7 @@
 @import './orbit-landing.css';
 @import './story.css';
 @import './pass4.css';
+@import './pass5.css';
 
 *{box-sizing:border-box}
 html,body,#root,.app{margin:0;width:100%;height:100%;overflow:hidden;background:#010103;color:#f7f8fb;font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
