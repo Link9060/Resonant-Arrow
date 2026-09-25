@@ -215,7 +215,7 @@ function Chaos(){
     <div className="ax-story-copy">
       <div className="ax-role">YOUR LIFE IS EVERYWHERE</div>
       <h2>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></h2>
-      <p>ARROW is built to connect the movement without flattening everything into one app.</p>
+      <p>Different parts of your life stay distinct — ARROW gives them one shared direction.</p>
     </div>
   </section>;
 }
@@ -228,7 +228,7 @@ function Organize(){
     <div className="ax-story-copy">
       <div className="ax-role">ARROW CONNECTS THE PIECES</div>
       <h2>Chaos becomes <b>direction.</b></h2>
-      <p>The same life. The same information. Now organized into places with a purpose.</p>
+      <p>Nothing disappears. It resolves into focused places — each with one clear job.</p>
     </div>
   </section>;
 }
@@ -238,7 +238,7 @@ function Atlas(){
     <AtlasVisual/>
     <TravelCraft variant="atlas"/>
     <ModuleCopy role="PERSONAL LIFE MAP" name="ATLAS">
-      Each point is something in your digital world. The lines show how your files, projects, links, accounts, and media relate.
+      Your digital world becomes a map: things become points, relationships become lines, and connected context becomes visible.
     </ModuleCopy>
   </section>;
 }
@@ -248,7 +248,7 @@ function Ravin(){
     <RavinVisual/>
     <TravelCraft variant="ravin"/>
     <ModuleCopy role="INTELLIGENCE CORE" name="RAVIN">
-      Understands the context around your world, reasons across it, and helps you act when you ask.
+      Your intelligence layer: understand context, reason across your world, then help turn an answer into action.
     </ModuleCopy>
   </section>;
 }
@@ -258,7 +258,7 @@ function Relay(){
     <RelayVisual/>
     <TravelCraft variant="relay"/>
     <ModuleCopy role="COMMUNICATIONS CENTER" name="RELAY">
-      Keeps conversations, groups, and coordination connected without pulling you away from everything else.
+      Your communications center: people, groups, and coordination stay connected to the rest of your system.
     </ModuleCopy>
   </section>;
 }
@@ -268,7 +268,7 @@ function Waypoint(){
     <WaypointVisual/>
     <TravelCraft variant="waypoint"/>
     <ModuleCopy role="INTENTION & EXECUTION" name="WAYPOINT">
-      Turns messy thoughts, goals, tasks, and time into a clear direction — then surfaces the next move.
+      Your execution layer: capture the mess, choose the destination, and turn it into the next clear move.
     </ModuleCopy>
   </section>;
 }
@@ -277,7 +277,7 @@ function Orbit(){
   return <section className="ax-scene ax-module ax-orbit">
     <div className="ax-orbit-stage"><OrbitPlanet active introMix={1} showDestinations={false} showCore={false} showCraft={true}/></div>
     <ModuleCopy role="CENTRAL NAVIGATION" name="ORBIT">
-      The place you return to — a living center for moving between every part of ARROW.
+      Your central world — the place you return to and navigate outward from, without module labels pinned onto the sphere.
     </ModuleCopy>
   </section>;
 }
@@ -371,6 +371,9 @@ export function ArrowExperience(){
     setScene(0);
   }
 
+  const progress=scene===0?0:scene>=12?100:Math.round((scene/12)*100);
+  const sceneNames=['READY','ALIGN','IGNITION','DIRECTION','CHAOS','CONNECT','ATLAS','RAVIN','RELAY','WAYPOINT','ORBIT','ARROW','EXPLORE'];
+
   const views=[<Intro onStart={begin}/>,<Converge/>,<Ignition/>,<Direction/>,<Chaos/>,<Organize/>,<Atlas/>,<Ravin/>,<Relay/>,<Waypoint/>,<Orbit/>,<Final/>,<Landing onReplay={replay}/>];
 
   return <main className={'arrow-experience scene-'+scene}>
@@ -378,6 +381,7 @@ export function ArrowExperience(){
     <div className="ax-grain"/><div className="ax-vignette"/><div className="ax-ambient"/>
     <header className="ax-brand">RESONANT ASSIST <i>/</i> PROJECT ARROW</header>
     {running&&scene<12?<button className="ax-skip" onClick={skip}>SKIP EXPERIENCE</button>:null}
+    {running&&scene>0&&scene<12?<div className="ax-progress" aria-hidden="true"><i style={{width:progress+'%'}}/><span>{sceneNames[scene]}</span></div>:null}
     <div key={scene} className={'ax-scene-transition t'+scene} aria-hidden="true"/>
     {views[scene]}
   </main>;
