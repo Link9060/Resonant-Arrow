@@ -24,6 +24,7 @@ export function PixelField({className=''}){
     {items.map(p=><i key={p.id} style={{
       '--a':p.a+'rad',
       '--d':p.d+'px',
+      '--d72':(p.d*.72)+'px',
       '--size':p.size+'px',
       '--delay':p.delay+'s',
       '--spin':p.spin+'deg',
