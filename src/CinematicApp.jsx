@@ -103,7 +103,7 @@ export function CinematicApp(){
       </div>
     </section>}
 
-    {scene>=5&&scene<=7?<div className={'persistentPlanet pstate-'+scene}><OrbitPlanet active introMix={scene===5?.74:1}/></div>:null}
+    {scene>=5&&scene<=7?<div className={'persistentPlanet pstate-'+scene}><OrbitPlanet active introMix={scene===5 ? .74 : 1}/></div>:null}
 
     {scene===5&&<section className="orderScene">
       <div className="orderSweep"/>
