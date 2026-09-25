@@ -38,8 +38,8 @@
 @keyframes v4LostWander{
   0%{transform:translate3d(0,0,0) rotate(var(--r0)) scale(var(--s0))}
   24%{transform:translate3d(var(--dx1),var(--dy1),0) rotate(var(--r1)) scale(var(--s1))}
-  58%{transform:translate3d(var(--dx2),var(--dy2),0) rotate(var(--r2)) scale(calc(var(--s0)*.88))}
-  82%{transform:translate3d(calc(var(--dx1)*-.38),calc(var(--dy2)*-.34),0) rotate(calc(var(--r1) + 260deg)) scale(calc(var(--s1)*.95))}
+  58%{transform:translate3d(var(--dx2),var(--dy2),0) rotate(var(--r2)) scale(var(--s0))}
+  82%{transform:translate3d(calc(var(--dx1)*-.38),calc(var(--dy2)*-.34),0) rotate(calc(var(--r1) + 260deg)) scale(var(--s1))}
   100%{transform:translate3d(0,0,0) rotate(calc(var(--r2) + 420deg)) scale(var(--s0))}
 }
 
@@ -72,7 +72,7 @@
 @keyframes v4PixelOut{
   0%{opacity:0;transform:rotate(var(--a)) translateX(0) rotate(0) scale(2)}
   13%{opacity:var(--spark-opacity,.8)}
-  55%{opacity:calc(var(--spark-opacity,.8)*.72)}
+  55%{opacity:.55}
   100%{opacity:0;transform:rotate(var(--a)) translateX(var(--d)) rotate(var(--spin)) scale(.08)}
 }
 
