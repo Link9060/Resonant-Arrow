@@ -1,0 +1,308 @@
+/* Pass 6 — module meaning, Waypoint, Atlas clarity, and cascade cleanup */
+
+/* Base particle field lives here so the cinematic no longer depends on legacy CSS. */
+.v6 .pixelField{position:absolute;left:50%;top:49%;z-index:6}
+.v6 .pixelField i{position:absolute;background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8)}
+
+/* Module roles are meant to be read, not treated like micro-decoration. */
+.v6 .v3WorldCopy small,
+.v6 .v3OrbitCopy small{
+  display:inline-block;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.2;
+  letter-spacing:.2em;
+  color:rgba(255,255,255,.82);
+  text-shadow:0 2px 18px #000;
+}
+.v6 .v3WorldCopy h2,
+.v6 .v3OrbitCopy h2{
+  margin-top:10px;
+}
+.v6 .v3WorldCopy p,
+.v6 .v3OrbitCopy p{
+  max-width:880px;
+  margin-left:auto;
+  margin-right:auto;
+  font-size:17px;
+  line-height:1.58;
+  color:rgba(255,255,255,.8);
+}
+.v6 .v4CopyPlate:before{height:245px}
+
+/* Atlas: every particle belongs to a visible information cluster. */
+.v6AtlasField{
+  top:38%!important;
+  width:min(94vw,1360px)!important;
+  height:min(70vh,720px)!important;
+  transform:translate(-50%,-50%) perspective(1100px) rotateX(54deg) rotateZ(-9deg)!important;
+}
+.v6AtlasField svg{z-index:1}
+.v6AtlasField .atlasParticle{z-index:3}
+.v6AtlasField .group-0{background:#fff;box-shadow:0 0 16px rgba(255,255,255,.95),0 0 36px rgba(160,195,255,.18)}
+.v6AtlasField .group-1{background:#e6efff;box-shadow:0 0 17px rgba(225,237,255,.92),0 0 38px rgba(105,158,255,.2)}
+.v6AtlasField .group-2{background:#d8e6ff;box-shadow:0 0 15px rgba(215,231,255,.9),0 0 34px rgba(130,170,255,.18)}
+.v6AtlasField .group-3{background:#f6f9ff;box-shadow:0 0 18px rgba(255,255,255,.95),0 0 34px rgba(145,180,255,.18)}
+.v6AtlasField .group-4{background:#edf4ff;box-shadow:0 0 16px rgba(240,247,255,.95),0 0 34px rgba(120,160,245,.18)}
+.v6AtlasField line{stroke:rgba(255,255,255,.29)!important;stroke-width:.22!important}
+.v6AtlasAnchor{
+  position:absolute;
+  z-index:8;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  transform:translate(-50%,-50%) rotateZ(9deg) rotateX(-54deg);
+  transform-origin:center;
+  white-space:nowrap;
+  pointer-events:none;
+}
+.v6AtlasAnchor b{
+  width:12px;height:12px;border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 16px white,0 0 36px rgba(118,163,255,.42);
+}
+.v6AtlasAnchor span{
+  padding:6px 9px;
+  border:1px solid rgba(255,255,255,.15);
+  background:rgba(2,3,7,.82);
+  backdrop-filter:blur(9px);
+  font-size:10px;
+  font-weight:750;
+  letter-spacing:.16em;
+  color:rgba(255,255,255,.88);
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+.v6AtlasLegend{
+  position:absolute;
+  z-index:12;
+  left:50%;
+  top:94%;
+  transform:translate(-50%,-50%) rotateZ(9deg) rotateX(-54deg);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 13px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(2,3,7,.8);
+  backdrop-filter:blur(12px);
+  font-size:9px;
+  font-weight:650;
+  letter-spacing:.12em;
+  color:rgba(255,255,255,.64);
+  white-space:nowrap;
+}
+.v6AtlasLegend i{display:block;width:7px;height:7px;border-radius:50%;background:white;box-shadow:0 0 10px white}
+.v6AtlasLegend em{display:block;width:32px;height:1px;background:rgba(255,255,255,.42)}
+.v6 .v3Atlas .v3WorldCopy{bottom:3.8%}
+.v6 .v3Atlas .v3WorldCopy p{max-width:930px}
+
+/* Atlas motion should read as moving across a map instead of through meaningless dust. */
+.v6 .v3Atlas .v3WorldCraft{
+  z-index:18;
+  animation:v6AtlasSurvey 7.3s cubic-bezier(.18,.58,.24,1) both;
+}
+@keyframes v6AtlasSurvey{
+  0%{transform:translate(-65vw,18vh) rotate(-12deg) scale(.32);opacity:0}
+  14%{opacity:1}
+  36%{transform:translate(-25vw,-4vh) rotate(3deg) scale(.58);opacity:.88}
+  58%{transform:translate(-2vw,-13vh) rotate(-4deg) scale(.75);opacity:1}
+  78%{transform:translate(25vw,-18vh) rotate(8deg) scale(.9);opacity:1}
+  100%{transform:translate(67vw,-33vh) rotate(12deg) scale(.38);opacity:0}
+}
+
+/* RAVIN: reveal what the core is doing. */
+.v6RavinThoughts{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.v6RavinThoughts span{
+  position:absolute;
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(10px);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.18em;
+  color:rgba(255,255,255,.68);
+  animation:v6RavinThought 3.1s ease-in-out infinite alternate;
+}
+.v6RavinThoughts span:nth-child(1){left:9%;top:28%}
+.v6RavinThoughts span:nth-child(2){right:8%;top:42%;animation-delay:-1.1s}
+.v6RavinThoughts span:nth-child(3){left:25%;bottom:12%;animation-delay:-2.1s}
+@keyframes v6RavinThought{from{opacity:.34;transform:translateY(5px)}to{opacity:.82;transform:translateY(-5px)}}
+
+/* Relay: endpoints make the signals understandable. */
+.v6RelayLabels span{
+  position:absolute;
+  padding:7px 10px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(10px);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.18em;
+  color:rgba(255,255,255,.7);
+}
+.v6RelayLabels span:nth-child(1){left:47%;top:15%}
+.v6RelayLabels span:nth-child(2){left:9%;bottom:19%}
+.v6RelayLabels span:nth-child(3){right:8%;bottom:21%}
+.v6 .v3RelayWorld .v3Signal{opacity:.42}
+.v6 .v3RelayWorld .v3Packet{box-shadow:0 0 14px white,0 0 24px rgba(115,164,255,.25)}
+
+/* Waypoint: exact target/beacon icon + messy inputs resolving into a route. */
+.v6Waypoint{overflow:hidden}
+.v6WaypointWorld{
+  position:absolute;
+  left:50%;top:40%;
+  width:min(92vw,1240px);
+  height:min(66vh,650px);
+  transform:translate(-50%,-50%);
+  perspective:1100px;
+}
+.v6WaypointGrid{
+  position:absolute;inset:4%;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+  background-size:7% 12%;
+  mask-image:radial-gradient(ellipse,#000 0 24%,transparent 74%);
+  transform:perspective(900px) rotateX(67deg) translateY(8%);
+  opacity:.62;
+}
+.v6Beacon{
+  position:absolute;
+  left:50%;top:46%;
+  transform:translate(-50%,-50%);
+  color:white;
+  filter:drop-shadow(0 0 12px rgba(255,255,255,.6)) drop-shadow(0 0 54px rgba(112,158,255,.36));
+  animation:v6BeaconFloat 4.8s ease-in-out infinite;
+}
+.v6Beacon .waypoint-mark{overflow:visible}
+.v6Beacon .waypoint-mark circle:nth-child(1){animation:v6BeaconRing 2.8s ease-out infinite;transform-origin:24px 24px}
+.v6Beacon .waypoint-mark circle:nth-child(2){animation:v6BeaconRing 2.8s .45s ease-out infinite;transform-origin:24px 24px}
+.beaconGlow{
+  position:absolute;left:50%;top:50%;width:2px;height:2px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 50px 20px rgba(255,255,255,.42),0 0 160px 70px rgba(85,130,235,.18);
+}
+.v6WaypointInputs{position:absolute;inset:0}
+.v6WaypointInputs .wi{
+  position:absolute;left:50%;top:46%;
+  padding:8px 12px;
+  border:1px solid rgba(255,255,255,.13);
+  background:rgba(2,3,7,.74);
+  backdrop-filter:blur(10px);
+  font-size:11px;
+  font-weight:750;
+  letter-spacing:.17em;
+  color:rgba(255,255,255,.74);
+  animation:v6InputResolve 5.8s cubic-bezier(.18,.64,.2,1) infinite;
+}
+.v6WaypointInputs .wi1{animation-delay:-.55s}
+.v6WaypointInputs .wi2{animation-delay:-1.1s}
+.v6WaypointInputs .wi3{animation-delay:-1.65s}
+.v6WaypointRoute{
+  position:absolute;
+  left:50%;top:46%;
+  width:min(43vw,520px);height:80px;
+  transform:translate(65px,-50%);
+  opacity:0;
+  animation:v6RouteReveal 6.4s ease-in-out infinite;
+}
+.v6WaypointRoute .routeLine{
+  position:absolute;left:0;top:50%;width:100%;height:2px;
+  background:linear-gradient(90deg,rgba(255,255,255,.75),rgba(118,162,255,.22),transparent);
+  transform-origin:left;
+  box-shadow:0 0 10px rgba(255,255,255,.16);
+}
+.v6WaypointRoute .routeDot{
+  position:absolute;top:50%;width:9px;height:9px;border-radius:50%;background:white;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 13px white;
+}
+.v6WaypointRoute .d1{left:28%}.v6WaypointRoute .d2{left:57%}.v6WaypointRoute .d3{left:84%}
+.v6WaypointRoute .routeArrow{position:absolute;right:0;top:50%;transform:translateY(-54%);font-size:27px;font-weight:300;color:rgba(255,255,255,.78)}
+.v6NextMove{
+  position:absolute;
+  left:81%;top:55%;
+  font-size:10px;
+  font-weight:750;
+  letter-spacing:.19em;
+  color:rgba(255,255,255,.58);
+  opacity:0;
+  animation:v6NextMove 6.4s ease-in-out infinite;
+}
+.v6WaypointCraft{
+  position:absolute;
+  z-index:24;
+  left:50%;top:43%;
+  filter:drop-shadow(0 0 12px white) drop-shadow(0 0 34px rgba(115,160,255,.44));
+  animation:v6WaypointCraft 7.3s cubic-bezier(.18,.58,.25,1) both;
+}
+.v6 .v6Waypoint .v3WorldCopy{bottom:3.8%}
+@keyframes v6BeaconFloat{0%,100%{transform:translate(-50%,-50%) scale(.96)}50%{transform:translate(-50%,-54%) scale(1.04)}}
+@keyframes v6BeaconRing{0%{opacity:.65;transform:scale(.82)}100%{opacity:0;transform:scale(1.38)}}
+@keyframes v6InputResolve{
+  0%,10%{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.92);opacity:.22}
+  35%{opacity:.85}
+  67%{transform:translate(calc(var(--x)*.18),calc(var(--y)*.18)) rotate(0) scale(.78);opacity:.8}
+  82%,100%{transform:translate(0,0) rotate(0) scale(.18);opacity:0}
+}
+@keyframes v6RouteReveal{
+  0%,43%{opacity:0;transform:translate(65px,-50%) scaleX(.04);transform-origin:left}
+  58%,84%{opacity:.85;transform:translate(65px,-50%) scaleX(1);transform-origin:left}
+  100%{opacity:.12;transform:translate(65px,-50%) scaleX(1)}
+}
+@keyframes v6NextMove{0%,58%{opacity:0}70%,88%{opacity:.78}100%{opacity:.2}}
+@keyframes v6WaypointCraft{
+  0%{transform:translate(-62vw,22vh) scale(.3);opacity:0}
+  15%{opacity:1}
+  50%{transform:translate(-14vw,-10vh) rotate(-7deg) scale(.68);opacity:.94}
+  70%{transform:translate(16vw,-12vh) rotate(5deg) scale(.86);opacity:1}
+  100%{transform:translate(66vw,-30vh) rotate(10deg) scale(.38);opacity:0}
+}
+
+/* Orbit should feel like the center of a five-module system, not a fifth content page. */
+.v6 .v3OrbitCamera{top:-15%;bottom:15%}
+.v6 .v3OrbitCopy{bottom:3%}
+.v6 .v3Orbit .orbitExactCanvas{opacity:.92}
+.v6 .v3Orbit .orbitExactCraft{filter:drop-shadow(0 0 12px white) drop-shadow(0 0 34px rgba(110,157,255,.4))}
+.v6 .v3OrbitCopy p{max-width:830px}
+
+/* Scene seams are shorter and subtler so they do not fight the module meaning. */
+.v6 .v4ModuleSeam{animation:v6Seam .72s cubic-bezier(.2,.62,.2,1) both}
+.v6 .v4ModuleSeam:after{opacity:.65}
+@keyframes v6Seam{
+  0%{opacity:0;transform:translate(-56vw,21vh) rotate(-20deg) scale(.5)}
+  24%{opacity:.85}
+  78%{opacity:.7}
+  100%{opacity:0;transform:translate(56vw,-25vh) rotate(-20deg) scale(1)}
+}
+
+/* Final/landing copy includes Waypoint without becoming a tiny sentence. */
+.v6 .v3LandingContent p{max-width:900px}
+
+/* The top chrome recedes during the dramatic final reveal. */
+.v6.scene-11 .brandLockup,.v6.scene-11 .skip{opacity:.18;transition:opacity .8s}
+
+/* Small-screen safeguards */
+@media(max-width:760px){
+  .v6 .v3WorldCopy small,.v6 .v3OrbitCopy small{font-size:10px;letter-spacing:.13em}
+  .v6 .v3WorldCopy p,.v6 .v3OrbitCopy p{font-size:12px}
+  .v6AtlasField{top:35%!important;width:118vw!important;height:58vh!important}
+  .v6AtlasAnchor span{font-size:8px;padding:5px 7px}
+  .v6AtlasLegend{display:none}
+  .v6AtlasAnchor.anchor-0{transform:translate(-50%,-50%) rotateZ(9deg) rotateX(-54deg) translateX(10px)}
+  .v6WaypointWorld{top:36%;width:110vw;height:55vh}
+  .v6Beacon .waypoint-mark{width:120px;height:120px}
+  .v6WaypointInputs .wi{font-size:8px;padding:6px 8px}
+  .v6WaypointRoute{width:46vw;transform:translate(45px,-50%)}
+  .v6NextMove{font-size:8px}
+  .v6RavinThoughts span,.v6RelayLabels span{font-size:8px;padding:5px 7px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v6WaypointInputs .wi,.v6WaypointRoute,.v6NextMove,.v6Beacon .waypoint-mark circle{animation:none!important}
+}
