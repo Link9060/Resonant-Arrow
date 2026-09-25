@@ -6,16 +6,16 @@ import{PixelField}from'./PixelField';
 
 const TIMELINE=[
   [0,1],
-  [5200,2],
-  [10800,3],
-  [18400,4],
-  [26000,5],
-  [32500,6],
-  [38500,7],
-  [44500,8],
-  [50500,9],
-  [58500,10],
-  [65000,11],
+  [6400,2],
+  [13800,3],
+  [22000,4],
+  [30000,5],
+  [37000,6],
+  [43000,7],
+  [49000,8],
+  [55000,9],
+  [63500,10],
+  [70500,11],
 ];
 
 function seeded(seed){
@@ -94,7 +94,7 @@ function RelayVisual(){
 
   return <div className="v3RelayWorld" aria-hidden="true">
     <div className="v4RelayGrid"/>
-    <div className="v3Tower"><i/><i/><i/></div>
+    <div className="v3Tower"><i/><i/><i/><b/><b/><b/></div>
     <div className="v3Signal s1"/><div className="v3Signal s2"/><div className="v3Signal s3"/>
     <div className="v4RelayArc a1"/><div className="v4RelayArc a2"/>
     {packets.map(p=><span key={p.id} className="v3Packet" style={{
@@ -188,6 +188,7 @@ export function CinematicApp(){
       <div className="v3WordBreak">
         {['A','R','R','O','W'].map((l,i)=><span key={i}>{l}</span>)}
       </div>
+      <PixelField className="v5TitleParticles"/>
       <div className="v3PreArrow"><ArrowMark size={74} className="v3ArrowUp"/></div>
       <div className="v3PreCopy"><span>EVERYTHING MOVES.</span><b>NOTHING MOVES TOGETHER.</b></div>
     </section>}
