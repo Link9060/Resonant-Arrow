@@ -1,210 +1,275 @@
 import React,{useEffect,useMemo,useRef,useState}from'react';
 import{createRoot}from'react-dom/client';
+import{ArrowMark}from'./ArrowMark';
+import{OrbitPlanet}from'./OrbitPlanet';
 import'./style.css';
 
-const timeline=[
+const TIMELINE=[
   [0,1],
-  [2600,2],
-  [6900,3],
-  [11200,4],
-  [16400,5],
-  [21600,6],
-  [28600,7],
-  [34600,8],
-  [39600,9],
+  [5400,2],
+  [11200,3],
+  [19200,4],
+  [27500,5],
+  [36000,6],
+  [48000,7],
+  [59000,8],
+  [66000,9],
 ];
 
-function Arrow({className='',style}){return <div className={'arrow '+className} style={style}><span/><span/><span/></div>}
+function seeded(seed){
+  let s=seed|0;
+  return()=>{s=(Math.imul(s,1664525)+1013904223)|0;return(s>>>0)/4294967296};
+}
 
 function App(){
   const[scene,setScene]=useState(0);
   const[running,setRunning]=useState(false);
-  const canvas=useRef(null);
+  const canvasRef=useRef(null);
   const timers=useRef([]);
-  const mouse=useRef({x:0,y:0});
 
-  const ghosts=useMemo(()=>Array.from({length:56},(_,i)=>({
-    x:4+((i*37)%92),
-    y:4+((i*61)%90),
-    r:((i*47)%220)-110,
-    s:.22+((i*29)%70)/100,
-    o:.025+((i*17)%8)/100
-  })),[]);
+  const lostArrows=useMemo(()=>{
+    const rnd=seeded(9060);
+    return Array.from({length:68},(_,i)=>{
+      const depth=rnd();
+      const size=9+depth*21;
+      return{
+        id:i,
+        left:rnd()*100,
+        top:rnd()*100,
+        size,
+        opacity:.035+depth*.13,
+        blur:(1-depth)*1.15,
+        dx1:(rnd()-.5)*150,
+        dy1:(rnd()-.5)*130,
+        dx2:(rnd()-.5)*190,
+        dy2:(rnd()-.5)*160,
+        r0:rnd()*360,
+        r1:(rnd()-.5)*900,
+        r2:(rnd()-.5)*1200,
+        dur:7+rnd()*12,
+        delay:-rnd()*14,
+      };
+    });
+  },[]);
 
-  const particles=useMemo(()=>Array.from({length:90},(_,i)=>({
-    a:(i*137.5)%360,
-    d:70+((i*83)%420),
-    s:2+((i*19)%5),
-    delay:(i%15)*.035
-  })),[]);
+  const burstParticles=useMemo(()=>{
+    const rnd=seeded(1741);
+    return Array.from({length:150},(_,i)=>({
+      id:i,
+      a:rnd()*Math.PI*2,
+      d:110+rnd()*520,
+      size:.7+rnd()*3.4,
+      delay:rnd()*.42,
+      spin:(rnd()-.5)*720,
+    }));
+  },[]);
+
+  useEffect(()=>{
+    const c=canvasRef.current,ctx=c.getContext('2d');
+    if(!ctx)return;
+    let frame=0,w=innerWidth,h=innerHeight,dpr=1,last=performance.now();
+    const rnd=seeded(5005);
+    let dust=Array.from({length:360},()=>({
+      x:(rnd()-.5)*2,
+      y:(rnd()-.5)*2,
+      z:rnd()*.98+.02,
+      s:.25+rnd()*1.15,
+      drift:(rnd()-.5)*.001,
+    }));
+    const resize=()=>{
+      w=innerWidth;h=innerHeight;
+      dpr=Math.min(devicePixelRatio||1,1.5);
+      c.width=Math.round(w*dpr);c.height=Math.round(h*dpr);
+      c.style.width=w+'px';c.style.height=h+'px';
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    };
+    resize();addEventListener('resize',resize);
+
+    const draw=now=>{
+      const dt=Math.min(.05,(now-last)/1000);last=now;
+      ctx.clearRect(0,0,w,h);
+      ctx.save();ctx.translate(w/2,h/2);
+      const travel=scene===3?1:scene===2?.42:scene===4?.18:scene===8?.08:.025;
+      const alphaBase=scene===3?.36:scene===2?.24:.12;
+
+      for(const p of dust){
+        p.z-=travel*dt*.44;
+        p.x+=p.drift*dt*18;
+        if(p.z<.018){p.z=1;p.x=(rnd()-.5)*2;p.y=(rnd()-.5)*2}
+        const scale=1/p.z;
+        const x=p.x*w*.52*scale;
+        const y=p.y*h*.54*scale;
+        const prev=Math.min(1,p.z+travel*.05);
+        const px=p.x*w*.52/prev;
+        const py=p.y*h*.54/prev;
+        const a=Math.min(.72,alphaBase+(1-p.z)*.34);
+        if(scene===3||scene===2){
+          ctx.strokeStyle='rgba(220,232,255,'+a+')';
+          ctx.lineWidth=p.s;
+          ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(x,y);ctx.stroke();
+        }else{
+          ctx.globalAlpha=a;
+          ctx.fillStyle='#eaf1ff';
+          ctx.fillRect(x,y,p.s,p.s);
+        }
+      }
+      ctx.globalAlpha=1;ctx.restore();
+      frame=requestAnimationFrame(draw);
+    };
+    frame=requestAnimationFrame(draw);
+    return()=>{cancelAnimationFrame(frame);removeEventListener('resize',resize)};
+  },[scene]);
 
   useEffect(()=>{
     const move=e=>{
-      mouse.current.x=(e.clientX/innerWidth-.5)*2;
-      mouse.current.y=(e.clientY/innerHeight-.5)*2;
-      document.documentElement.style.setProperty('--mx',mouse.current.x);
-      document.documentElement.style.setProperty('--my',mouse.current.y);
+      const mx=(e.clientX/innerWidth-.5)*2;
+      const my=(e.clientY/innerHeight-.5)*2;
+      document.documentElement.style.setProperty('--mx',mx.toFixed(3));
+      document.documentElement.style.setProperty('--my',my.toFixed(3));
     };
     addEventListener('pointermove',move);
     return()=>removeEventListener('pointermove',move);
   },[]);
 
-  useEffect(()=>{
-    const c=canvas.current,ctx=c.getContext('2d');
-    let raf,stars=[];
-    function resize(){
-      const dpr=Math.min(devicePixelRatio||1,1.5);
-      c.width=innerWidth*dpr;c.height=innerHeight*dpr;
-      c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      stars=Array.from({length:680},()=>({
-        x:(Math.random()-.5)*innerWidth*2.1,
-        y:(Math.random()-.5)*innerHeight*2.1,
-        z:Math.random()*.98+.02,
-        w:Math.random()*1.25+.2
-      }));
-    }
-    resize();addEventListener('resize',resize);
-    function draw(){
-      ctx.clearRect(0,0,innerWidth,innerHeight);
-      ctx.save();ctx.translate(innerWidth/2,innerHeight/2);
-      const speeds=[.06,.35,.18,4.4,1.1,.45,.7,1.8,.35,.08];
-      const speed=speeds[scene]||.08;
-      ctx.globalCompositeOperation='lighter';
-      for(const p of stars){
-        p.z-=speed*.0045;
-        if(p.z<.012){p.z=1;p.x=(Math.random()-.5)*innerWidth*2.1;p.y=(Math.random()-.5)*innerHeight*2.1}
-        const sx=p.x/p.z,sy=p.y/p.z;
-        const prev=Math.min(1,p.z+speed*.03);
-        const px=p.x/prev,py=p.y/prev;
-        const alpha=Math.min(.82,(1-p.z)*.7+.035);
-        ctx.strokeStyle='rgba(210,225,255,'+alpha+')';
-        ctx.lineWidth=p.w;
-        ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(sx,sy);ctx.stroke();
-      }
-      ctx.restore();ctx.globalCompositeOperation='source-over';
-      raf=requestAnimationFrame(draw);
-    }
-    draw();
-    return()=>{cancelAnimationFrame(raf);removeEventListener('resize',resize)}
-  },[scene]);
+  useEffect(()=>()=>timers.current.forEach(clearTimeout),[]);
 
+  function clearTimers(){timers.current.forEach(clearTimeout);timers.current=[]}
   function start(){
     if(running)return;
-    setRunning(true);
-    timeline.forEach(([ms,s])=>timers.current.push(setTimeout(()=>setScene(s),ms)));
+    clearTimers();setRunning(true);setScene(1);
+    TIMELINE.slice(1).forEach(([ms,s])=>timers.current.push(setTimeout(()=>setScene(s),ms)));
   }
-
-  useEffect(()=>()=>timers.current.forEach(clearTimeout),[]);
+  function skip(){clearTimers();setRunning(true);setScene(9)}
+  function replay(){clearTimers();setRunning(false);setScene(0)}
 
   const chaos=['MESSAGES','FILES','PROJECTS','PEOPLE','EVENTS','IDEAS','TASKS','MUSIC','NOTES','AI','CALENDAR','MEMORIES'];
   const modules=[
-    ['ATLAS','Your files, ideas, knowledge, and digital world.'],
-    ['RAVIN','Intelligence that understands the context around you.'],
-    ['RELAY','Communication designed around the people that matter.'],
-    ['ORBIT','One place to move through everything.']
+    ['01','ATLAS','Your files, ideas, knowledge, and the things you own — mapped into one connected world.'],
+    ['02','RAVIN','An intelligence layer that can understand the context surrounding everything else.'],
+    ['03','RELAY','Communication, planning, and coordination without breaking the rest of your flow.'],
+    ['04','ORBIT','The place you return to. A living map of the entire ARROW system.'],
   ];
 
-  return <main className={'scene scene-'+scene+(running?' running':'')}>
-    <canvas ref={canvas}/>
-    <div className="grain"/>
-    <div className="vignette"/>
-    <div className="ambientGlow"/>
-    <header>RESONANT ASSIST <i>/</i> PROJECT ARROW</header>
+  return <main className={'app scene-'+scene+(running?' is-running':'')}>
+    <canvas ref={canvasRef} className="ambientCanvas"/>
+    <div className="grain"/><div className="vignette"/><div className="edgeGlow"/>
+    <div className="brandLockup">RESONANT ASSIST <i>/</i> PROJECT ARROW</div>
+    {running&&scene<9?<button className="skip" onClick={skip}>SKIP EXPERIENCE</button>:null}
 
-    {scene===0&&<>
-      <div className="idleWord">ARROW</div>
-      <div className="ghostField">{ghosts.map((g,i)=><Arrow key={i} className="ghost" style={{left:g.x+'%',top:g.y+'%',transform:'rotate('+g.r+'deg) scale('+g.s+')',opacity:g.o}}/>)}</div>
-      <button className="initiate" onClick={start} aria-label="Start Project Arrow experience">
-        <div className="halo h1"/><div className="halo h2"/>
-        <Arrow className="heroArrow"/>
-        <span>FIND YOUR DIRECTION</span>
-        <small>CLICK TO BEGIN</small>
-      </button>
-    </>}
-
-    {scene===1&&<>
-      <div className="compression">
-        <div className="idleWord">ARROW</div>
-        <div className="ghostField collapsing">{ghosts.map((g,i)=><Arrow key={i} className="ghost" style={{left:g.x+'%',top:g.y+'%',transform:'rotate('+g.r+'deg) scale('+g.s+')',opacity:g.o}}/>)}</div>
+    {scene===0&&<section className="introScene">
+      <div className="lostField" aria-hidden="true">
+        {lostArrows.map(a=><ArrowMark key={a.id} size={a.size} className="lostArrow" style={{
+          left:a.left+'%',top:a.top+'%',opacity:a.opacity,filter:'blur('+a.blur+'px)',
+          '--dx1':a.dx1+'px','--dy1':a.dy1+'px','--dx2':a.dx2+'px','--dy2':a.dy2+'px',
+          '--r0':a.r0+'deg','--r1':a.r1+'deg','--r2':a.r2+'deg',
+          '--dur':a.dur+'s','--delay':a.delay+'s'
+        }}/>)}
       </div>
-      <div className="chargeCore"><Arrow/></div>
-      <div className="chargeText">EVERYTHING IS MOVING.</div>
-      <div className="chargeText second">CHOOSE A DIRECTION.</div>
-    </>}
+      <div className="introWord">ARROW</div>
+      <button className="startCore" onClick={start}>
+        <span className="coreAura a1"/><span className="coreAura a2"/><span className="coreAura a3"/>
+        <ArrowMark size={62} className="mainMark upright"/>
+        <b>FIND YOUR DIRECTION</b>
+        <small>CLICK TO INITIATE</small>
+      </button>
+      <p className="introHint">Everything is moving. Most of it is moving separately.</p>
+    </section>}
 
-    {scene===2&&<>
-      <div className="whiteFlash"/>
-      <div className="beam"/>
-      <div className="beamBloom"/>
-      <div className="impactRing r1"/><div className="impactRing r2"/><div className="impactRing r3"/>
-      <div className="debris">{particles.map((p,i)=><i key={i} style={{'--a':p.a+'deg','--d':p.d+'px','--s':p.s+'px','--delay':p.delay+'s'}}/>)}</div>
-      <div className="launchArrow"><Arrow/></div>
-      <div className="impactCaption">IGNITION</div>
-    </>}
+    {scene===1&&<section className="convergeScene">
+      <div className="lostField convergence" aria-hidden="true">
+        {lostArrows.map(a=><ArrowMark key={a.id} size={a.size} className="lostArrow" style={{
+          left:a.left+'%',top:a.top+'%',opacity:Math.min(.24,a.opacity*1.35),
+          '--dx1':a.dx1+'px','--dy1':a.dy1+'px','--dx2':a.dx2+'px','--dy2':a.dy2+'px',
+          '--r0':a.r0+'deg','--r1':a.r1+'deg','--r2':a.r2+'deg','--dur':a.dur+'s','--delay':a.delay+'s'
+        }}/>)}
+      </div>
+      <div className="convergeWord"><span>A</span><span>R</span><span>R</span><span>O</span><span>W</span></div>
+      <div className="convergeCore"><ArrowMark size={72} className="upright"/></div>
+      <div className="cinematicCaption"><span>SCATTERED.</span><span>UNCONNECTED.</span><b>UNTIL NOW.</b></div>
+    </section>}
 
-    {scene===3&&<>
-      <div className="speedTunnel"/>
-      <div className="travelArrow"><Arrow/></div>
-      <div className="statement">
+    {scene===2&&<section className="ignitionScene">
+      <div className="burstWord" aria-hidden="true">{['A','R','R','O','W'].map((l,i)=><span key={i}>{l}</span>)}</div>
+      <div className="burstParticles">{burstParticles.map(p=><i key={p.id} style={{
+        '--a':p.a+'rad','--d':p.d+'px','--size':p.size+'px','--delay':p.delay+'s','--spin':p.spin+'deg'
+      }}/>)}</div>
+      <div className="beam beamCore"/><div className="beam beamSoft"/><div className="impactBloom"/>
+      <div className="impactRing ir1"/><div className="impactRing ir2"/><div className="impactRing ir3"/>
+      <div className="launchCraft"><ArrowMark size={78} className="upright"/></div>
+      <div className="ignitionLabel">DIRECTION LOCKED</div>
+    </section>}
+
+    {scene===3&&<section className="directionScene">
+      <div className="radialTunnel"/>
+      <div className="directionCopy">
         <span>GIVE YOUR LIFE</span>
         <strong>DIRECTION.</strong>
-        <small>One connected system for the things you do, know, build, and share.</small>
+        <p>One connected system for the things you do, know, build, remember, and share.</p>
       </div>
-    </>}
-
-    {scene===4&&<>
-      <div className="chaosCloud">
-        {chaos.map((w,i)=><div key={w} className={'chaosWord cw'+i}>{w}</div>)}
-      </div>
-      <div className="centerArrow"><Arrow/></div>
-      <div className="sceneCopy"><b>Your life isn't one thing.</b><span>Neither should the tools that organize it be.</span></div>
-    </>}
-
-    {scene===5&&<>
-      <div className="orderPulse"/>
-      <div className="networkLines"/>
-      <div className="orderedNodes">
-        {chaos.slice(0,8).map((w,i)=><div key={w} className={'orderedNode on'+i}><i/><span>{w}</span></div>)}
-      </div>
-      <div className="sceneCopy orderCopy"><b>Bring the pieces together.</b><span>ARROW turns scattered tools into one navigable system.</span></div>
-    </>}
-
-    {scene===6&&<>
-      <div className="moduleWorld">
-        <div className="moduleCore"><Arrow/></div>
-        {modules.map((m,i)=><article className={'moduleCard mc'+i} key={m[0]}><em>0{i+1}</em><h2>{m[0]}</h2><p>{m[1]}</p></article>)}
-      </div>
-      <div className="sectionTitle">FOUR WORLDS. <b>ONE DIRECTION.</b></div>
-    </>}
-
-    {scene===7&&<>
-      <div className="orbitScene">
-        <div className="orbitSphere"><div className="lat l1"/><div className="lat l2"/><div className="lat l3"/><div className="long lo1"/><div className="long lo2"/></div>
-        <div className="orbitTrail"/>
-        <div className="orbitCraft"><Arrow/></div>
-        <div className="orbitLabel">
-          <small>THE CENTER OF ARROW</small>
-          <h2>ORBIT</h2>
-          <p>Move between the parts of your digital life like they belong to the same world.</p>
-        </div>
-      </div>
-    </>}
-
-    {scene===8&&<>
-      <div className="finalBurst"/>
-      <div className="finalMark"><Arrow/></div>
-      <div className="finalTitle"><small>RESONANT ASSIST PRESENTS</small><h1>PROJECT<br/>ARROW</h1><p>YOUR LIFE. CONNECTED.</p><b>GIVE IT DIRECTION.</b></div>
-    </>}
-
-    {scene>=9&&<section className="landing">
-      <div className="landingOrb"/>
-      <Arrow className="landingArrow"/>
-      <span className="eyebrow">PROJECT ARROW</span>
-      <h1>Your digital life.<br/><b>Moving together.</b></h1>
-      <p>Atlas. RAVIN. Relay. Orbit. One connected system built to give the moving parts of your life a direction.</p>
-      <div className="landingActions"><button>EXPLORE ARROW →</button><button onClick={()=>location.reload()}>REPLAY EXPERIENCE</button></div>
+      <div className="flightCraft"><ArrowMark size={58} className="upright"/></div>
+      <div className="horizonLine"/>
     </section>}
-  </main>
+
+    {scene===4&&<section className="chaosScene">
+      <div className="chaosWords" aria-hidden="true">{chaos.map((w,i)=><span key={w} className={'cw cw'+i}>{w}</span>)}</div>
+      <div className="chaosCraft"><ArrowMark size={54} className="upright"/></div>
+      <div className="storyCopy">
+        <small>YOUR LIFE ISN'T ONE THING.</small>
+        <h2>So why does it live in<br/><b>separate places?</b></h2>
+      </div>
+    </section>}
+
+    {scene===5&&<section className="orderScene">
+      <div className="formingPlanet"><OrbitPlanet active introMix={.74}/></div>
+      <div className="orderSweep"/>
+      <div className="orderCopy">
+        <small>ARROW CONNECTS THE PIECES</small>
+        <h2>Scattered becomes <b>navigable.</b></h2>
+        <p>The same information. The same people. The same projects. Now moving as one system.</p>
+      </div>
+    </section>}
+
+    {scene===6&&<section className="moduleScene">
+      <OrbitPlanet active introMix={1}/>
+      <div className="moduleEyebrow">FOUR WORLDS · ONE SYSTEM</div>
+      <div className="moduleStories">
+        {modules.map((m,i)=><article key={m[1]} className={'moduleStory ms'+i}>
+          <em>{m[0]}</em><h2>{m[1]}</h2><p>{m[2]}</p>
+        </article>)}
+      </div>
+    </section>}
+
+    {scene===7&&<section className="orbitReveal">
+      <OrbitPlanet active introMix={1}/>
+      <div className="orbitRevealCopy">
+        <small>THE CENTER OF ARROW</small>
+        <h2>ORBIT</h2>
+        <p>Not a dashboard. A world you move through.</p>
+      </div>
+    </section>}
+
+    {scene===8&&<section className="finalScene">
+      <div className="finalLight"/>
+      <ArrowMark size={74} className="finalArrow upright"/>
+      <div className="finalCopy">
+        <small>RESONANT ASSIST PRESENTS</small>
+        <h1>PROJECT<br/><b>ARROW</b></h1>
+        <p>YOUR LIFE. CONNECTED.</p>
+        <strong>GIVE IT DIRECTION.</strong>
+      </div>
+    </section>}
+
+    {scene===9&&<section className="landingScene">
+      <div className="landingPlanet"><OrbitPlanet active introMix={1}/></div>
+      <div className="landingShade"/>
+      <div className="landingContent">
+        <ArrowMark size={46} className="upright landingMark"/>
+        <small>PROJECT ARROW</small>
+        <h1>Your digital life.<br/><b>Moving together.</b></h1>
+        <p>Atlas. RAVIN. Relay. Orbit. One connected system built to give the moving parts of your life a direction.</p>
+        <div className="landingActions"><button>EXPLORE ARROW <span>→</span></button><button onClick={replay}>REPLAY EXPERIENCE</button></div>
+      </div>
+    </section>}
+  </main>;
 }
 createRoot(document.getElementById('root')).render(<App/>);
