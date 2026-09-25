@@ -99,8 +99,8 @@ export function AmbientCanvas({scene}){
         scene===3?1:
         scene===2?.46:
         scene===4?.2:
-        scene>=6&&scene<=9?.07:
-        scene===10?.05:.028;
+        scene>=6&&scene<=10?.07:
+        scene===11?.05:.028;
       const alphaBase=scene===3?.4:scene===2?.27:scene===4?.16:.13;
 
       for(const p of dust){
