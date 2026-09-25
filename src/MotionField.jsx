@@ -28,7 +28,8 @@ export function LostArrowField({converging=false}){
         scale0:.72+depth*.42,
         scale1:.82+depth*.5,
         dur:6.2+rnd()*10.5,
-        delay:-rnd()*16
+        delay:-rnd()*16,
+        pullDelay:rnd()*.55
       };
     });
   },[]);
@@ -43,6 +44,8 @@ export function LostArrowField({converging=false}){
       '--dx2':a.dx2+'px','--dy2':a.dy2+'px',
       '--r0':a.r0+'deg','--r1':a.r1+'deg','--r2':a.r2+'deg',
       '--s0':a.scale0,'--s1':a.scale1,
+      '--to-x':(50-a.left)+'vw','--to-y':(50-a.top)+'vh',
+      '--pull-delay':a.pullDelay+'s',
       '--dur':a.dur+'s','--delay':a.delay+'s'
     }}/>)}
   </div>;
