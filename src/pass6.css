@@ -66,9 +66,9 @@
   border:1px solid rgba(255,255,255,.15);
   background:rgba(2,3,7,.82);
   backdrop-filter:blur(9px);
-  font-size:10px;
+  font-size:12px;
   font-weight:750;
-  letter-spacing:.16em;
+  letter-spacing:.14em;
   color:rgba(255,255,255,.88);
   box-shadow:0 8px 24px rgba(0,0,0,.35);
 }
@@ -85,9 +85,9 @@
   border:1px solid rgba(255,255,255,.1);
   background:rgba(2,3,7,.8);
   backdrop-filter:blur(12px);
-  font-size:9px;
+  font-size:11px;
   font-weight:650;
-  letter-spacing:.12em;
+  letter-spacing:.1em;
   color:rgba(255,255,255,.64);
   white-space:nowrap;
 }
@@ -129,7 +129,7 @@
   animation:v6RavinThought 3.1s ease-in-out infinite alternate;
 }
 .v6RavinThoughts span:nth-child(1){left:9%;top:28%}
-.v6RavinThoughts span:nth-child(2){right:8%;top:42%;animation-delay:-1.1s}
+.v6RavinThoughts span:nth-child(2){right:8%;top:42%;animation-delay:.3s}
 .v6RavinThoughts span:nth-child(3){left:25%;bottom:12%;animation-delay:-2.1s}
 @keyframes v6RavinThought{from{opacity:.34;transform:translateY(5px)}to{opacity:.82;transform:translateY(-5px)}}
 
@@ -198,18 +198,18 @@
   font-weight:750;
   letter-spacing:.17em;
   color:rgba(255,255,255,.74);
-  animation:v6InputResolve 5.8s cubic-bezier(.18,.64,.2,1) infinite;
+  animation:v6InputResolve 4.8s cubic-bezier(.18,.64,.2,1) both;
 }
-.v6WaypointInputs .wi1{animation-delay:-.55s}
+.v6WaypointInputs .wi1{animation-delay:.15s}
 .v6WaypointInputs .wi2{animation-delay:-1.1s}
-.v6WaypointInputs .wi3{animation-delay:-1.65s}
+.v6WaypointInputs .wi3{animation-delay:.45s}
 .v6WaypointRoute{
   position:absolute;
   left:50%;top:46%;
   width:min(43vw,520px);height:80px;
   transform:translate(65px,-50%);
   opacity:0;
-  animation:v6RouteReveal 6.4s ease-in-out infinite;
+  animation:v6RouteReveal 5.7s .8s ease-in-out both;
 }
 .v6WaypointRoute .routeLine{
   position:absolute;left:0;top:50%;width:100%;height:2px;
@@ -232,7 +232,7 @@
   letter-spacing:.19em;
   color:rgba(255,255,255,.58);
   opacity:0;
-  animation:v6NextMove 6.4s ease-in-out infinite;
+  animation:v6NextMove 5.7s .8s ease-in-out both;
 }
 .v6WaypointCraft{
   position:absolute;
@@ -251,11 +251,11 @@
   82%,100%{transform:translate(0,0) rotate(0) scale(.18);opacity:0}
 }
 @keyframes v6RouteReveal{
-  0%,43%{opacity:0;transform:translate(65px,-50%) scaleX(.04);transform-origin:left}
-  58%,84%{opacity:.85;transform:translate(65px,-50%) scaleX(1);transform-origin:left}
-  100%{opacity:.12;transform:translate(65px,-50%) scaleX(1)}
+  0%,38%{opacity:0;transform:translate(65px,-50%) scaleX(.04);transform-origin:left}
+  58%{opacity:.9;transform:translate(65px,-50%) scaleX(1);transform-origin:left}
+  100%{opacity:.62;transform:translate(65px,-50%) scaleX(1);transform-origin:left}
 }
-@keyframes v6NextMove{0%,58%{opacity:0}70%,88%{opacity:.78}100%{opacity:.2}}
+@keyframes v6NextMove{0%,55%{opacity:0}70%{opacity:.82}100%{opacity:.7}}
 @keyframes v6WaypointCraft{
   0%{transform:translate(-62vw,22vh) scale(.3);opacity:0}
   15%{opacity:1}
