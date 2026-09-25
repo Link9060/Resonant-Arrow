@@ -14,7 +14,7 @@ const timeline=[
   [39600,9],
 ];
 
-function Arrow({className=''}){return <div className={'arrow '+className}><span/><span/><span/></div>}
+function Arrow({className='',style}){return <div className={'arrow '+className} style={style}><span/><span/><span/></div>}
 
 function App(){
   const[scene,setScene]=useState(0);
@@ -114,7 +114,7 @@ function App(){
 
     {scene===0&&<>
       <div className="idleWord">ARROW</div>
-      <div className="ghostField">{ghosts.map((g,i)=><Arrow key={i} className="ghost" style={g}/>)}</div>
+      <div className="ghostField">{ghosts.map((g,i)=><Arrow key={i} className="ghost" style={{left:g.x+'%',top:g.y+'%',transform:'rotate('+g.r+'deg) scale('+g.s+')',opacity:g.o}}/>)}</div>
       <button className="initiate" onClick={start} aria-label="Start Project Arrow experience">
         <div className="halo h1"/><div className="halo h2"/>
         <Arrow className="heroArrow"/>
@@ -126,7 +126,7 @@ function App(){
     {scene===1&&<>
       <div className="compression">
         <div className="idleWord">ARROW</div>
-        <div className="ghostField collapsing">{ghosts.map((g,i)=><Arrow key={i} className="ghost" style={g}/>)}</div>
+        <div className="ghostField collapsing">{ghosts.map((g,i)=><Arrow key={i} className="ghost" style={{left:g.x+'%',top:g.y+'%',transform:'rotate('+g.r+'deg) scale('+g.s+')',opacity:g.o}}/>)}</div>
       </div>
       <div className="chargeCore"><Arrow/></div>
       <div className="chargeText">EVERYTHING IS MOVING.</div>
