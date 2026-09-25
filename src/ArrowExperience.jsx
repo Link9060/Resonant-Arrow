@@ -161,11 +161,11 @@ function WaypointVisual(){
   </div>;
 }
 
-function Intro(){
+function Intro({onStart}){
   return <section className="ax-scene ax-intro">
     <LostArrowCanvas mode="wander"/>
     <div className="ax-intro-title">ARROW</div>
-    <button className="ax-start" data-start-button>
+    <button className="ax-start" onClick={onStart}>
       <span className="ax-hero-ring r1"/><span className="ax-hero-ring r2"/>
       <ArrowMark size={70} className="ax-arrow-up ax-hero-mark"/>
       <strong>FIND YOUR DIRECTION</strong>
@@ -304,7 +304,7 @@ function Landing({onReplay}){
       <small>PROJECT ARROW</small>
       <h1>Your digital life.<br/><b>Moving together.</b></h1>
       <p>Atlas. RAVIN. Relay. Waypoint. Orbit. One connected system designed to give the moving parts of your life a direction.</p>
-      <div className="ax-actions"><button>EXPLORE ARROW <span>→</span></button><button onClick={onReplay}>REPLAY EXPERIENCE</button></div>
+      <div className="ax-actions"><button onClick={()=>{window.location.href="https://link9060.github.io/Resonant-Orbit/"}}>EXPLORE ARROW <span>→</span></button><button onClick={onReplay}>REPLAY EXPERIENCE</button></div>
     </div>
   </section>;
 }
@@ -371,7 +371,7 @@ export function ArrowExperience(){
     setScene(0);
   }
 
-  const views=[<Intro/>,<Converge/>,<Ignition/>,<Direction/>,<Chaos/>,<Organize/>,<Atlas/>,<Ravin/>,<Relay/>,<Waypoint/>,<Orbit/>,<Final/>,<Landing onReplay={replay}/>];
+  const views=[<Intro onStart={begin}/>,<Converge/>,<Ignition/>,<Direction/>,<Chaos/>,<Organize/>,<Atlas/>,<Ravin/>,<Relay/>,<Waypoint/>,<Orbit/>,<Final/>,<Landing onReplay={replay}/>];
 
   return <main className={'arrow-experience scene-'+scene}>
     <SpaceFieldCanvas scene={scene}/>
