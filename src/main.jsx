@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowExperience } from './ArrowExperience';
+import { CinematicApp } from './CinematicApp';
 import './experience.css';
 
-createRoot(document.getElementById('root')).render(<ArrowExperience />);
+createRoot(document.getElementById('root')).render(<CinematicApp/>);
