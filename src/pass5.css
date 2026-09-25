@@ -1,0 +1,369 @@
+/* Pass 5 — startup smoothness, exaggerated motion, and readable text hierarchy */
+
+/* 1–8: Global hierarchy/readability */
+.v5{}
+.v4 .brandLockup{
+  top:24px;left:30px;
+  font-size:10px;
+  letter-spacing:.25em;
+  opacity:.66;
+  color:rgba(255,255,255,.78);
+}
+.v4 .skip{
+  top:18px;right:24px;
+  padding:9px 13px;
+  font-size:9px;
+  letter-spacing:.18em;
+  color:rgba(255,255,255,.7);
+}
+.v4SceneVeil{
+  background:radial-gradient(circle at 50% 48%,rgba(118,156,235,.055),rgba(0,0,0,.13) 58%,rgba(0,0,0,.22));
+  animation:v5SoftCut .42s ease-out forwards;
+}
+.v4SceneVeil-1{background:radial-gradient(circle at 50% 48%,rgba(255,255,255,.08),rgba(0,0,0,.12) 36%,rgba(0,0,0,.24))}
+.v4SceneVeil-2{
+  background:#fff;
+  mix-blend-mode:screen;
+  animation:v5ImpactCut .62s ease-out forwards;
+}
+@keyframes v5SoftCut{from{opacity:.34}to{opacity:0}}
+@keyframes v5ImpactCut{0%{opacity:.66}35%{opacity:.12}100%{opacity:0}}
+.v4CopyPlate:before{
+  width:min(1060px,118vw);
+  height:225px;
+  background:radial-gradient(ellipse,rgba(0,0,0,.82),rgba(0,0,0,.46) 45%,transparent 76%);
+}
+.v4 .v3WorldCopy small,.v4 .v3OrbitCopy small,.v4 .v3ChaosCopy small,.v4 .v3OrganizeCopy small{
+  font-size:12px;
+  letter-spacing:.26em;
+}
+.v4 .v3WorldCopy p,.v4 .v3OrbitCopy p,.v4 .v3LandingContent p{
+  font-size:17px;
+  line-height:1.62;
+  letter-spacing:.015em;
+}
+
+/* 9–18: Opening now matches the original concept more closely */
+.v4 .v3GhostTitle{
+  top:24.5%;
+  font-size:clamp(48px,6.1vw,94px);
+  font-weight:760;
+  letter-spacing:.34em;
+  padding-left:.34em;
+  color:rgba(255,255,255,.095);
+  text-shadow:0 0 55px rgba(255,255,255,.08);
+}
+.v4 .v3Start{
+  height:380px;
+  transform:translateY(3%);
+}
+.v4 .v3Start b{
+  margin-top:54px;
+  font-size:13px;
+  letter-spacing:.32em;
+  opacity:.92;
+}
+.v4 .v3Start small{
+  margin-top:13px;
+  font-size:10px;
+  letter-spacing:.22em;
+  opacity:.62;
+}
+.v4IntroMicrocopy{
+  bottom:6.6%;
+  font-size:13px;
+  line-height:1.5;
+  letter-spacing:.035em;
+  color:rgba(255,255,255,.58);
+}
+.v4 .v3HeroMark{
+  filter:drop-shadow(0 0 14px white) drop-shadow(0 0 68px rgba(122,166,255,.64));
+  animation:v5HeroIdle 3.8s ease-in-out infinite;
+}
+.v4 .v3Halo.h1{width:164px;height:164px}
+.v4 .v3Halo.h2{width:310px;height:310px}
+@keyframes v5HeroIdle{
+  0%,100%{transform:rotate(-90deg) translateY(0) scale(1)}
+  50%{transform:rotate(-90deg) translateY(-5px) scale(1.035)}
+}
+
+/* Lost arrows remain chaotic until click, then truly converge to the center */
+.v4 .lostField{inset:-2%}
+.v4 .lostArrow{
+  opacity:max(var(--arrow-opacity,.1),.1);
+  filter:blur(var(--blur,0)) drop-shadow(0 0 9px rgba(220,235,255,.23));
+}
+.v4 .v3Prelude .lostArrow{
+  animation:v5LostPull 6.15s cubic-bezier(.46,.04,.18,1) both;
+  filter:blur(calc(var(--blur,0)*.45)) drop-shadow(0 0 11px rgba(255,255,255,.3));
+}
+@keyframes v5LostPull{
+  0%{
+    transform:translate(0,0) rotate(var(--r0)) scale(var(--s0));
+    opacity:.22;
+  }
+  27%{
+    transform:translate(var(--dx1),var(--dy1)) rotate(var(--r1)) scale(var(--s1));
+    opacity:.3;
+  }
+  55%{
+    transform:translate(var(--dx2),var(--dy2)) rotate(var(--r2)) scale(var(--s1));
+    opacity:.36;
+  }
+  76%{
+    transform:translate(calc(var(--to-x)*.7),calc(var(--to-y)*.7)) rotate(calc(var(--r2) + 250deg)) scale(.58);
+    opacity:.38;
+  }
+  100%{
+    transform:translate(var(--to-x),var(--to-y)) rotate(calc(var(--r2) + 620deg)) scale(.06);
+    opacity:0;
+  }
+}
+
+/* 19–26: ARROW title shatters instead of becoming a giant opaque word */
+.v4 .v3WordBreak{
+  left:50%;
+  top:24.5%;
+  font-size:clamp(48px,6.1vw,94px);
+  font-weight:760;
+  letter-spacing:.22em;
+  gap:.09em;
+  color:rgba(255,255,255,.12);
+  text-shadow:0 0 48px rgba(255,255,255,.1);
+}
+.v4 .v3WordBreak span{
+  animation:v5TitleBreak 6.2s cubic-bezier(.18,.75,.2,1) both;
+}
+@keyframes v5TitleBreak{
+  0%,47%{transform:none;opacity:1;filter:blur(0)}
+  54%{transform:translateY(-4px) scale(1.04);opacity:1;filter:blur(0)}
+  100%{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1.32);opacity:0;filter:blur(13px)}
+}
+.v5TitleParticles{
+  left:50%!important;
+  top:24.5%!important;
+  z-index:9!important;
+}
+.v5TitleParticles i{
+  animation:v5TitleDust 1.95s calc(3.65s + var(--delay)) cubic-bezier(.14,.72,.18,1) both!important;
+}
+@keyframes v5TitleDust{
+  0%{opacity:0;transform:rotate(var(--a)) translateX(0) scale(2)}
+  15%{opacity:.92}
+  100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d)*.72)) rotate(var(--spin)) scale(.05)}
+}
+.v4 .v3PreArrow{
+  top:49%;
+  filter:drop-shadow(0 0 20px white) drop-shadow(0 0 88px rgba(103,154,255,.72));
+  animation:v5CentralCharge 6.15s ease-in-out both;
+}
+@keyframes v5CentralCharge{
+  0%{transform:translate(-50%,-50%) scale(.92);filter:drop-shadow(0 0 12px white)}
+  40%{transform:translate(-50%,-50%) scale(1.02);filter:drop-shadow(0 0 26px white) drop-shadow(0 0 65px rgba(112,160,255,.4))}
+  72%{transform:translate(-50%,-50%) scale(.86);filter:drop-shadow(0 0 34px white) drop-shadow(0 0 100px rgba(112,160,255,.72))}
+  100%{transform:translate(-50%,-50%) scale(1.12);filter:drop-shadow(0 0 42px white) drop-shadow(0 0 130px rgba(112,160,255,.9))}
+}
+.v4 .v3PreCopy{
+  bottom:6.5%;
+  font-size:12px;
+  letter-spacing:.22em;
+  color:rgba(255,255,255,.68);
+}
+.v4 .v3PreCopy b{color:#fff}
+
+/* 27–34: Beam/launch is more violent but less visually clumsy */
+.v4 .v3Beam.core{
+  animation:v5BeamCore .9s .12s both;
+  width:6px;
+}
+.v4 .v3Beam.soft{
+  animation:v5BeamSoft 1.15s .06s both;
+  width:250px;
+  filter:blur(22px);
+}
+.v4 .v3HitGlow{animation:v5HitGlow 2.7s .18s both}
+.v4 .v3Ring{
+  width:34px;height:34px;
+  border-width:.7px;
+  border-color:rgba(255,255,255,.68);
+  animation:v5Shock 1.8s .28s cubic-bezier(.12,.7,.2,1) both;
+}
+.v4 .v3Ring.r2{animation-delay:.43s;opacity:.42}
+.v4 .v3Ring.r3{animation-delay:.58s;opacity:.2}
+.v4 .v3LaunchCraft{
+  top:51%;
+  animation:v5Launch 7.25s .2s cubic-bezier(.18,.03,.72,.18) forwards;
+  filter:drop-shadow(0 0 22px white) drop-shadow(0 0 85px rgba(105,157,255,.8));
+}
+.v4 .v3LaunchCraft:after{
+  top:54px;
+  width:10px;
+  height:560px;
+  background:linear-gradient(#fff,rgba(110,162,255,.84) 18%,rgba(85,130,235,.24) 56%,transparent);
+}
+.v4 .v3Lock{
+  bottom:7%;
+  font-size:12px;
+  letter-spacing:.34em;
+  animation:v5LockRead 4s 1.35s both;
+}
+@keyframes v5BeamCore{
+  0%{transform:translateX(-50%) scaleY(0);opacity:0}
+  30%{transform:translateX(-50%) scaleY(1);opacity:1}
+  100%{transform:translateX(-50%) scaleY(1);opacity:.38}
+}
+@keyframes v5BeamSoft{
+  0%{transform:translateX(-50%) scaleY(0);opacity:0}
+  32%{transform:translateX(-50%) scaleY(1);opacity:.9}
+  100%{transform:translateX(-50%) scaleY(1);opacity:.28}
+}
+@keyframes v5HitGlow{
+  0%{opacity:0;transform:scale(.04)}
+  20%{opacity:1}
+  55%{opacity:.52}
+  100%{opacity:.04;transform:scale(2.35)}
+}
+@keyframes v5Shock{
+  from{transform:translate(-50%,-50%) scale(.35);opacity:.9}
+  to{transform:translate(-50%,-50%) scale(32);opacity:0}
+}
+@keyframes v5Launch{
+  0%{transform:translate(-50%,-50%) scale(1)}
+  12%{transform:translate(-50%,8%) scale(1.16, .88)}
+  23%{transform:translate(-50%,12%) scale(.93,1.16)}
+  31%{transform:translate(-50%,-5%) scale(1.18)}
+  47%{transform:translate(-50%,-35vh) scale(1)}
+  70%{transform:translate(-50%,-88vh) scale(.68)}
+  100%{transform:translate(-50%,-205vh) scale(.18)}
+}
+@keyframes v5LockRead{0%,100%{opacity:0}18%,72%{opacity:.82}}
+
+/* 35–39: Direction scene readability */
+.v4 .v3DirectionCopy{top:46.5%}
+.v4 .v3DirectionCopy span{
+  font-size:clamp(34px,4.4vw,66px);
+  font-weight:330;
+  letter-spacing:.11em;
+}
+.v4 .v3DirectionCopy strong{
+  margin-top:3px;
+  font-size:clamp(88px,12.8vw,198px);
+}
+.v4 .v3DirectionCopy p{
+  max-width:850px;
+  margin-top:28px;
+  font-size:18px;
+  line-height:1.58;
+  letter-spacing:.02em;
+  color:rgba(255,255,255,.84);
+}
+.v4 .v3DirectionShards i{opacity:.28}
+
+/* 40–43: Chaos and organization communicate clearly */
+.v4 .v3ChaosDepth span{
+  font-size:clamp(15px,1.8vw,28px);
+  color:rgba(255,255,255,.7);
+}
+.v4 .v3ChaosCopy small{font-size:12px;opacity:.74}
+.v4 .v3ChaosCopy h2{
+  font-size:clamp(34px,4.1vw,60px);
+  line-height:1.14;
+}
+.v4 .v3OrganizePulse{
+  animation:v5OrganizePulse 2.6s ease-out infinite;
+  border-color:rgba(255,255,255,.42);
+}
+.v4 .v3OrganizeCopy small{font-size:12px;opacity:.72}
+.v4 .v3OrganizeCopy h2{font-size:clamp(36px,4.5vw,66px)}
+.v4 .v3OrganizeCopy p{font-size:16px;color:rgba(255,255,255,.75)}
+@keyframes v5OrganizePulse{
+  0%{transform:translate(-50%,-50%) scale(.5);opacity:.78}
+  58%{opacity:.3}
+  100%{transform:translate(-50%,-50%) scale(11);opacity:0}
+}
+
+/* 44–47: Module worlds feel fuller and text no longer disappears */
+.v4 .v3WorldCopy{bottom:4.2%}
+.v4 .v3WorldCopy small{font-size:12px;color:rgba(255,255,255,.72)}
+.v4 .v3WorldCopy h2{
+  font-size:clamp(70px,9.2vw,138px);
+  letter-spacing:.14em;
+  padding-left:.14em;
+  margin:7px 0 12px;
+}
+.v4 .v3WorldCopy p{
+  max-width:800px;
+  font-size:17px;
+  color:rgba(255,255,255,.78);
+}
+.v4 .v3AtlasField line{stroke:rgba(255,255,255,.34)}
+.v4 .v3AtlasField i{min-width:3px;min-height:3px}
+.v4 .v3RavinCore{width:min(66vw,780px)}
+.v4 .v3CoreOrb{
+  box-shadow:0 0 30px 9px white,0 0 115px 45px rgba(98,148,255,.48),0 0 230px 84px rgba(73,112,210,.13);
+}
+.v4 .v3Tower b{
+  position:absolute;left:50%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-50%);
+  box-shadow:0 0 8px rgba(255,255,255,.18)
+}
+.v4 .v3Tower b:nth-of-type(1){top:88px;width:82px}
+.v4 .v3Tower b:nth-of-type(2){top:150px;width:118px}
+.v4 .v3Tower b:nth-of-type(3){top:213px;width:154px}
+
+/* 48: Orbit composition/readability */
+.v4 .v3OrbitCamera{
+  top:-12%;
+  bottom:13%;
+}
+.v4 .v3OrbitCopy{bottom:3.5%}
+.v4 .v3OrbitCopy small{font-size:12px;color:rgba(255,255,255,.72)}
+.v4 .v3OrbitCopy h2{font-size:clamp(78px,9.8vw,148px)}
+.v4 .v3OrbitCopy p{font-size:17px;color:rgba(255,255,255,.8)}
+.v4 .v3Orbit .orbitExactCraft{width:36px;height:36px}
+.v4 .v3Orbit .orbitExactCraft svg{width:32px;height:32px}
+
+/* 49: Final reveal hierarchy */
+.v4 .v3FinalCopy small{font-size:12px;letter-spacing:.32em}
+.v4 .v3FinalCopy h1{font-size:clamp(84px,11.8vw,180px)}
+.v4 .v3FinalCopy p{font-size:15px;letter-spacing:.34em}
+.v4 .v3FinalCopy strong{font-size:13px;letter-spacing:.3em}
+
+/* 50: Landing is actually readable and tappable */
+.v4 .v3LandingContent>small{font-size:11px;letter-spacing:.32em}
+.v4 .v3LandingContent h1{font-size:clamp(60px,7.7vw,120px)}
+.v4 .v3LandingContent p{
+  max-width:840px;
+  font-size:17px;
+  line-height:1.6;
+  color:rgba(255,255,255,.76);
+}
+.v4 .v3LandingContent button{
+  min-height:44px;
+  padding:14px 22px;
+  font-size:10px;
+  letter-spacing:.16em;
+}
+
+/* Mobile keeps the hierarchy readable instead of shrinking everything into micro-text */
+@media(max-width:760px){
+  .v4 .brandLockup{font-size:8px;letter-spacing:.16em;max-width:58vw}
+  .v4 .skip{font-size:8px}
+  .v4 .v3GhostTitle{top:21%;font-size:12vw}
+  .v4 .v3Start b{font-size:10px;letter-spacing:.24em}
+  .v4 .v3Start small{font-size:9px}
+  .v4IntroMicrocopy{font-size:11px}
+  .v4 .v3PreCopy{font-size:9px;line-height:1.45}
+  .v4 .v3DirectionCopy p{font-size:13px;max-width:88vw}
+  .v4 .v3ChaosCopy small,.v4 .v3OrganizeCopy small,.v4 .v3WorldCopy small,.v4 .v3OrbitCopy small{font-size:9px}
+  .v4 .v3ChaosCopy h2{font-size:8.5vw}
+  .v4 .v3OrganizeCopy h2{font-size:9vw}
+  .v4 .v3OrganizeCopy p{font-size:12px}
+  .v4 .v3WorldCopy p,.v4 .v3OrbitCopy p,.v4 .v3LandingContent p{font-size:12px}
+  .v4 .v3WorldCopy h2{font-size:17vw}
+  .v4 .v3FinalCopy small{font-size:9px}
+  .v4 .v3FinalCopy p,.v4 .v3FinalCopy strong{font-size:10px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v4 .v3HeroMark,.v4 .lostArrow{animation:none!important}
+}
