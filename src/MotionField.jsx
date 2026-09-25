@@ -45,6 +45,7 @@ export function LostArrowField({converging=false}){
       '--r0':a.r0+'deg','--r1':a.r1+'deg','--r2':a.r2+'deg',
       '--s0':a.scale0,'--s1':a.scale1,
       '--to-x':(50-a.left)+'vw','--to-y':(50-a.top)+'vh',
+      '--to-x70':((50-a.left)*.7)+'vw','--to-y70':((50-a.top)*.7)+'vh',
       '--pull-delay':a.pullDelay+'s',
       '--dur':a.dur+'s','--delay':a.delay+'s'
     }}/>)}
