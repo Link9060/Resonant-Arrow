@@ -325,21 +325,16 @@ export function ArrowExperience(){
 
   useEffect(()=>{
     const move=e=>{
-      document.documentElement.style.setProperty('--mx',((e.clientX/innerWidth-.5)*2).toFixed(3));
-      document.documentElement.style.setProperty('--my',((e.clientY/innerHeight-.5)*2).toFixed(3));
+      const mx=(e.clientX/innerWidth-.5)*2;
+      const my=(e.clientY/innerHeight-.5)*2;
+      document.documentElement.style.setProperty('--mx',mx.toFixed(3));
+      document.documentElement.style.setProperty('--my',my.toFixed(3));
+      document.documentElement.style.setProperty('--mxp',(mx*3).toFixed(2)+'%');
+      document.documentElement.style.setProperty('--myp',(my*3).toFixed(2)+'%');
     };
     addEventListener('pointermove',move,{passive:true});
     return()=>removeEventListener('pointermove',move);
   },[]);
-
-  useEffect(()=>{
-    if(scene!==0)return;
-    const start=document.querySelector('[data-start-button]');
-    if(!start)return;
-    const fn=()=>begin();
-    start.addEventListener('click',fn,{once:true});
-    return()=>start.removeEventListener('click',fn);
-  },[scene,running,reduced]);
 
   useEffect(()=>()=>timers.current.forEach(clearTimeout),[]);
 
