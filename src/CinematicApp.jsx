@@ -1,13 +1,61 @@
-import React,{useEffect,useRef,useState}from'react';
+import React,{useEffect,useMemo,useRef,useState}from'react';
 import{ArrowMark}from'./ArrowMark';
 import{OrbitPlanet}from'./OrbitPlanet';
 import{AmbientCanvas,LostArrowField}from'./MotionField';
 import{PixelField}from'./PixelField';
 
 const TIMELINE=[
-  [0,1],[5400,2],[11200,3],[19200,4],[27500,5],
-  [36000,6],[48000,7],[59000,8],[66000,9]
+  [0,1],
+  [5200,2],
+  [10800,3],
+  [18400,4],
+  [26000,5],
+  [32500,6],
+  [38500,7],
+  [44500,8],
+  [50500,9],
+  [58500,10],
+  [65000,11],
 ];
+
+function seeded(seed){
+  let s=seed|0;
+  return()=>{s=(Math.imul(s,1664525)+1013904223)|0;return(s>>>0)/4294967296};
+}
+
+function AtlasVisual(){
+  const nodes=useMemo(()=>{
+    const rnd=seeded(232);
+    return Array.from({length:23},(_,i)=>({
+      id:i,x:10+rnd()*80,y:12+rnd()*72,s:2+rnd()*5,d:rnd()*2.4
+    }));
+  },[]);
+  return <div className="v3AtlasField" aria-hidden="true">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+      {nodes.slice(1).map((n,i)=>{
+        const p=nodes[Math.max(0,Math.floor(i*.55))];
+        return <line key={n.id} x1={p.x} y1={p.y} x2={n.x} y2={n.y}/>;
+      })}
+    </svg>
+    {nodes.map(n=><i key={n.id} style={{left:n.x+'%',top:n.y+'%',width:n.s+'px',height:n.s+'px','--d':n.d+'s'}}/>)}
+  </div>;
+}
+
+function RavinVisual(){
+  return <div className="v3RavinCore" aria-hidden="true">
+    <div className="v3CoreHalo h1"/><div className="v3CoreHalo h2"/><div className="v3CoreHalo h3"/>
+    <div className="v3CoreOrb"/>
+    {Array.from({length:18},(_,i)=><i key={i} style={{'--i':i}}/>)}
+  </div>;
+}
+
+function RelayVisual(){
+  return <div className="v3RelayWorld" aria-hidden="true">
+    <div className="v3Tower"><i/><i/><i/></div>
+    <div className="v3Signal s1"/><div className="v3Signal s2"/><div className="v3Signal s3"/>
+    {Array.from({length:12},(_,i)=><span key={i} className={'v3Packet p'+i}/>)}
+  </div>;
+}
 
 export function CinematicApp(){
   const[scene,setScene]=useState(0);
@@ -30,130 +78,120 @@ export function CinematicApp(){
 
   function start(){
     if(running)return;
-    clearTimers();setRunning(true);setScene(1);
-    TIMELINE.slice(1).forEach(([ms,s])=>{
-      timers.current.push(setTimeout(()=>setScene(s),ms));
-    });
+    clearTimers();
+    setRunning(true);
+    setScene(1);
+    TIMELINE.slice(1).forEach(([ms,s])=>timers.current.push(setTimeout(()=>setScene(s),ms)));
   }
-  function skip(){clearTimers();setRunning(true);setScene(9)}
+  function skip(){clearTimers();setRunning(true);setScene(11)}
   function replay(){clearTimers();setRunning(false);setScene(0)}
 
   const chaos=['MESSAGES','FILES','PROJECTS','PEOPLE','EVENTS','IDEAS','TASKS','MUSIC','NOTES','AI','CALENDAR','MEMORIES'];
-  const modules=[
-    ['01','ATLAS','Your files, ideas, knowledge, and the things you own — mapped into one connected world.'],
-    ['02','RAVIN','An intelligence layer that can understand the context surrounding everything else.'],
-    ['03','RELAY','Communication, planning, and coordination without breaking the rest of your flow.'],
-    ['04','ORBIT','The place you return to. A living map of the entire ARROW system.']
-  ];
 
-  return <main className={'app scene-'+scene+(running?' is-running':'')}>
+  return <main className={'app v3 scene-'+scene+(running?' is-running':'')}>
     <AmbientCanvas scene={scene}/>
     <div className="grain"/><div className="vignette"/><div className="edgeGlow"/>
     <div className="brandLockup">RESONANT ASSIST <i>/</i> PROJECT ARROW</div>
-    {running&&scene<9?<button className="skip" onClick={skip}>SKIP EXPERIENCE</button>:null}
+    {running&&scene<11?<button className="skip" onClick={skip}>SKIP EXPERIENCE</button>:null}
 
-    {scene===0&&<section className="introScene">
+    {scene===0&&<section className="v3Intro">
       <LostArrowField/>
-      <div className="introWord">ARROW</div>
-      <button className="startCore" onClick={start}>
-        <span className="coreAura a1"/><span className="coreAura a2"/><span className="coreAura a3"/>
-        <ArrowMark size={62} className="mainMark upright"/>
+      <div className="v3GhostTitle">ARROW</div>
+      <button className="v3Start" onClick={start}>
+        <span className="v3Halo h1"/><span className="v3Halo h2"/>
+        <ArrowMark size={68} className="v3ArrowUp v3HeroMark"/>
         <b>FIND YOUR DIRECTION</b>
-        <small>CLICK TO INITIATE</small>
+        <small>CLICK TO BEGIN</small>
       </button>
-      <p className="introHint">Everything is moving. Most of it is moving separately.</p>
     </section>}
 
-    {scene===1&&<section className="convergeScene">
+    {scene===1&&<section className="v3Prelude">
       <LostArrowField converging/>
-      <div className="convergeWord"><span>A</span><span>R</span><span>R</span><span>O</span><span>W</span></div>
-      <div className="convergeCore"><ArrowMark size={72} className="upright"/></div>
-      <div className="cinematicCaption"><span>SCATTERED.</span><span>UNCONNECTED.</span><b>UNTIL NOW.</b></div>
+      <div className="v3WordBreak">
+        {['A','R','R','O','W'].map((l,i)=><span key={i}>{l}</span>)}
+      </div>
+      <div className="v3PreArrow"><ArrowMark size={74} className="v3ArrowUp"/></div>
+      <div className="v3PreCopy"><span>EVERYTHING MOVES.</span><b>NOTHING MOVES TOGETHER.</b></div>
     </section>}
 
-    {scene===2&&<section className="energyScene">
-      <div className="splitWord" aria-hidden="true">{['A','R','R','O','W'].map((l,i)=><span key={i}>{l}</span>)}</div>
+    {scene===2&&<section className="v3Ignition">
       <PixelField/>
-      <div className="lightColumn columnCore"/><div className="lightColumn columnSoft"/>
-      <div className="energyGlow"/>
-      <div className="waveRing wr1"/><div className="waveRing wr2"/><div className="waveRing wr3"/>
-      <div className="risingCraft"><ArrowMark size={78} className="upright"/></div>
-      <div className="energyLabel">DIRECTION LOCKED</div>
+      <div className="v3Beam soft"/><div className="v3Beam core"/>
+      <div className="v3HitGlow"/>
+      <div className="v3Ring r1"/><div className="v3Ring r2"/><div className="v3Ring r3"/>
+      <div className="v3LaunchCraft"><ArrowMark size={80} className="v3ArrowUp"/></div>
+      <span className="v3Lock">DIRECTION LOCKED</span>
     </section>}
 
-    {scene===3&&<section className="directionScene">
-      <div className="radialTunnel"/>
-      <div className="directionCopy">
+    {scene===3&&<section className="v3Direction">
+      <div className="v3Tunnel"/>
+      <div className="v3DirectionCopy">
         <span>GIVE YOUR LIFE</span>
         <strong>DIRECTION.</strong>
         <p>One connected system for the things you do, know, build, remember, and share.</p>
       </div>
-      <div className="flightCraft"><ArrowMark size={58} className="upright"/></div>
-      <div className="horizonLine"/>
+      <div className="v3PassCraft"><ArrowMark size={60} className="v3ArrowUp"/></div>
+      <div className="v3DirectionShards" aria-hidden="true">{Array.from({length:18},(_,i)=><i key={i}/>)}</div>
     </section>}
 
-    {scene===4&&<section className="chaosScene">
-      <div className="chaosWords" aria-hidden="true">
-        {chaos.map((w,i)=><span key={w} className={'cw cw'+i}>{w}</span>)}
+    {scene===4&&<section className="v3Chaos">
+      <div className="v3ChaosDepth" aria-hidden="true">
+        {chaos.map((w,i)=><span key={w} className={'d'+i}>{w}</span>)}
       </div>
-      <div className="chaosCraft"><ArrowMark size={54} className="upright"/></div>
-      <div className="storyCopy">
-        <small>YOUR LIFE ISN'T ONE THING.</small>
-        <h2>So why does it live in<br/><b>separate places?</b></h2>
-      </div>
-    </section>}
-
-    {scene>=5&&scene<=7?<div className={'persistentPlanet pstate-'+scene}><OrbitPlanet active introMix={scene===5 ? .74 : 1}/></div>:null}
-
-    {scene===5&&<section className="orderScene">
-      <div className="orderSweep"/>
-      <div className="orderCopy">
-        <small>ARROW CONNECTS THE PIECES</small>
-        <h2>Scattered becomes <b>navigable.</b></h2>
-        <p>The same information. The same people. The same projects. Now moving as one system.</p>
+      <div className="v3ChaosCraft"><ArrowMark size={55} className="v3ArrowUp"/></div>
+      <div className="v3ChaosCopy">
+        <small>YOUR LIFE IS EVERYWHERE.</small>
+        <h2>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></h2>
       </div>
     </section>}
 
-    {scene===6&&<section className="moduleScene">
-      <div className="moduleEyebrow">FOUR WORLDS · ONE SYSTEM</div>
-      <div className="moduleStories">
-        {modules.map((m,i)=><article key={m[1]} className={'moduleStory ms'+i}>
-          <em>{m[0]}</em><h2>{m[1]}</h2><p>{m[2]}</p>
-        </article>)}
-      </div>
+    {scene===5&&<section className="v3Organize">
+      <div className="v3OrganizePulse"/>
+      <div className="v3FlowLines" aria-hidden="true">{Array.from({length:26},(_,i)=><i key={i} style={{'--i':i}}/>)}</div>
+      <div className="v3OrganizeArrow"><ArrowMark size={58} className="v3ArrowUp"/></div>
+      <div className="v3OrganizeCopy"><small>ARROW CONNECTS THE PIECES</small><h2>Chaos becomes <b>direction.</b></h2></div>
     </section>}
 
-    {scene===7&&<section className="orbitReveal">
-      <div className="orbitRevealCopy">
-        <small>THE CENTER OF ARROW</small>
-        <h2>ORBIT</h2>
-        <p>Not a dashboard. A world you move through.</p>
-      </div>
+    {scene===6&&<section className="v3World v3Atlas">
+      <AtlasVisual/>
+      <div className="v3WorldCraft"><ArrowMark size={46} className="v3ArrowUp"/></div>
+      <div className="v3WorldCopy"><small>01 / YOUR WORLD</small><h2>ATLAS</h2><p>Files, ideas, knowledge, and the things you own — connected as one navigable map.</p></div>
     </section>}
 
-    {scene===8&&<section className="finalScene">
-      <div className="finalLight"/>
-      <ArrowMark size={74} className="finalArrow upright"/>
-      <div className="finalCopy">
-        <small>RESONANT ASSIST PRESENTS</small>
-        <h1>PROJECT<br/><b>ARROW</b></h1>
-        <p>YOUR LIFE. CONNECTED.</p>
-        <strong>GIVE IT DIRECTION.</strong>
-      </div>
+    {scene===7&&<section className="v3World v3Ravin">
+      <RavinVisual/>
+      <div className="v3WorldCraft ravinCraft"><ArrowMark size={46} className="v3ArrowUp"/></div>
+      <div className="v3WorldCopy"><small>02 / INTELLIGENCE</small><h2>RAVIN</h2><p>An intelligence layer that understands the context surrounding your world.</p></div>
     </section>}
 
-    {scene===9&&<section className="landingScene">
-      <div className="landingPlanet"><OrbitPlanet active introMix={1}/></div>
-      <div className="landingShade"/>
-      <div className="landingContent">
-        <ArrowMark size={46} className="upright landingMark"/>
+    {scene===8&&<section className="v3World v3Relay">
+      <RelayVisual/>
+      <div className="v3WorldCraft relayCraft"><ArrowMark size={46} className="v3ArrowUp"/></div>
+      <div className="v3WorldCopy"><small>03 / CONNECTION</small><h2>RELAY</h2><p>Communication and coordination without breaking the rest of your flow.</p></div>
+    </section>}
+
+    {scene===9&&<section className="v3Orbit">
+      <div className="v3OrbitCamera">
+        <OrbitPlanet active introMix={1} showDestinations={false} showCore={false} showCraft={true}/>
+      </div>
+      <div className="v3OrbitCopy"><small>04 / THE CENTER</small><h2>ORBIT</h2><p>Not another dashboard. The place the whole system comes back to.</p></div>
+    </section>}
+
+    {scene===10&&<section className="v3Final">
+      <div className="v3FinalSun"/>
+      <ArrowMark size={76} className="v3ArrowUp v3FinalMark"/>
+      <div className="v3FinalCopy"><small>RESONANT ASSIST PRESENTS</small><h1>PROJECT<br/><b>ARROW</b></h1><p>YOUR LIFE. CONNECTED.</p><strong>GIVE IT DIRECTION.</strong></div>
+    </section>}
+
+    {scene===11&&<section className="v3Landing">
+      <div className="v3LandingPlanet"><OrbitPlanet active introMix={1} showDestinations={false} showCore={false} showCraft={true}/></div>
+      <div className="v3LandingShade"/>
+      <div className="v3LandingContent">
+        <ArrowMark size={46} className="v3ArrowUp"/>
         <small>PROJECT ARROW</small>
         <h1>Your digital life.<br/><b>Moving together.</b></h1>
-        <p>Atlas. RAVIN. Relay. Orbit. One connected system built to give the moving parts of your life a direction.</p>
-        <div className="landingActions">
-          <button>EXPLORE ARROW <span>→</span></button>
-          <button onClick={replay}>REPLAY EXPERIENCE</button>
-        </div>
+        <p>Atlas. RAVIN. Relay. Orbit. One connected system designed to give the moving parts of your life a direction.</p>
+        <div><button>EXPLORE ARROW →</button><button onClick={replay}>REPLAY EXPERIENCE</button></div>
       </div>
     </section>}
   </main>;
