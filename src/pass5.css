@@ -111,7 +111,7 @@
     opacity:.36;
   }
   76%{
-    transform:translate(calc(var(--to-x)*.7),calc(var(--to-y)*.7)) rotate(calc(var(--r2) + 250deg)) scale(.58);
+    transform:translate(var(--to-x70),var(--to-y70)) rotate(calc(var(--r2) + 250deg)) scale(.58);
     opacity:.38;
   }
   100%{
@@ -150,7 +150,7 @@
 @keyframes v5TitleDust{
   0%{opacity:0;transform:rotate(var(--a)) translateX(0) scale(2)}
   15%{opacity:.92}
-  100%{opacity:0;transform:rotate(var(--a)) translateX(calc(var(--d)*.72)) rotate(var(--spin)) scale(.05)}
+  100%{opacity:0;transform:rotate(var(--a)) translateX(var(--d72)) rotate(var(--spin)) scale(.05)}
 }
 .v4 .v3PreArrow{
   top:49%;
