@@ -1,0 +1,277 @@
+/* Pass 4 — readability, continuity, and scene cleanup */
+
+/* Global readability and chrome */
+.v4 .brandLockup{opacity:.5;font-size:9px;text-shadow:0 1px 14px #000}
+.v4 .skip{color:rgba(255,255,255,.56);border-color:rgba(255,255,255,.16);background:rgba(0,0,0,.18);backdrop-filter:blur(10px)}
+.v4 .skip:hover{color:#fff;border-color:rgba(255,255,255,.42);background:rgba(255,255,255,.05)}
+.v4 section{animation:v4SectionIn .55s ease-out both}
+.v4SceneVeil{position:fixed;z-index:86;inset:0;pointer-events:none;background:#000;animation:v4Veil .8s cubic-bezier(.16,1,.3,1) forwards}
+.v4SceneVeil-2,.v4SceneVeil-10{background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.13),#000 54%)}
+@keyframes v4SectionIn{from{opacity:.3;filter:blur(2px)}to{opacity:1;filter:none}}
+@keyframes v4Veil{0%{opacity:.58}100%{opacity:0}}
+
+/* Opening composition returns to original idea: faint title ABOVE the main arrow */
+.v4 .v3GhostTitle{
+  top:27%;
+  font-size:clamp(44px,6.8vw,104px);
+  letter-spacing:.28em;
+  padding-left:.28em;
+  color:rgba(255,255,255,.07);
+  text-shadow:0 0 48px rgba(255,255,255,.055);
+}
+.v4 .v3Start{height:350px}
+.v4 .v3Start b{margin-top:48px;font-size:11px;letter-spacing:.44em;opacity:.82;text-shadow:0 2px 24px #000}
+.v4 .v3Start small{font-size:8px;letter-spacing:.3em;opacity:.48}
+.v4 .v3HeroMark{filter:drop-shadow(0 0 12px rgba(255,255,255,.95)) drop-shadow(0 0 56px rgba(127,168,255,.5))}
+.v4IntroMicrocopy{position:absolute;left:50%;bottom:7.5%;transform:translateX(-50%);font-size:11px;letter-spacing:.08em;color:rgba(255,255,255,.42);text-align:center;width:min(720px,84vw);text-shadow:0 1px 16px #000}
+
+/* Lost arrows: more visible, more dimensional, never static */
+.v4 .lostField{inset:-3%;transform:translate(calc(var(--mx,0)*-11px),calc(var(--my,0)*-8px));mask-image:radial-gradient(circle at 50% 48%,transparent 0 7%,#000 27% 100%)}
+.v4 .lostArrow{
+  color:#dce3ef;
+  filter:blur(var(--blur,0)) drop-shadow(0 0 7px rgba(220,234,255,.18));
+  animation:v4LostWander var(--dur) var(--delay) cubic-bezier(.45,.04,.55,.96) infinite alternate;
+  will-change:transform;
+}
+.v4 .v3Prelude .lostField{mask-image:none}
+.v4 .v3Prelude .lostArrow{filter:blur(calc(var(--blur,0)*.55)) drop-shadow(0 0 10px rgba(255,255,255,.24))}
+@keyframes v4LostWander{
+  0%{transform:translate3d(0,0,0) rotate(var(--r0)) scale(var(--s0))}
+  24%{transform:translate3d(var(--dx1),var(--dy1),0) rotate(var(--r1)) scale(var(--s1))}
+  58%{transform:translate3d(var(--dx2),var(--dy2),0) rotate(var(--r2)) scale(calc(var(--s0)*.88))}
+  82%{transform:translate3d(calc(var(--dx1)*-.38),calc(var(--dy2)*-.34),0) rotate(calc(var(--r1) + 260deg)) scale(calc(var(--s1)*.95))}
+  100%{transform:translate3d(0,0,0) rotate(calc(var(--r2) + 420deg)) scale(var(--s0))}
+}
+
+/* Prelude/readability */
+.v4 .v3WordBreak{color:rgba(255,255,255,.13);text-shadow:0 0 80px rgba(255,255,255,.07)}
+.v4 .v3PreCopy{
+  bottom:8%;
+  gap:22px;
+  padding:10px 16px;
+  font-size:10px;
+  letter-spacing:.29em;
+  color:rgba(255,255,255,.48);
+  text-shadow:0 2px 18px #000;
+}
+.v4 .v3PreCopy b{color:rgba(255,255,255,.9)}
+.v4 .v3PreArrow{filter:drop-shadow(0 0 16px white) drop-shadow(0 0 70px rgba(105,155,255,.65))}
+
+/* Ignition */
+.v4 .pixelField i{
+  width:var(--size);
+  height:calc(var(--size)*var(--stretch,1));
+  opacity:var(--spark-opacity,.8);
+  border-radius:20%;
+  animation:v4PixelOut 2.9s var(--delay) cubic-bezier(.13,.74,.18,1) both;
+}
+.v4 .v3Beam.core{width:6px;box-shadow:0 0 18px 7px white,0 0 76px 27px rgba(194,216,255,.92),0 0 220px 55px rgba(80,127,236,.34)}
+.v4 .v3Beam.soft{width:220px;opacity:.85}
+.v4 .v3Lock{font-size:10px;letter-spacing:.52em;color:rgba(255,255,255,.82);text-shadow:0 0 24px rgba(255,255,255,.28)}
+.v4 .v3LaunchCraft{filter:drop-shadow(0 0 18px white) drop-shadow(0 0 58px rgba(110,160,255,.65))}
+@keyframes v4PixelOut{
+  0%{opacity:0;transform:rotate(var(--a)) translateX(0) rotate(0) scale(2)}
+  13%{opacity:var(--spark-opacity,.8)}
+  55%{opacity:calc(var(--spark-opacity,.8)*.72)}
+  100%{opacity:0;transform:rotate(var(--a)) translateX(var(--d)) rotate(var(--spin)) scale(.08)}
+}
+
+/* Direction scene */
+.v4 .v3Tunnel{
+  background:
+    radial-gradient(circle at 50% 58%,transparent 0 5%,rgba(114,157,245,.035) 18%,transparent 47%),
+    repeating-conic-gradient(from 0deg at 50% 58%,transparent 0 1.38deg,rgba(225,235,255,.065) 1.44deg 1.55deg);
+}
+.v4 .v3DirectionCopy span{font-size:clamp(28px,3.8vw,58px);opacity:0}
+.v4 .v3DirectionCopy strong{font-size:clamp(80px,12vw,188px);text-shadow:0 3px 26px rgba(0,0,0,.72)}
+.v4 .v3DirectionCopy p{
+  max-width:810px;
+  margin-top:29px;
+  font-size:15px;
+  line-height:1.7;
+  letter-spacing:.045em;
+  color:rgba(255,255,255,.76);
+  text-shadow:0 2px 22px #000;
+}
+.v4 .v3DirectionShards i{opacity:.23;filter:drop-shadow(0 0 6px rgba(145,181,255,.25))}
+.v4 .v3PassCraft{filter:drop-shadow(0 0 14px white) drop-shadow(0 0 48px rgba(100,150,255,.58))}
+
+/* Shared readable cinematic copy — a soft light falloff, NOT a card */
+.v4CopyPlate{isolation:isolate}
+.v4CopyPlate:before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  left:50%;
+  top:50%;
+  width:min(940px,112vw);
+  height:190px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,rgba(0,0,0,.76),rgba(0,0,0,.38) 45%,transparent 74%);
+  filter:blur(12px);
+  pointer-events:none;
+}
+
+/* Chaos */
+.v4 .v3ChaosDepth span{
+  font-size:clamp(13px,1.65vw,25px);
+  color:rgba(255,255,255,.62);
+  text-shadow:0 0 18px rgba(255,255,255,.17),0 3px 20px #000;
+}
+.v4 .v3ChaosCopy{bottom:7%}
+.v4 .v3ChaosCopy small{font-size:10px;letter-spacing:.34em;opacity:.62}
+.v4 .v3ChaosCopy h2{font-size:clamp(30px,3.8vw,56px);color:rgba(255,255,255,.86);text-shadow:0 2px 25px #000}
+.v4 .v3ChaosCopy b{color:#fff}
+.v4 .v3ChaosCraft{filter:drop-shadow(0 0 17px white) drop-shadow(0 0 45px rgba(113,158,255,.48))}
+
+/* Organize: replace giant loading-ring look with layered directional convergence */
+.v4 .v3OrganizePulse{
+  width:34px;height:34px;
+  border-color:rgba(255,255,255,.5);
+  box-shadow:0 0 28px rgba(255,255,255,.24),inset 0 0 18px rgba(127,166,255,.15);
+  animation:v4OrganizePulse 3s ease-out infinite;
+}
+.v4 .v3FlowLines i{
+  opacity:.24;
+  height:39vh;
+  background:linear-gradient(transparent,rgba(255,255,255,.34) 52%,transparent);
+  filter:drop-shadow(0 0 5px rgba(135,174,255,.2));
+}
+.v4ConvergeDots{position:absolute;inset:0;pointer-events:none}
+.v4ConvergeDots i{
+  position:absolute;left:50%;top:48%;width:3px;height:3px;border-radius:50%;
+  background:#fff;box-shadow:0 0 9px #fff;
+  transform:rotate(calc(var(--i)*11.25deg)) translateX(34vw);
+  animation:v4DotIn 2.9s calc(var(--i)*-.07s) ease-in-out infinite;
+}
+.v4 .v3OrganizeArrow{filter:drop-shadow(0 0 18px white) drop-shadow(0 0 66px rgba(102,150,255,.58))}
+.v4 .v3OrganizeCopy{bottom:6.5%}
+.v4 .v3OrganizeCopy small{font-size:10px;letter-spacing:.36em;opacity:.62}
+.v4 .v3OrganizeCopy h2{font-size:clamp(32px,4.2vw,62px);color:rgba(255,255,255,.9)}
+.v4 .v3OrganizeCopy p{margin:10px 0 0;font-size:14px;letter-spacing:.05em;color:rgba(255,255,255,.62)}
+@keyframes v4OrganizePulse{0%{transform:translate(-50%,-50%) scale(.4);opacity:.8}72%{opacity:.23}100%{transform:translate(-50%,-50%) scale(18);opacity:0}}
+@keyframes v4DotIn{0%{opacity:0;transform:rotate(calc(var(--i)*11.25deg)) translateX(42vw) scale(.4)}40%{opacity:.78}80%,100%{opacity:0;transform:rotate(calc(var(--i)*11.25deg)) translateX(4vw) scale(1.2)}}
+
+/* Scene-to-scene craft seam */
+.v4ModuleSeam{
+  position:fixed;z-index:85;left:50%;top:50%;width:26px;height:26px;color:#fff;
+  pointer-events:none;opacity:0;
+  filter:drop-shadow(0 0 10px white) drop-shadow(0 0 28px rgba(117,162,255,.55));
+  animation:v4Seam 1.05s cubic-bezier(.2,.62,.2,1) both;
+}
+.v4ModuleSeam:after{
+  content:"";position:absolute;right:18px;top:50%;width:42vw;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.42));
+  transform:translateY(-50%);
+}
+@keyframes v4Seam{0%{opacity:0;transform:translate(-58vw,28vh) rotate(-24deg) scale(.45)}20%{opacity:1}76%{opacity:1}100%{opacity:0;transform:translate(58vw,-32vh) rotate(-24deg) scale(1.2)}}
+
+/* World captions */
+.v4 .v3WorldCopy{bottom:5.5%;width:min(850px,90vw)}
+.v4 .v3WorldCopy small{font-size:10px;letter-spacing:.37em;color:rgba(255,255,255,.62);text-shadow:0 2px 18px #000}
+.v4 .v3WorldCopy h2{font-size:clamp(64px,8.8vw,132px);margin:9px 0 14px;color:rgba(255,255,255,.92);text-shadow:0 4px 30px #000}
+.v4 .v3WorldCopy p{max-width:760px;font-size:15px;line-height:1.68;letter-spacing:.035em;color:rgba(255,255,255,.72);text-shadow:0 2px 20px #000}
+
+/* Atlas */
+.v4 .v3AtlasField{
+  top:40%;
+  width:min(90vw,1280px);
+  height:min(66vh,670px);
+  filter:drop-shadow(0 0 32px rgba(127,167,255,.13));
+}
+.v4AtlasGrid{position:absolute;inset:-6%;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:7% 10%;mask-image:radial-gradient(ellipse,#000 20%,transparent 74%);opacity:.5}
+.v4AtlasRing{position:absolute;left:50%;top:50%;border:1px solid rgba(255,255,255,.12);border-radius:50%;transform:translate(-50%,-50%);animation:v4AtlasRing 5s ease-in-out infinite}
+.v4AtlasRing.ar1{width:45%;height:45%}.v4AtlasRing.ar2{width:78%;height:78%;animation-delay:-2.2s}
+.v4 .v3AtlasField line{stroke:rgba(255,255,255,.25);stroke-width:.19}
+.v4 .v3AtlasField i{box-shadow:0 0 calc(8px + var(--halo)*15px) rgba(255,255,255,.92),0 0 26px rgba(116,160,255,.18)}
+.v4 .v3Atlas .v3WorldCraft{animation:v4AtlasCraft 5.9s cubic-bezier(.18,.55,.26,1) both}
+@keyframes v4AtlasRing{0%,100%{opacity:.18;transform:translate(-50%,-50%) scale(.92)}50%{opacity:.5;transform:translate(-50%,-50%) scale(1.04)}}
+@keyframes v4AtlasCraft{0%{transform:translate(-62vw,20vh) scale(.35);opacity:0}17%{opacity:1}48%{transform:translate(-18vw,-8vh) scale(.65);opacity:.9}78%{transform:translate(19vw,-19vh) scale(.86);opacity:1}100%{transform:translate(65vw,-36vh) scale(.4);opacity:0}}
+
+/* RAVIN */
+.v4 .v3RavinCore{top:39%;width:min(61vw,730px)}
+.v4 .v3CoreOrb{width:28px;height:28px;box-shadow:0 0 34px 11px white,0 0 135px 52px rgba(98,148,255,.55)}
+.v4 .v3CoreHalo{border-color:rgba(255,255,255,.23)}
+.v4CoreMesh{position:absolute;inset:12%;border-radius:50%;background:repeating-conic-gradient(from 0deg,transparent 0 10deg,rgba(255,255,255,.045) 10.3deg 10.8deg);mask-image:radial-gradient(circle,transparent 0 16%,#000 18% 74%,transparent 76%);animation:v4CoreSpin 22s linear infinite}
+.v4CoreBits{position:absolute;inset:0}
+.v4CoreBits span{position:absolute;left:var(--x);top:var(--y);width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 8px #fff;opacity:.25;animation:v4Bit 2.4s var(--d) ease-in-out infinite alternate}
+.v4 .v3Ravin .v3WorldCraft{animation:v4RavinCraft 5.9s cubic-bezier(.18,.58,.24,1) both}
+@keyframes v4CoreSpin{to{transform:rotate(360deg)}}
+@keyframes v4Bit{to{opacity:.85;transform:scale(1.8)}}
+@keyframes v4RavinCraft{0%{transform:translate(-58vw,-18vh) scale(.32);opacity:0}16%{opacity:1}50%{transform:translate(-8vw,-12vh) rotate(18deg) scale(.7);opacity:.95}68%{transform:translate(8vw,-4vh) rotate(-8deg) scale(.9);opacity:1}100%{transform:translate(63vw,18vh) rotate(13deg) scale(.38);opacity:0}}
+
+/* Relay */
+.v4 .v3RelayWorld{top:40%;width:min(88vw,1120px);height:min(65vh,650px)}
+.v4RelayGrid{position:absolute;inset:0;background:radial-gradient(circle at 50% 48%,rgba(92,137,234,.07),transparent 42%),linear-gradient(20deg,transparent 49.9%,rgba(255,255,255,.035) 50%,transparent 50.1%),linear-gradient(-20deg,transparent 49.9%,rgba(255,255,255,.035) 50%,transparent 50.1%)}
+.v4 .v3Tower{height:300px}
+.v4 .v3Tower:before{top:34px;height:245px;width:3px;background:linear-gradient(#fff,rgba(255,255,255,.08));box-shadow:0 0 20px rgba(255,255,255,.42),0 0 42px rgba(110,155,255,.16)}
+.v4 .v3Tower:after{width:11px;height:11px;box-shadow:0 0 23px white,0 0 70px rgba(100,151,255,.55)}
+.v4 .v3Tower i{border-color:rgba(255,255,255,.28)}
+.v4RelayArc{position:absolute;left:50%;top:47%;border:1px solid rgba(255,255,255,.09);border-radius:50%;transform:translate(-50%,-50%) rotateX(70deg);animation:v4RelayArc 4.8s linear infinite}
+.v4RelayArc.a1{width:58%;height:58%}.v4RelayArc.a2{width:86%;height:86%;animation-direction:reverse;animation-duration:7s}
+.v4 .v3Packet{
+  left:var(--x);
+  top:var(--y);
+  width:var(--size);
+  height:var(--size);
+  animation:v4PacketTravel var(--dur) var(--delay) cubic-bezier(.4,.04,.42,1) infinite;
+}
+.v4 .v3Relay .v3WorldCraft{animation:v4RelayCraft 5.9s cubic-bezier(.18,.55,.25,1) both}
+@keyframes v4RelayArc{to{transform:translate(-50%,-50%) rotateX(70deg) rotateZ(360deg)}}
+@keyframes v4PacketTravel{0%{left:var(--x);top:var(--y);opacity:0;transform:scale(.45)}18%{opacity:.85}72%{left:50%;top:46%;opacity:1;transform:scale(1.25)}100%{left:50%;top:46%;opacity:0;transform:scale(.2)}}
+@keyframes v4RelayCraft{0%{transform:translate(-62vw,30vh) rotate(-12deg) scale(.3);opacity:0}16%{opacity:1}58%{transform:translate(-3vw,-4vh) rotate(5deg) scale(.8);opacity:1}100%{transform:translate(65vw,-29vh) rotate(-10deg) scale(.4);opacity:0}}
+
+/* Orbit */
+.v4 .v3OrbitCamera{top:-7%;bottom:7%;opacity:.13;animation:v4OrbitReveal 3.2s cubic-bezier(.16,1,.3,1) forwards}
+.v4 .v3OrbitCamera .orbitExactCanvas{filter:drop-shadow(0 0 22px rgba(112,154,245,.06))}
+.v4 .v3Orbit .orbitExactCraft{width:32px;height:32px;filter:drop-shadow(0 0 10px white) drop-shadow(0 0 24px rgba(112,157,255,.32))}
+.v4 .v3Orbit .orbitExactCraft svg{width:29px;height:29px}
+.v4 .v3Orbit .orbitExactCraft:after{
+  content:"";position:absolute;right:20px;top:50%;width:54px;height:1px;transform:translateY(-50%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45));
+  filter:blur(.3px)
+}
+.v4 .v3OrbitCopy{bottom:4.5%;width:min(800px,92vw)}
+.v4 .v3OrbitCopy small{font-size:10px;letter-spacing:.39em;color:rgba(255,255,255,.62)}
+.v4 .v3OrbitCopy h2{font-size:clamp(72px,9.4vw,142px);margin:10px 0 12px;color:rgba(255,255,255,.94);text-shadow:0 4px 30px #000}
+.v4 .v3OrbitCopy p{font-size:15px;letter-spacing:.045em;color:rgba(255,255,255,.72);text-shadow:0 2px 20px #000}
+@keyframes v4OrbitReveal{0%{transform:scale(1.24);filter:blur(7px);opacity:.06}35%{opacity:.42}100%{transform:scale(1);filter:none;opacity:1}}
+
+/* Final reveal: remove the dark dead period */
+.v4 .v3FinalSun{top:43%;animation:v4FinalSun 6s ease-out both}
+.v4 .v3FinalMark{top:12%;animation:v4FinalMark 1.35s .08s cubic-bezier(.16,1,.3,1) forwards}
+.v4 .v3FinalCopy small{font-size:10px;letter-spacing:.44em;animation:v4SoftFinal .9s .28s forwards}
+.v4 .v3FinalCopy h1{font-size:clamp(78px,11.3vw,174px);margin:25px 0 28px;animation:v4FinalTitle 1.35s .72s forwards}
+.v4 .v3FinalCopy p{font-size:13px;letter-spacing:.45em;animation:v4SoftFinal 1s 2.15s forwards}
+.v4 .v3FinalCopy strong{font-size:11px;letter-spacing:.42em;animation:v4SoftFinal 1s 2.9s forwards}
+@keyframes v4FinalSun{0%{opacity:.18;transform:scale(.28)}32%{opacity:.76}100%{opacity:.13;transform:scale(1.28)}}
+@keyframes v4FinalMark{from{opacity:0;transform:translate(-50%,-45px) rotate(-90deg) scale(.55);filter:blur(6px)}to{opacity:1;transform:translate(-50%,0) rotate(-90deg) scale(1);filter:none}}
+@keyframes v4SoftFinal{from{opacity:0;transform:translateY(10px);filter:blur(6px)}to{opacity:.76;transform:none;filter:none}}
+@keyframes v4FinalTitle{from{opacity:0;transform:scale(.9);filter:blur(14px)}to{opacity:1;transform:scale(1);filter:none}}
+
+/* Landing */
+.v4 .v3LandingPlanet{opacity:.26}
+.v4 .v3LandingContent>small{font-size:9px;color:rgba(255,255,255,.58)}
+.v4 .v3LandingContent h1{font-size:clamp(56px,7.35vw,114px)}
+.v4 .v3LandingContent p{max-width:780px;font-size:15px;line-height:1.7;color:rgba(255,255,255,.65)}
+.v4 .v3LandingContent>div{margin-top:32px;gap:14px}
+.v4 .v3LandingContent button{padding:15px 21px;font-size:9px;letter-spacing:.2em;transition:.22s}
+.v4 .v3LandingContent button:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.42)}
+.v4 .v3LandingContent button:first-child:hover{box-shadow:0 10px 35px rgba(255,255,255,.12)}
+
+/* Mobile */
+@media(max-width:760px){
+  .v4 .v3GhostTitle{top:24%;font-size:13vw}
+  .v4IntroMicrocopy{font-size:9px}
+  .v4 .v3PreCopy{flex-direction:column;gap:5px;font-size:7px;text-align:center}
+  .v4 .v3DirectionCopy p,.v4 .v3WorldCopy p,.v4 .v3OrbitCopy p,.v4 .v3LandingContent p{font-size:11px;line-height:1.58}
+  .v4 .v3WorldCopy{bottom:4.5%}
+  .v4 .v3WorldCopy h2{font-size:16vw}
+  .v4 .v3OrbitCopy h2{font-size:17vw}
+  .v4CopyPlate:before{height:150px}
+  .v4ModuleSeam:after{width:55vw}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .v4SceneVeil,.v4ModuleSeam,.v4ConvergeDots,.v4CoreMesh,.v4RelayArc{display:none!important}
+}
