@@ -115,14 +115,14 @@ export function OrbitPlanet({
 
       if(showCraft&&craftRef.current){
         const craftAnchor=[
-          Math.cos(craftAngle)*1.32,
+          Math.cos(craftAngle)*1.16,
           Math.sin(craftAngle*.7)*.23,
-          Math.sin(craftAngle)*1.32,
+          Math.sin(craftAngle)*1.16,
         ];
         const nextAnchor=[
-          Math.cos(craftAngle+.025)*1.32,
+          Math.cos(craftAngle+.025)*1.16,
           Math.sin((craftAngle+.025)*.7)*.23,
-          Math.sin(craftAngle+.025)*1.32,
+          Math.sin(craftAngle+.025)*1.16,
         ];
         const cp=projectPoint(craftAnchor,yaw,worldPitch,worldRoll,sphereRadius,centerX,centerY);
         const np=projectPoint(nextAnchor,yaw,worldPitch,worldRoll,sphereRadius,centerX,centerY);
