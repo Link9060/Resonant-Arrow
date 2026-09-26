@@ -1072,3 +1072,26 @@ body{touch-action:manipulation}
     100%{opacity:0;transform:rotate(var(--a)) translateX(42vw) scaleX(1)}
   }
 }
+
+
+/* Scene-2 Safari crash fix: never combine full-screen blend/filter layers with ignition. */
+.scene-2 .space-field-canvas{
+  visibility:hidden!important;
+}
+.scene-2 .ax-scene{
+  animation:axSceneInSafe .28s ease-out both!important;
+}
+.ax-scene-transition.t2{
+  mix-blend-mode:normal!important;
+  background:rgba(255,255,255,.92)!important;
+  animation:axFlashTransitionSafe .38s ease-out both!important;
+}
+@keyframes axSceneInSafe{
+  from{opacity:.72}
+  to{opacity:1}
+}
+@keyframes axFlashTransitionSafe{
+  0%{opacity:.82}
+  22%{opacity:.34}
+  100%{opacity:0}
+}
