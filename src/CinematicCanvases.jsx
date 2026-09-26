@@ -153,7 +153,7 @@ export function SpaceFieldCanvas({scene}){
     let frame=0,last=performance.now(),size=fit(canvas,ctx),paused=document.hidden;
     const rnd=seeded(5005);
     const lowPower=matchMedia('(max-width: 700px)').matches||((navigator.hardwareConcurrency||8)<=4);
-    const points=Array.from({length:lowPower?280:520},()=>({
+    const points=Array.from({length:lowPower?120:240},()=>({
       x:(rnd()-.5)*2.2,
       y:(rnd()-.5)*2.2,
       z:.04+rnd()*.96,
@@ -171,13 +171,13 @@ export function SpaceFieldCanvas({scene}){
     document.addEventListener('visibilitychange',visibility);
 
     function config(s){
-      if(s===2)return{speed:.36,alpha:.24,streak:1.2};
-      if(s===3)return{speed:.86,alpha:.35,streak:2.6};
-      if(s===4)return{speed:.14,alpha:.16,streak:.35};
-      if(s===5)return{speed:.08,alpha:.12,streak:.18};
-      if(s>=6&&s<=10)return{speed:.045,alpha:.095,streak:.08};
-      if(s===11)return{speed:.025,alpha:.075,streak:.02};
-      return{speed:.018,alpha:.065,streak:.02};
+      if(s===2)return{disabled:true,speed:0,alpha:0,streak:0};
+      if(s===3)return{speed:.22,alpha:.16,streak:.42};
+      if(s===4)return{speed:.10,alpha:.13,streak:.24};
+      if(s===5)return{speed:.06,alpha:.10,streak:.14};
+      if(s>=6&&s<=10)return{speed:.035,alpha:.08,streak:.06};
+      if(s===11)return{speed:.02,alpha:.065,streak:.02};
+      return{speed:.014,alpha:.055,streak:.02};
     }
 
     function loop(now){
@@ -187,9 +187,13 @@ export function SpaceFieldCanvas({scene}){
       last=now;
       const cfg=config(sceneRef.current);
       ctx.clearRect(0,0,size.w,size.h);
+      if(cfg.disabled){
+        frame=requestAnimationFrame(loop);
+        return;
+      }
       ctx.save();
       ctx.translate(size.w/2,size.h/2);
-      ctx.globalCompositeOperation='lighter';
+      ctx.globalCompositeOperation='source-over';
 
       for(const p of points){
         p.z-=cfg.speed*dt;
