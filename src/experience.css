@@ -980,3 +980,61 @@ body{touch-action:manipulation}
   .ax-ignition .ax-impact-flash{animation-duration:.52s}
   .ax-ignition .impact-particles{opacity:.92}
 }
+
+
+/* Global ignition performance pass — large-looking, cheap-to-render explosion. */
+.ax-ignition{
+  animation:none!important;
+  transform:none!important;
+  contain:paint;
+  isolation:isolate;
+}
+.ax-ignition .impact-particles{
+  filter:none!important;
+  transform:none!important;
+}
+.ax-impact-flash{
+  mix-blend-mode:normal!important;
+  background:radial-gradient(circle at 50% 50%,#fff 0 7%,rgba(225,237,255,.96) 10%,rgba(121,165,255,.5) 24%,rgba(44,78,155,.16) 42%,transparent 68%)!important;
+  animation-duration:.55s!important;
+}
+.ax-impact-core{
+  width:26px!important;
+  height:26px!important;
+  box-shadow:none!important;
+  background:radial-gradient(circle,#fff 0 18%,rgba(213,231,255,.96) 28%,rgba(113,161,255,.58) 52%,transparent 74%)!important;
+  animation-duration:.85s!important;
+}
+.ax-impact-ring{
+  box-shadow:none!important;
+  border:2px solid rgba(236,244,255,.9)!important;
+  animation-duration:.92s!important;
+}
+.ax-shock{box-shadow:none!important}
+.ax-shock.s1{border-width:2px!important}
+.ax-shock.s2{border-width:1px!important}
+.ax-hit-glow{
+  width:min(62vw,760px)!important;
+  height:min(62vw,760px)!important;
+  border-radius:50%;
+  box-shadow:none!important;
+  background:radial-gradient(circle,rgba(255,255,255,.92) 0 3%,rgba(187,214,255,.58) 10%,rgba(86,134,238,.25) 26%,transparent 62%)!important;
+}
+.ax-beam.soft{
+  width:120px!important;
+  filter:none!important;
+  background:linear-gradient(90deg,transparent,rgba(122,166,255,.06) 18%,rgba(218,233,255,.28) 43%,rgba(255,255,255,.58) 50%,rgba(218,233,255,.28) 57%,rgba(122,166,255,.06) 82%,transparent)!important;
+  opacity:.8!important;
+}
+.ax-beam.core{
+  width:5px!important;
+  box-shadow:0 0 14px 4px rgba(255,255,255,.85),0 0 40px 12px rgba(131,174,255,.45)!important;
+}
+@media(min-width:701px){
+  .ax-impact-ring{animation-name:axImpactRingDesktopCheap!important}
+  @keyframes axImpactRingDesktopCheap{
+    0%{opacity:1;transform:translate(-50%,-50%) scale(.3)}
+    25%{opacity:.9}
+    100%{opacity:0;transform:translate(-50%,-50%) scale(26)}
+  }
+}
