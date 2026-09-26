@@ -104,7 +104,7 @@ function RavinVisual(){
   return <div className="ax-ravin-world" aria-hidden="true">
     <div className="ax-ravin-mesh"/>
     <div className="ax-ravin-ring rr1"/><div className="ax-ravin-ring rr2"/><div className="ax-ravin-ring rr3"/>
-    <div className="ax-ravin-core"/>
+    <div className="ax-ravin-core"><span>CONTEXT</span><b>→</b><span>DECISION</span></div>
     <div className="ax-ravin-rays">{Array.from({length:20},(_,i)=><i key={i} style={{'--i':i}}/>)}</div>
     <div className="ax-ravin-bits">{bits.map(b=><i key={b.id} style={{left:b.x+'%',top:b.y+'%',width:b.s+'px',height:b.s+'px','--d':b.d+'s'}}/>)}</div>
     <div className="ax-ravin-steps"><span>UNDERSTAND</span><span>REASON</span><span>ACT</span></div>
@@ -138,7 +138,7 @@ function RelayVisual(){
   },[endpoints]);
 
   return <div className="ax-relay-world" aria-hidden="true">
-    <div className="ax-relay-grid"/>
+    <div className="ax-relay-grid"/><div className="ax-relay-status">SIGNAL ROUTING THROUGH RELAY</div>
     <svg className="ax-relay-links" viewBox="0 0 100 100" preserveAspectRatio="none">
       {endpoints.map(e=><line key={e.id} x1={e.x} y1={e.y} x2={hub.x} y2={hub.y}/>)}
     </svg>
@@ -180,7 +180,7 @@ function WaypointVisual(){
       <i className="point p1"/><i className="point p2"/><i className="point p3"/>
       <b>→</b>
     </div>
-    <div className="ax-waypoint-next"><span>NEXT MOVE</span><strong>DO THE FIRST CLEAR THING</strong></div>
+    <div className="ax-waypoint-next"><span>DESTINATION CHOSEN</span><strong>NEXT → DO THE FIRST CLEAR THING</strong></div>
   </div>;
 }
 
@@ -190,7 +190,7 @@ function Intro({onStart}){
     <div className="ax-intro-title">ARROW</div>
     <button className="ax-start" onClick={onStart}>
       <span className="ax-hero-ring r1"/><span className="ax-hero-ring r2"/>
-      <ArrowMark size={70} className="ax-arrow-up ax-hero-mark"/>
+      <ArrowMark size={84} className="ax-hero-mark"/>
       <strong>FIND YOUR DIRECTION</strong>
       <small>CLICK TO BEGIN</small>
     </button>
@@ -202,7 +202,7 @@ function Converge(){
   return <section className="ax-scene ax-converge">
     <LostArrowCanvas mode="converge"/>
     <div className="ax-title-shatter" aria-hidden="true">{['A','R','R','O','W'].map((x,i)=><span key={i}>{x}</span>)}</div>
-    <div className="ax-charge"><ArrowMark size={78} className="ax-arrow-up"/></div>
+    <div className="ax-charge"><ArrowMark size={88}/></div>
     <div className="ax-converge-copy"><span>SCATTERED.</span><span>UNCONNECTED.</span><b>CHOOSE A DIRECTION.</b></div>
   </section>;
 }
@@ -226,7 +226,7 @@ function Direction(){
       <strong>DIRECTION.</strong>
       <p>One connected system for the things you do, know, build, remember, and share.</p>
     </div>
-    <div className="ax-direction-craft"><ArrowMark size={58} className="ax-arrow-up"/><i/></div>
+    <div className="ax-direction-craft"><ArrowMark size={72}/><i/></div>
   </section>;
 }
 
@@ -234,7 +234,7 @@ function Chaos(){
   const words=['MESSAGES','FILES','PROJECTS','PEOPLE','EVENTS','IDEAS','TASKS','MUSIC','NOTES','AI','CALENDAR','MEMORIES','LINKS','GOALS'];
   return <section className="ax-scene ax-chaos">
     <div className="ax-chaos-words" aria-hidden="true">{words.map((w,i)=><span key={w} className={'c'+i}>{w}</span>)}</div>
-    <div className="ax-chaos-craft"><ArrowMark size={54} className="ax-arrow-up"/></div>
+    <div className="ax-chaos-craft"><ArrowMark size={72}/></div>
     <div className="ax-story-copy">
       <div className="ax-role">YOUR LIFE IS EVERYWHERE</div>
       <h2>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></h2>
@@ -247,7 +247,7 @@ function Organize(){
   return <section className="ax-scene ax-organize">
     <div className="ax-organize-lines">{Array.from({length:28},(_,i)=><i key={i} style={{'--i':i}}/>)}</div>
     <div className="ax-organize-dots">{Array.from({length:36},(_,i)=><i key={i} style={{'--i':i}}/>)}</div>
-    <div className="ax-organize-arrow"><ArrowMark size={62} className="ax-arrow-up"/></div>
+    <div className="ax-organize-arrow"><ArrowMark size={78}/></div>
     <div className="ax-story-copy">
       <div className="ax-role">ARROW CONNECTS THE PIECES</div>
       <h2>Chaos becomes <b>direction.</b></h2>
@@ -308,7 +308,7 @@ function Orbit(){
 function Final(){
   return <section className="ax-scene ax-final">
     <div className="ax-final-sun"/>
-    <ArrowMark size={78} className="ax-arrow-up ax-final-mark"/>
+    <ArrowMark size={96} className="ax-final-mark"/>
     <div className="ax-final-copy">
       <small>RESONANT ASSIST PRESENTS</small>
       <h1>PROJECT<br/><b>ARROW</b></h1>
@@ -323,7 +323,7 @@ function Landing({onReplay}){
     <div className="ax-landing-orbit"><OrbitPlanet active introMix={1} showDestinations={false} showCore={false} showCraft={true}/></div>
     <div className="ax-landing-shade"/>
     <div className="ax-landing-copy">
-      <ArrowMark size={46} className="ax-arrow-up"/>
+      <ArrowMark size={54}/>
       <small>PROJECT ARROW</small>
       <h1>Your digital life.<br/><b>Moving together.</b></h1>
       <p>Atlas. RAVIN. Relay. Waypoint. Orbit. One connected system designed to give the moving parts of your life a direction.</p>
