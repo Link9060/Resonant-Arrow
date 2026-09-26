@@ -240,12 +240,12 @@ export function ImpactParticles({count=180,className='' }){
     const rnd=seeded(1741);
     const parts=Array.from({length:count},()=>({
       angle:rnd()*Math.PI*2,
-      speed:90+rnd()*520,
-      life:.8+rnd()*1.9,
-      delay:rnd()*.28,
-      size:.5+rnd()*3.2,
+      speed:170+rnd()*820,
+      life:.65+rnd()*1.65,
+      delay:rnd()*.12,
+      size:.8+rnd()*4.8,
       spin:rnd()*Math.PI*2,
-      tangent:(rnd()-.5)*80,
+      tangent:(rnd()-.5)*115,
     }));
 
     const resize=()=>{size=fit(canvas,ctx)};
@@ -270,7 +270,7 @@ export function ImpactParticles({count=180,className='' }){
         ctx.rotate(p.spin+local*4);
         ctx.fillStyle='rgba(235,243,255,'+a+')';
         ctx.shadowColor='rgba(160,195,255,'+(a*.6)+')';
-        ctx.shadowBlur=9;
+        ctx.shadowBlur=14;
         ctx.fillRect(-p.size*.5,-p.size*2,p.size,p.size*4);
         ctx.restore();
       }
