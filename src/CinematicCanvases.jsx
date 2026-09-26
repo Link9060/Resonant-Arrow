@@ -29,7 +29,7 @@ export function LostArrowCanvas({mode='wander'}){
 
     let frame=0,last=performance.now(),started=performance.now(),size=fit(canvas,ctx),paused=document.hidden;
     const rnd=seeded(9060);
-    const count=96;
+    const count=76;
     const path=new Path2D(ARROW_MARK_PATH);
 
     const arrows=Array.from({length:count},()=>({
@@ -39,8 +39,8 @@ export function LostArrowCanvas({mode='wander'}){
       vy:(rnd()-.5)*(14+rnd()*28),
       rot:rnd()*Math.PI*2,
       vr:(rnd()-.5)*(0.45+rnd()*1.25),
-      scale:.38+rnd()*1.25,
-      alpha:.035+rnd()*.16,
+      scale:.52+rnd()*1.34,
+      alpha:.075+rnd()*.20,
       depth:.35+rnd()*.9,
       phase:rnd()*Math.PI*2,
       swirl:(rnd()>.5?1:-1)*(0.6+rnd()*1.4),
