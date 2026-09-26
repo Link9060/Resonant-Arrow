@@ -230,7 +230,7 @@ export function SpaceFieldCanvas({scene}){
   return <canvas ref={ref} className="space-field-canvas" aria-hidden="true"/>;
 }
 
-export function ImpactParticles({count=180,className='' }){
+export function ImpactParticles({count=180,className='',lightweight=false}){
   const ref=useRef(null);
 
   useEffect(()=>{
@@ -273,8 +273,10 @@ export function ImpactParticles({count=180,className='' }){
         ctx.translate(x,y);
         ctx.rotate(p.spin+local*4);
         ctx.fillStyle='rgba(235,243,255,'+a+')';
-        ctx.shadowColor='rgba(160,195,255,'+(a*.6)+')';
-        ctx.shadowBlur=14;
+        if(!lightweight){
+          ctx.shadowColor='rgba(160,195,255,'+(a*.6)+')';
+          ctx.shadowBlur=14;
+        }
         ctx.fillRect(-p.size*.5,-p.size*2,p.size,p.size*4);
         ctx.restore();
       }
@@ -286,7 +288,7 @@ export function ImpactParticles({count=180,className='' }){
       cancelAnimationFrame(frame);
       removeEventListener('resize',resize);
     };
-  },[count]);
+  },[count,lightweight]);
 
   return <canvas ref={ref} className={'impact-particles '+className} aria-hidden="true"/>;
 }
