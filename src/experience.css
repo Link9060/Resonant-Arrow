@@ -1038,3 +1038,37 @@ body{touch-action:manipulation}
     100%{opacity:0;transform:translate(-50%,-50%) scale(26)}
   }
 }
+
+
+/* Crash-safe ignition: no scene-specific canvas, filters, blend modes, or huge raster shadows. */
+.ax-burst-streaks{position:absolute;z-index:21;inset:0;overflow:hidden;pointer-events:none}
+.ax-burst-streaks i{
+  position:absolute;left:50%;top:50%;width:clamp(70px,11vw,170px);height:2px;
+  transform-origin:0 50%;
+  transform:rotate(var(--a)) translateX(16px) scaleX(.04);
+  background:linear-gradient(90deg,rgba(255,255,255,.96),rgba(176,205,255,.56) 35%,transparent);
+  opacity:0;
+  animation:axBurstStreak .82s cubic-bezier(.12,.72,.18,1) var(--d) both;
+}
+.ax-burst-streaks i:nth-child(3n){height:1px;width:clamp(110px,16vw,240px)}
+.ax-burst-streaks i:nth-child(5n){opacity:.72}
+@keyframes axBurstStreak{
+  0%{opacity:0;transform:rotate(var(--a)) translateX(10px) scaleX(.03)}
+  10%{opacity:1}
+  58%{opacity:.72}
+  100%{opacity:0;transform:rotate(var(--a)) translateX(min(42vw,520px)) scaleX(1)}
+}
+.ax-ignition .ax-impact-core,
+.ax-ignition .ax-hit-glow,
+.ax-ignition .ax-impact-flash,
+.ax-ignition .ax-beam.soft{filter:none!important;box-shadow:none!important}
+@media(max-width:700px){
+  .ax-burst-streaks i{width:26vw}
+  .ax-burst-streaks i:nth-child(3n){width:38vw}
+  @keyframes axBurstStreak{
+    0%{opacity:0;transform:rotate(var(--a)) translateX(8px) scaleX(.03)}
+    10%{opacity:1}
+    58%{opacity:.68}
+    100%{opacity:0;transform:rotate(var(--a)) translateX(42vw) scaleX(1)}
+  }
+}
