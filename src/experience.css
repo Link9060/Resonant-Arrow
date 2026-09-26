@@ -479,3 +479,49 @@ button:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:5px}
   .ax-relay-tower{transform:translateX(-50%) scale(.78);transform-origin:top}
   .ax-direction-copy strong{font-size:17vw}
 }
+
+
+/* IGNITION IMPACT AMPLIFICATION */
+.ax-ignition{animation:axImpactPunch 1.05s cubic-bezier(.2,.8,.2,1) both}
+.ax-impact-flash{position:absolute;z-index:24;inset:0;pointer-events:none;background:#fff;mix-blend-mode:screen;animation:axImpactFlash .72s cubic-bezier(.12,.78,.18,1) both}
+.ax-impact-core{position:absolute;z-index:23;left:50%;top:50%;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);background:#fff;box-shadow:0 0 45px 22px #fff,0 0 130px 65px rgba(186,213,255,.96),0 0 330px 150px rgba(77,130,255,.52);animation:axImpactCore 1.35s cubic-bezier(.12,.8,.2,1) both}
+.ax-impact-ring{position:absolute;z-index:22;left:50%;top:50%;width:40px;height:40px;border:3px solid rgba(255,255,255,.95);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 30px rgba(255,255,255,.8),inset 0 0 20px rgba(155,194,255,.5);animation:axImpactRing 1.3s cubic-bezier(.08,.72,.16,1) both}
+.ax-impact-ring.ir2{animation-delay:.09s;border-width:2px;opacity:.72}
+.ax-shock.s1{border-width:3px;box-shadow:0 0 22px rgba(255,255,255,.7)}
+.ax-shock.s2{border-width:2px}
+.ax-shock.s3{border-width:1px}
+.ax-beam.core{width:7px;box-shadow:0 0 18px 7px #fff,0 0 76px 30px rgba(194,216,255,.96),0 0 250px 78px rgba(80,127,236,.46)}
+.ax-beam.soft{width:210px;filter:blur(25px);opacity:.95}
+.ax-hit-glow{box-shadow:0 0 120px 60px #fff,0 0 320px 145px rgba(89,137,247,.66)}
+.impact-particles{filter:brightness(1.45) contrast(1.08)}
+@keyframes axImpactFlash{
+  0%{opacity:1}
+  7%{opacity:.98}
+  16%{opacity:.22}
+  31%{opacity:.7}
+  47%{opacity:.08}
+  100%{opacity:0}
+}
+@keyframes axImpactCore{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(.2)}
+  14%{opacity:1;transform:translate(-50%,-50%) scale(2.8)}
+  42%{opacity:.7;transform:translate(-50%,-50%) scale(7)}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(15)}
+}
+@keyframes axImpactRing{
+  0%{opacity:1;transform:translate(-50%,-50%) scale(.15)}
+  22%{opacity:.95}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(38)}
+}
+@keyframes axImpactPunch{
+  0%{transform:translate(0,0) scale(1)}
+  4%{transform:translate(-10px,5px) scale(1.012)}
+  8%{transform:translate(12px,-7px) scale(1.018)}
+  13%{transform:translate(-8px,-4px) scale(1.012)}
+  19%{transform:translate(6px,4px) scale(1.007)}
+  27%{transform:translate(-3px,1px) scale(1.003)}
+  38%,100%{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .ax-impact-flash,.ax-impact-core,.ax-impact-ring{display:none}
+}
