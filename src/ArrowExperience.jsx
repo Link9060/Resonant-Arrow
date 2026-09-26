@@ -209,7 +209,7 @@ function Converge(){
 
 function Ignition(){
   return <section className="ax-scene ax-ignition">
-    <ImpactParticles count={240}/>
+    <ImpactParticles count={420}/><div className="ax-impact-flash"/><div className="ax-impact-core"/><div className="ax-impact-ring ir1"/><div className="ax-impact-ring ir2"/>
     <div className="ax-beam soft"/><div className="ax-beam core"/>
     <div className="ax-hit-glow"/>
     <div className="ax-shock s1"/><div className="ax-shock s2"/><div className="ax-shock s3"/>
@@ -326,7 +326,7 @@ function Landing({onReplay}){
       <ArrowMark size={54}/>
       <small>PROJECT ARROW</small>
       <h1>Your digital life.<br/><b>Moving together.</b></h1>
-      <p>Atlas. RAVIN. Relay. Waypoint. Orbit. One connected system designed to give the moving parts of your life a direction.</p>
+      <p>Atlas. RAVIN. Relay. Orbit. Waypoint. One connected system designed to give the moving parts of your life a direction.</p>
       <div className="ax-actions"><button onClick={()=>{window.location.href="https://link9060.github.io/Resonant-Orbit/"}}>EXPLORE ARROW <span>→</span></button><button onClick={onReplay}>REPLAY EXPERIENCE</button></div>
     </div>
   </section>;
