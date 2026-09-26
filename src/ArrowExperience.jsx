@@ -208,8 +208,9 @@ function Converge(){
 }
 
 function Ignition(){
+  const mobile=typeof window!=='undefined'&&matchMedia('(max-width: 700px)').matches;
   return <section className="ax-scene ax-ignition">
-    <ImpactParticles count={420}/><div className="ax-impact-flash"/><div className="ax-impact-core"/><div className="ax-impact-ring ir1"/><div className="ax-impact-ring ir2"/>
+    <ImpactParticles count={mobile?110:420} lightweight={mobile}/><div className="ax-impact-flash"/><div className="ax-impact-core"/><div className="ax-impact-ring ir1"/><div className="ax-impact-ring ir2"/>
     <div className="ax-beam soft"/><div className="ax-beam core"/>
     <div className="ax-hit-glow"/>
     <div className="ax-shock s1"/><div className="ax-shock s2"/><div className="ax-shock s3"/>
