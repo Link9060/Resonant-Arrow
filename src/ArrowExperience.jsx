@@ -34,7 +34,7 @@ function ModuleCopy({role,name,children}){
 
 function TravelCraft({variant='default'}){
   return <div className={'ax-travel-craft ax-travel-'+variant}>
-    <ArrowMark size={42} className="ax-arrow-up"/>
+    <ArrowMark size={42}/>
     <i/>
   </div>;
 }
@@ -113,23 +113,46 @@ function RavinVisual(){
 }
 
 function RelayVisual(){
+  const endpoints=useMemo(()=>[
+    {id:'you',label:'YOU',x:50,y:10},
+    {id:'friends',label:'FRIENDS',x:14,y:72},
+    {id:'groups',label:'GROUPS',x:86,y:72},
+    {id:'school',label:'SCHOOL',x:14,y:18},
+  ],[]);
+  const hub=useMemo(()=>({x:50,y:31}),[]);
+
   const packets=useMemo(()=>{
     const rnd=seeded(404);
-    return Array.from({length:34},(_,i)=>({
-      id:i,x:7+rnd()*86,y:8+rnd()*84,delay:-rnd()*4.8,dur:2.8+rnd()*3.4,size:3+rnd()*4
-    }));
-  },[]);
+    return Array.from({length:32},(_,i)=>{
+      const endpoint=endpoints[i%endpoints.length];
+      return{
+        id:i,
+        x:endpoint.x,
+        y:endpoint.y,
+        delay:-rnd()*4.8,
+        dur:2.8+rnd()*2.7,
+        size:3+rnd()*3.5,
+        outbound:i%4===0,
+      };
+    });
+  },[endpoints]);
 
   return <div className="ax-relay-world" aria-hidden="true">
     <div className="ax-relay-grid"/>
-    <div className="ax-relay-tower"><i/><i/><i/><b/><b/><b/></div>
-    <div className="ax-relay-line l1"/><div className="ax-relay-line l2"/><div className="ax-relay-line l3"/><div className="ax-relay-line l4"/>
-    <div className="ax-relay-end e1"><i/>YOU</div>
-    <div className="ax-relay-end e2"><i/>FRIENDS</div>
-    <div className="ax-relay-end e3"><i/>GROUPS</div>
-    <div className="ax-relay-end e4"><i/>SCHOOL</div>
-    {packets.map(p=><span key={p.id} className="ax-relay-packet" style={{
-      '--x':p.x+'%','--y':p.y+'%','--delay':p.delay+'s','--dur':p.dur+'s','--size':p.size+'px'
+    <svg className="ax-relay-links" viewBox="0 0 100 100" preserveAspectRatio="none">
+      {endpoints.map(e=><line key={e.id} x1={e.x} y1={e.y} x2={hub.x} y2={hub.y}/>)}
+    </svg>
+    <div className="ax-relay-tower">
+      <span className="ax-relay-beacon"/>
+      <span className="ax-relay-mast"/>
+      <span className="ax-relay-leg left"/>
+      <span className="ax-relay-leg right"/>
+      <i/><i/><i/><b/><b/><b/>
+    </div>
+    {endpoints.map(e=><div key={e.id} className="ax-relay-end" style={{left:e.x+'%',top:e.y+'%'}}><i/>{e.label}</div>)}
+    {packets.map(p=><span key={p.id} className={'ax-relay-packet'+(p.outbound?' outbound':'')} style={{
+      '--sx':p.x+'%','--sy':p.y+'%','--hx':hub.x+'%','--hy':hub.y+'%',
+      '--delay':p.delay+'s','--dur':p.dur+'s','--size':p.size+'px'
     }}/>)}
   </div>;
 }
@@ -190,7 +213,7 @@ function Ignition(){
     <div className="ax-beam soft"/><div className="ax-beam core"/>
     <div className="ax-hit-glow"/>
     <div className="ax-shock s1"/><div className="ax-shock s2"/><div className="ax-shock s3"/>
-    <div className="ax-launch"><ArrowMark size={82} className="ax-arrow-up"/></div>
+    <div className="ax-launch"><ArrowMark size={82}/></div>
     <div className="ax-lock">DIRECTION LOCKED</div>
   </section>;
 }
