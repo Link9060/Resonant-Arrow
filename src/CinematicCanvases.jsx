@@ -8,7 +8,8 @@ function seeded(seed){
 
 function fit(canvas,ctx){
   const w=innerWidth,h=innerHeight;
-  const dpr=Math.min(devicePixelRatio||1,1.6);
+  const mobile=matchMedia('(max-width: 700px)').matches;
+  const dpr=Math.min(devicePixelRatio||1,mobile?1.25:1.6);
   canvas.width=Math.round(w*dpr);
   canvas.height=Math.round(h*dpr);
   canvas.style.width=w+'px';
@@ -29,7 +30,8 @@ export function LostArrowCanvas({mode='wander'}){
 
     let frame=0,last=performance.now(),started=performance.now(),size=fit(canvas,ctx),paused=document.hidden;
     const rnd=seeded(9060);
-    const count=76;
+    const mobile=matchMedia('(max-width: 700px)').matches;
+    const count=mobile?46:76;
     const path=new Path2D(ARROW_MARK_PATH);
 
     const arrows=Array.from({length:count},()=>({
@@ -238,7 +240,9 @@ export function ImpactParticles({count=180,className='' }){
 
     let frame=0,size=fit(canvas,ctx),start=performance.now();
     const rnd=seeded(1741);
-    const parts=Array.from({length:count},()=>({
+    const mobile=matchMedia('(max-width: 700px)').matches;
+    const renderedCount=mobile?Math.min(count,260):count;
+    const parts=Array.from({length:renderedCount},()=>({
       angle:rnd()*Math.PI*2,
       speed:170+rnd()*820,
       life:.65+rnd()*1.65,
