@@ -210,10 +210,10 @@ function Converge(){
 function Ignition(){
   const mobile=typeof window!=='undefined'&&matchMedia('(max-width: 700px)').matches;
   return <section className="ax-scene ax-ignition">
-    <ImpactParticles count={mobile?110:420} lightweight={mobile}/><div className="ax-impact-flash"/><div className="ax-impact-core"/><div className="ax-impact-ring ir1"/><div className="ax-impact-ring ir2"/>
+    <ImpactParticles count={mobile?90:180} lightweight/><div className="ax-impact-flash"/><div className="ax-impact-core"/><div className="ax-impact-ring ir1"/>
     <div className="ax-beam soft"/><div className="ax-beam core"/>
     <div className="ax-hit-glow"/>
-    <div className="ax-shock s1"/><div className="ax-shock s2"/><div className="ax-shock s3"/>
+    <div className="ax-shock s1"/><div className="ax-shock s2"/>
     <div className="ax-launch"><ArrowMark size={82}/></div>
     <div className="ax-lock">DIRECTION LOCKED</div>
   </section>;
