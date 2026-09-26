@@ -110,7 +110,14 @@ export function LostArrowCanvas({mode='wander'}){
           const pull=1-eased;
           const x=cx+Math.cos(swirl)*radius*pull;
           const y=cy+Math.sin(swirl)*radius*pull;
-          const rot=a.rot+a.swirl*eased*8.4;
+          const nextP=Math.min(1,p+.012);
+          const nextEased=nextP*nextP*(3-2*nextP);
+          const nextSwirl=baseAngle+a.swirl*nextEased*3.6;
+          const nextPull=1-nextEased;
+          const nx=cx+Math.cos(nextSwirl)*radius*nextPull;
+          const ny=cy+Math.sin(nextSwirl)*radius*nextPull;
+          const tx=nx-x,ty=ny-y;
+          const rot=Math.hypot(tx,ty)>.001?Math.atan2(ty,tx):Math.atan2(cy-y,cx-x);
           const alpha=a.alpha*(1-p*.7);
           const scale=a.scale*a.depth*(1-p*.82);
           drawArrow(a,alpha,scale,rot,x,y);
