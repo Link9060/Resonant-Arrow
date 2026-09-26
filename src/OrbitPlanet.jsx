@@ -6,7 +6,7 @@ export const ARROW_DESTINATIONS=[
   {id:'atlas',name:'ATLAS',code:'NAVIGATION',anchor:[-0.82,-0.42,0.38]},
   {id:'ravin',name:'RAVIN',code:'INTELLIGENCE',anchor:[0.48,-0.7,0.52]},
   {id:'relay',name:'RELAY',code:'COMMUNICATION',anchor:[0.76,0.5,0.34]},
-  {id:'w',name:'W',code:'FUTURE MODULE',anchor:[-0.62,0.56,-0.55]},
+  {id:'waypoint',name:'WAYPOINT',code:'INTENTION',anchor:[-0.62,0.56,-0.55]},
 ];
 
 export function OrbitPlanet({
