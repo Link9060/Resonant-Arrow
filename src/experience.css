@@ -905,3 +905,46 @@ body{touch-action:manipulation}
   .ax-actions{flex-direction:row;margin-top:14px;width:auto}
   .ax-actions button{width:auto;min-height:42px}
 }
+
+
+/* iOS / mobile ignition compositing repair.
+   Never transform or filter a viewport-sized canvas: WebKit may expose GPU tiles. */
+@media(max-width:700px){
+  .ax-ignition{
+    animation:none!important;
+    transform:none!important;
+    filter:none!important;
+    contain:paint;
+    isolation:isolate;
+  }
+  .ax-ignition .impact-particles{
+    filter:none!important;
+    transform:none!important;
+    contain:strict;
+    clip-path:inset(0);
+    -webkit-mask-image:none;
+  }
+  .ax-ignition .ax-impact-flash{
+    mix-blend-mode:normal;
+    background:rgba(255,255,255,.98);
+  }
+  .ax-ignition .ax-impact-core,
+  .ax-ignition .ax-impact-ring,
+  .ax-ignition .ax-beam,
+  .ax-ignition .ax-hit-glow{
+    will-change:transform,opacity;
+    -webkit-transform:translateZ(0);
+  }
+  .ax-ignition .ax-launch{
+    animation-name:axLaunchMobile;
+  }
+}
+@keyframes axLaunchMobile{
+  0%{transform:translate(-50%,-50%) rotate(-90deg) scale(1)}
+  12%{transform:translate(-50%,8%) rotate(-90deg) scale(1.08)}
+  23%{transform:translate(-50%,11%) rotate(-90deg) scale(1.02)}
+  31%{transform:translate(-50%,-5%) rotate(-90deg) scale(1.12)}
+  47%{transform:translate(-50%,-30dvh) rotate(-90deg) scale(1)}
+  70%{transform:translate(-50%,-72dvh) rotate(-90deg) scale(.72)}
+  100%{transform:translate(-50%,-125dvh) rotate(-90deg) scale(.28)}
+}
