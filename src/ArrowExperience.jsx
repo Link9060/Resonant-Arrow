@@ -368,6 +368,7 @@ export function ArrowExperience(){
 
   function begin(){
     if(running)return;
+    document.documentElement.requestFullscreen?.().catch(()=>{});
     clear();
     setRunning(true);
     if(reduced){setScene(12);return;}
