@@ -948,3 +948,35 @@ body{touch-action:manipulation}
   70%{transform:translate(-50%,-72dvh) rotate(-90deg) scale(.72)}
   100%{transform:translate(-50%,-125dvh) rotate(-90deg) scale(.28)}
 }
+
+
+/* Mobile ignition performance budget: preserve apparent scale, remove expensive raster work. */
+@media(max-width:700px){
+  .ax-ignition .ax-impact-core{
+    width:18px;height:18px;
+    box-shadow:0 0 26px 12px rgba(255,255,255,.92),0 0 82px 34px rgba(142,181,255,.52);
+    animation-duration:.9s;
+  }
+  .ax-ignition .ax-impact-ring{
+    box-shadow:none!important;
+    border-width:2px;
+    animation-duration:.95s;
+  }
+  .ax-ignition .ax-impact-ring.ir2{display:none}
+  .ax-ignition .ax-shock.s3{display:none}
+  .ax-ignition .ax-shock{box-shadow:none!important}
+  .ax-ignition .ax-hit-glow{
+    box-shadow:0 0 72px 32px rgba(255,255,255,.9),0 0 150px 62px rgba(89,137,247,.38);
+  }
+  .ax-ignition .ax-beam.soft{
+    width:112px;
+    filter:blur(10px);
+    opacity:.78;
+  }
+  .ax-ignition .ax-beam.core{
+    width:5px;
+    box-shadow:0 0 12px 4px #fff,0 0 42px 16px rgba(194,216,255,.72);
+  }
+  .ax-ignition .ax-impact-flash{animation-duration:.52s}
+  .ax-ignition .impact-particles{opacity:.92}
+}
