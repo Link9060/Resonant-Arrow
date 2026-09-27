@@ -29,6 +29,10 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
     const g=glow.getContext('2d'),gradient=g.createRadialGradient(64,64,0,64,64,64);
     gradient.addColorStop(0,'rgba(240,247,255,1)');gradient.addColorStop(.1,'rgba(199,224,255,.8)');gradient.addColorStop(.32,'rgba(110,155,240,.25)');gradient.addColorStop(1,'rgba(70,110,220,0)');
     g.fillStyle=gradient;g.fillRect(0,0,128,128);
+    const plume=document.createElement('canvas');plume.width=24;plume.height=128;
+    const pc=plume.getContext('2d'),pg=pc.createLinearGradient(0,0,0,128);
+    pg.addColorStop(0,'rgba(216,237,255,.8)');pg.addColorStop(.22,'rgba(140,186,255,.32)');pg.addColorStop(1,'rgba(100,150,255,0)');
+    pc.fillStyle=pg;pc.beginPath();pc.moveTo(0,0);pc.lineTo(24,0);pc.lineTo(12,128);pc.fill();
     // Sample real letter silhouettes once. Shards originate inside ARROW.
     const mask=document.createElement('canvas');mask.width=500;mask.height=100;
     const m=mask.getContext('2d',{willReadFrequently:true});m.font='800 88px sans-serif';m.textAlign='center';m.fillText('ARROW',250,80);
@@ -63,6 +67,21 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
       ctx.beginPath();ctx.ellipse(cx,cy,r*1.28,r*.36,-.22,0,TAU);ctx.stroke();ctx.globalAlpha=1;
       return{cx,cy,r};
     }
+    function speedTunnel(t,strength){
+      const fade=smooth((t-.22)/.4)*strength;
+      if(fade<.005)return;
+      const diagonal=Math.hypot(w,h),cx=w/2,cy=h*.43;
+      for(let i=0;i<(mobile?30:52);i++){
+        const p=particles[i],q=fract(p.r+t*(.85+p.s*.28));
+        const distance=(.14+q*q*.95)*diagonal;
+        const length=(.025+q*q*.18)*diagonal;
+        const ux=Math.cos(p.a),uy=Math.sin(p.a);
+        const x=cx+ux*distance,y=cy+uy*distance;
+        // During text reveal keep the full streak outside the text region.
+        if(t>=2.2&&x>w*.06&&x<w*.94&&y>h*.24&&y<h*.76)continue;
+        line(x,y,x+ux*length,y+uy*length,fade*Math.sin(q*Math.PI)*(.28+p.r*.52),i%7===0?2:1);
+      }
+    }
     drawRef.current=({scene,local:t,elapsed,idle,reduced})=>{
       ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalAlpha=1;ctx.fillStyle='#030509';ctx.fillRect(0,0,w,h);
       const cx=w/2,cy=h/2,ax=p=>area.x+area.w*p,ay=p=>area.y+area.h*p;
@@ -80,7 +99,7 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
           const px=cx+Math.cos(angle)*r,py=cy+Math.sin(angle)*r;
           ctx.save();ctx.translate(px,py);ctx.rotate(scene===1?angle+Math.PI:a.a+Math.sin(time*.3+a.phase)*.2);ctx.scale(.6*(1-p*.6),.6*(1-p*.6));ctx.translate(-12,-12);ctx.globalAlpha=(.16+a.r*.2)*(1-p);ctx.fillStyle='#b4c5e5';ctx.fill(path);ctx.restore();
         }
-        light(hx,hy,120+80*p,.35+.38*p);
+        light(hx,hy,120+80*p-(scene===1?130*smooth((t-2.2)/.4):0),.35+.38*p);
         craft(hx,hy,-Math.PI/2,scene===0?52:52-14*smooth((t-1.9)/.7),0);
         if(scene===1){
           const q=clamp((t-.5)/1.55),fade=(1-q)*smooth(q*9),titleW=Math.min(w*.8,500),titleH=titleW*.2;
@@ -90,30 +109,42 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
           const r=140*(1-smooth(t/2.55));if(r>3){ctx.strokeStyle='#98bcff';ctx.globalAlpha=.4;ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,r,0,TAU);ctx.stroke();ctx.globalAlpha=1;}
         }
       } else if(scene===2){
-        // One short recoil within the canvas, not a transformed viewport layer.
-        const kick=Math.exp(-t*13)*Math.sin(t*75)*(mobile?3:7);
+        // Large apparent scale without adding surfaces or particle allocations.
+        // One centered pulse: no detached flare, flickering secondary flash,
+        // or permanent vertical beam competing with the launch.
+        const kick=Math.exp(-t*11)*Math.sin(t*52)*(mobile?4:10);
         ctx.save();ctx.translate(kick,-kick*.45);
-        const peak=Math.exp(-t*7),radius=Math.min(w,h);
-        light(cx,cy,radius*(.8+smooth(t/.25)*.6),peak*.9);
-        ctx.fillStyle='#dbe8ff';ctx.globalAlpha=.22*Math.exp(-t*12);ctx.fillRect(0,0,w,h);ctx.globalAlpha=1;
-        for(let j=0;j<2;j++){
-          const q=(t-j*.12)/.85;
-          if(q>=0&&q<1){ctx.beginPath();ctx.arc(cx,cy,(1-Math.pow(1-q,3))*Math.hypot(w,h)*.55,0,TAU);ctx.lineWidth=j===0?1.25:.65;ctx.strokeStyle='#e7f1ff';ctx.globalAlpha=(1-q)*.8;ctx.stroke();ctx.globalAlpha=1;}
+        const diagonal=Math.hypot(w,h),peak=Math.exp(-t*4.8);
+        light(cx,cy,diagonal*(.8+.5*smooth(t/.16)),peak);
+        ctx.fillStyle='#dfebff';ctx.globalAlpha=.42*Math.exp(-t*12);ctx.fillRect(0,0,w,h);ctx.globalAlpha=1;
+        const pressure=t/.68;
+        if(pressure<1){
+          const radius=(1-Math.pow(1-pressure,3))*diagonal*.78;
+          ctx.beginPath();ctx.arc(cx,cy,radius,0,TAU);ctx.lineWidth=1.4;
+          ctx.strokeStyle='#edf5ff';ctx.globalAlpha=(1-pressure)*.86;ctx.stroke();ctx.globalAlpha=1;
         }
         const count=mobile?48:90;
         for(let i=0;i<count;i++){
-          const p=particles[i],q=clamp(t/(.5+p.r*.75)),dist=radius*(.08+p.r*.72)*(1-Math.pow(1-q,2)),len=(i%8===0?80:24)*p.s*q;
-          line(cx+Math.cos(p.a)*dist,cy+Math.sin(p.a)*dist,cx+Math.cos(p.a)*(dist+len),cy+Math.sin(p.a)*(dist+len),(1-q)*.85,i%8===0?2:1);
+          const p=particles[i],q=clamp(t/(.55+p.r*.45));
+          const dist=diagonal*(.12+p.r*.65)*(1-Math.pow(1-q,2));
+          const len=(i%8===0?.25:.075)*diagonal*p.s*Math.sin(q*Math.PI);
+          line(cx+Math.cos(p.a)*dist,cy+Math.sin(p.a)*dist,cx+Math.cos(p.a)*(dist+len),cy+Math.sin(p.a)*(dist+len),(1-q)*.88,i%8===0?2.2:.9);
         }
-        // Beam expires with the blast; acceleration starts after 100 ms.
-        const beamAlpha=Math.exp(-t*4);line(cx,0,cx,cy,beamAlpha,2);light(cx,cy,180,beamAlpha);
-        const launch=clamp((t-.1)/1.25),y=cy-Math.pow(launch,2.5)*(cy+130);
-        if(launch<1)craft(cx,y,-Math.PI/2,38+launch*8,20+launch*240);
+        // The camera enters a continuous tunnel immediately after impact.
+        // Same seeded rays continue into scene 3; no unrelated point lights.
+        speedTunnel(t,1);
+        const beamAlpha=Math.exp(-t*9);line(cx,0,cx,cy,beamAlpha,3);
+        const launch=clamp((t-.12)/1.02),y=cy-Math.pow(launch,2.1)*(cy+150);
+        if(launch<1){
+          const tail=Math.min(h*.78,40+launch*h*.9);
+          ctx.globalAlpha=launch*.6;ctx.drawImage(plume,cx-9,y+12,18,tail);ctx.globalAlpha=1;
+          craft(cx,y,-Math.PI/2,38+launch*22,tail);
+        }
         ctx.restore();
       } else if(scene===3){
-        // Flight stays in the right margin, outside the readable headline.
-        const q=clamp(t/1.05);if(q<1)craft(w*.94,h*(1.1-q*1.4),-Math.PI/2,28,110,1-q*.45);
-        for(let i=0;i<8;i++){const p=particles[i];const x=(i<4?.03:.97)*w+(p.x-.5)*w*.04,y=fract(p.y+t*.28)*h;line(x,y,x,y+35,.12);}
+        // Carry the launch velocity into the next shot, then settle for reading.
+        speedTunnel(t+2.2,1-smooth(t/2.1));
+        const q=clamp(t/.8);if(q<1)craft(w*.94,h*(1.15-q*1.55),-Math.PI/2,34,Math.min(h*.6,460),1-q*.5);
       } else if(scene===4||scene===5){
         const q=scene===5?smooth(t/4.5):0;
         craft(ax(.5),ay(.48),-Math.PI/2+q*Math.PI/2,42,0);

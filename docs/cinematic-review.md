@@ -84,3 +84,17 @@ On the affected iPhone/Safari version: play through the boom and all modules,
 replay twice, rotate during the boom, background/foreground the page, and check
 that the tab remains alive. Linux WebKit emulation does not reproduce iOS memory
 limits or its GPU process exactly.
+
+## Follow-up: September 26, 8:58 PM recording
+
+The new recording still shows the production CSS version (PR #1 is unmerged),
+including its sideways first frame and detached lower-right flare. The review
+branch already removes those sources. This follow-up makes its centered pulse
+cover the viewport, sends a single pressure front beyond the screen, lengthens
+foreground ejecta, accelerates launch over 1.02 seconds, and carries a continuous
+speed tunnel into the Direction reveal. The plume uses a precomputed fading
+texture, without a hard rectangular tail. Surface/particle caps are unchanged.
+
+The stronger burst's local normal-speed phone-viewport check recorded a 16.8 ms
+maximum frame, with no long tasks. Chromium layout/playback checks passed. The
+branch workflow also checks WebKit before any subsequent publishing.
