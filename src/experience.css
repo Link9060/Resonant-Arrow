@@ -1,116 +1,119 @@
 /* One active stylesheet. No historical repair layers or viewport filters. */
 *{box-sizing:border-box}
-:root{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f5f8ff;background:#030509;font-synthesis:none;-webkit-text-size-adjust:100%}
+:root{font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#f8f8f8;background:#000000;font-synthesis:none;-webkit-text-size-adjust:100%}
 html,body,#root{margin:0;width:100%;height:100%;overflow:hidden}
 body{overscroll-behavior:none;touch-action:manipulation}
 button,a{-webkit-tap-highlight-color:transparent}
 button{font:inherit;color:inherit;cursor:pointer}
 a{color:inherit;text-decoration:none}
-button:focus-visible,a:focus-visible{outline:2px solid #b8d3ff;outline-offset:6px}
-.arrow-experience{position:relative;width:100%;height:100dvh;overflow:hidden;isolation:isolate;background:#030509}
+button:focus-visible,a:focus-visible{outline:2px solid #d0d0d0;outline-offset:6px}
+.arrow-experience{position:relative;width:100%;height:100dvh;overflow:hidden;isolation:isolate;background:#000000}
 .ax-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
 .ax-scene{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none}
 .ax-scene button,.ax-scene a{pointer-events:auto}
 .ax-visual{position:absolute;left:max(5%,env(safe-area-inset-left));right:max(5%,env(safe-area-inset-right));top:max(88px,calc(env(safe-area-inset-top) + 65px));bottom:max(260px,calc(env(safe-area-inset-bottom) + 230px));max-width:1050px;margin-inline:auto}
 .ax-visual-slot{visibility:hidden;pointer-events:none}
-.ax-brand{position:absolute;z-index:5;top:max(25px,calc(env(safe-area-inset-top) + 14px));left:max(28px,calc(env(safe-area-inset-left) + 18px));font-size:10px;font-weight:650;letter-spacing:.18em;color:#a7b4ca}
-.ax-brand span{margin-left:12px;color:#64738b}
+.ax-brand{position:absolute;z-index:5;top:max(25px,calc(env(safe-area-inset-top) + 14px));left:max(28px,calc(env(safe-area-inset-left) + 18px));font-size:10px;font-weight:650;letter-spacing:.18em;color:#b3b3b3}
+.ax-brand span{margin-left:12px;color:#727272}
 .ax-skip{position:absolute;z-index:6;right:max(22px,calc(env(safe-area-inset-right) + 12px));top:max(12px,env(safe-area-inset-top));border:0;border-radius:0;padding:0 14px;min-height:44px;background:transparent;font-size:10px;letter-spacing:.14em}
-.ax-skip:hover{background:#172132}
-.ax-progress{position:absolute;bottom:max(18px,calc(env(safe-area-inset-bottom) + 10px));left:28px;right:28px;z-index:5;display:flex;align-items:center;gap:20px;color:#7e90ac;font-size:9px;font-weight:600;letter-spacing:.15em}
-.ax-progress span{min-width:105px}.ax-progress>div{height:1px;background:#ffffff20;flex:1}.ax-progress i{display:block;width:100%;height:1px;background:#e9aa72;transform-origin:left;transform:scaleX(0)}
+.ax-skip:hover{background:#202020}
+.ax-progress{position:absolute;bottom:max(18px,calc(env(safe-area-inset-bottom) + 10px));left:28px;right:28px;z-index:5;display:flex;align-items:center;gap:20px;color:#8e8e8e;font-size:9px;font-weight:600;letter-spacing:.15em}
+.ax-progress span{min-width:105px}.ax-progress>div{height:1px;background:#ffffff20;flex:1}.ax-progress i{display:block;width:100%;height:1px;background:#b3b3b3;transform-origin:left;transform:scaleX(0)}
 .ax-up{transform:rotate(-90deg)}
-.ax-intro-title,.ax-title-shatter{position:absolute;top:21%;left:50%;transform:translate(-50%,-50%);font-size:clamp(48px,7vw,100px);font-weight:800;letter-spacing:-.045em;padding-left:0;color:#dce4ee99}
+.ax-intro-title,.ax-title-shatter{position:absolute;top:21%;left:50%;transform:translate(-50%,-50%);font-size:clamp(48px,7vw,100px);font-weight:800;letter-spacing:-.045em;padding-left:0;color:#ffffff28}
 .ax-start{position:absolute;left:50%;top:50%;transform:translate(-50%,-64px);display:flex;align-items:center;flex-direction:column;width:min(92%,440px);height:230px;border:0;background:transparent}
-.ax-start-target{width:128px;height:128px;border:1px solid #c5d9ff33;border-radius:50%;animation:target-breathe 3s ease-in-out infinite}
-.ax-start strong{margin-top:22px;font-size:13px;letter-spacing:.24em}.ax-start small{margin-top:13px;color:#94a7c8;font-size:10px;letter-spacing:.16em}
-.ax-intro-note{position:absolute;bottom:7%;left:5%;right:5%;text-align:center;color:#8293ae;font-size:14px;line-height:1.7}
+.ax-start-target{width:128px;height:128px;border:1px solid #d7d7d733;border-radius:50%;animation:target-breathe 3s ease-in-out infinite}
+.ax-start strong{margin-top:22px;font-size:13px;letter-spacing:.24em}.ax-start small{margin-top:13px;color:#a5a5a5;font-size:10px;letter-spacing:.16em}
+.ax-intro-note{position:absolute;bottom:7%;left:5%;right:5%;text-align:center;color:#919191;font-size:14px;line-height:1.7}
 .ax-title-shatter{animation:title-shatter 1.2s .4s both}
-.ax-lock{position:absolute;bottom:9%;left:5%;right:5%;text-align:center;color:#859ab9;font-size:12px;line-height:1.9;letter-spacing:.2em;margin:0}
-.ax-lock b{color:#e6efff}.ignition-lock{animation:lock .8s .4s both}
+.ax-lock{position:absolute;bottom:9%;left:5%;right:5%;text-align:center;color:#989898;font-size:12px;line-height:1.9;letter-spacing:.2em;margin:0}
+.ax-lock b{color:#eeeeee}.ignition-lock{animation:lock .8s .4s both}
 @keyframes target-breathe{50%{opacity:.35;transform:scale(1.08)}}
 @keyframes title-shatter{0%{opacity:1}32%{opacity:.2}65%,100%{opacity:0}}
 @keyframes lock{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .ax-direction-copy{position:absolute;left:7%;right:7%;top:50%;transform:translateY(-50%);text-align:center}
 .ax-direction-copy>span{display:block;font-size:clamp(24px,3.8vw,54px);font-weight:300;letter-spacing:.12em;animation:rise .5s .15s both}
 .ax-direction-copy h1{font-size:clamp(60px,10vw,152px);line-height:1;letter-spacing:-.02em;margin:12px 0 24px;animation:headline .55s .35s both}
-.ax-direction-copy p{font-size:clamp(16px,1.5vw,21px);line-height:1.65;color:#a9bad4;margin:0;animation:rise .6s .75s both}
+.ax-direction-copy p{font-size:clamp(16px,1.5vw,21px);line-height:1.65;color:#b8b8b8;margin:0;animation:rise .6s .75s both}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes anchor-rise{from{opacity:0;transform:translate(-50%,-40%)}to{opacity:1;transform:translate(-50%,-50%)}}
 @keyframes headline{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 .ax-module-copy,.ax-story-copy{position:absolute;bottom:max(65px,calc(env(safe-area-inset-bottom) + 44px));left:6%;right:6%;text-align:center;max-width:900px;margin-inline:auto}
-.ax-role{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;line-height:1.4;letter-spacing:.08em;font-weight:500;color:#c6a588}
+.ax-role{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;line-height:1.4;letter-spacing:.08em;font-weight:500;color:#aaaaaa}
 .ax-module-copy p{min-height:2lh}
 .ax-module-copy h2{font-size:clamp(48px,6vw,86px);line-height:1.03;letter-spacing:-.035em;padding-left:0;margin:9px 0 14px}
-.ax-module-copy p,.ax-story-copy p{font-size:clamp(15px,1.3vw,18px);line-height:1.55;color:#a7bad6;margin:0 auto;max-width:680px}
+.ax-module-copy p,.ax-story-copy p{font-size:clamp(15px,1.3vw,18px);line-height:1.55;color:#b8b8b8;margin:0 auto;max-width:680px}
 .ax-story-copy h2{font-size:clamp(28px,3.4vw,48px);font-weight:300;line-height:1.15;letter-spacing:-.03em;margin:10px 0 13px}
 .ax-story-copy b{font-weight:750}
 /* Information keeps the same word coordinates across the two scenes. */
 .ax-information{overflow:hidden}
-.ax-word{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);font-size:clamp(11px,1.4vw,18px);font-weight:600;letter-spacing:.1em;color:#a9bddb;white-space:nowrap}
+.ax-word{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);font-size:clamp(11px,1.4vw,18px);font-weight:600;letter-spacing:.1em;color:#bbbbbb;white-space:nowrap}
 .ax-information:not(.is-organized) .ax-word{animation:word-drift 4s ease-in-out both;animation-delay:0s}
 @keyframes word-drift{0%,100%{opacity:.55;transform:translate(-50%,-50%)}50%{opacity:1;transform:translate(-40%,-65%) rotate(2deg)}}
 .ax-connect-links{position:absolute;inset:0;width:100%;height:100%;opacity:0}
-.ax-connect-links line{stroke:#8cafe4;stroke-width:1;vector-effect:non-scaling-stroke}
+.ax-connect-links line{stroke:#ababab;stroke-width:1;vector-effect:non-scaling-stroke}
 .is-organized .ax-connect-links{animation:rise 1s 1.8s both}
 .is-organized .ax-word{animation:organize 2.3s cubic-bezier(.4,0,.2,1) both}
 @keyframes organize{0%,12%{left:var(--x);top:var(--y);opacity:.8}80%{opacity:.7}100%{left:var(--tx);top:var(--ty);opacity:0;transform:translate(-50%,-50%) scale(.25)}}
 .ax-destination{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;flex-direction:column;gap:12px;font-size:12px;font-weight:700;letter-spacing:.12em;animation:anchor-rise 1s calc(1.6s + var(--i)*.12s) both}
-.ax-destination i{width:9px;height:9px;border:1px solid #d4e6ff;border-radius:50%;background:#bcd4f8;box-shadow:0 0 18px #b6d1ff66}.dest-3{padding-top:48px}.dest-3 i{display:none}
+.ax-destination i{width:9px;height:9px;border:1px solid #e4e4e4;border-radius:50%;background:#d1d1d1;box-shadow:0 0 18px #cfcfcf66}.dest-3{padding-top:48px}.dest-3 i{display:none}
 /* Atlas: readable, unwarped labels and progressively connected relationships. */
 .ax-atlas-links{position:absolute;inset:0;width:100%;height:100%}
-.ax-atlas-links line{stroke:#9bb8e77a;stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:100;animation:connect-line 2s calc(var(--i)*.18s) both}
-.ax-atlas-links .ax-main-link{stroke:#c3d8f6bb;stroke-width:1.4}
-.ax-atlas-links circle{fill:#d5e6ff}
+.ax-atlas-links line{stroke:#b5b5b57a;stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:100;animation:connect-line 2s calc(var(--i)*.18s) both}
+.ax-atlas-links .ax-main-link{stroke:#d6d6d6bb;stroke-width:1.4}
+.ax-atlas-links circle{fill:#e4e4e4}
 @keyframes connect-line{from{stroke-dashoffset:100;opacity:.15}to{stroke-dashoffset:0;opacity:1}}
 .ax-map-anchor{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:8px;white-space:nowrap;animation:anchor-rise .6s calc(var(--i)*.15s) both}
 .ax-map-anchor i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
 .ax-map-anchor span{position:absolute;top:8px;left:50%;transform:translateX(-50%)}
-.ax-map-anchor i,.ax-relay-end i{flex-shrink:0;width:7px;height:7px;background:#e2efff;border-radius:50%;box-shadow:0 0 14px #8ebaff77}
-.ax-map-anchor span,.ax-relay-end{font-size:12px;font-weight:650;letter-spacing:.07em;background:#08101ce8;border:0;border-radius:0;padding:8px 10px}
+.ax-map-anchor i,.ax-relay-end i{flex-shrink:0;width:7px;height:7px;background:#ededed;border-radius:50%;box-shadow:0 0 14px #b6b6b677}
+.ax-map-anchor span,.ax-relay-end{font-size:12px;font-weight:650;letter-spacing:.07em;background:#0f0f0fe8;border:0;border-radius:0;padding:8px 10px}
 .ax-visual-caption:empty{display:none}
-.ax-visual-caption{position:absolute;left:0;right:0;bottom:-7px;text-align:center;font-size:12px;letter-spacing:.04em;color:#899fc0}
-/* RAVIN: shaded core, internal rings and explicit context-to-answer flow. */
-.ax-ravin-core{position:absolute;left:50%;top:48%;width:clamp(88px,12vw,150px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 32% 26%,#def0ff 0,#6389bd 15%,#152a48 48%,#070d18 73%);border:1px solid #a1c8ff88;box-shadow:none;overflow:hidden}
-.ax-ravin-core i,.ax-ravin-core b,.ax-ravin-core em{position:absolute;inset:15%;border:1px solid #bbd7ff99;border-radius:50%;transform:rotate(40deg) scaleX(.45);animation:core-orbit 3s linear infinite}
-.ax-ravin-core b{inset:24%;animation-direction:reverse}.ax-ravin-core em{inset:34%;background:#d5ebff66;border:0}
-@keyframes core-orbit{to{transform:rotate(400deg) scaleX(.45)}}
-.ax-ravin-orbit{position:absolute;left:50%;top:48%;width:44%;aspect-ratio:1;border:1px solid #789ccd55;border-radius:50%;transform:translate(-50%,-50%) rotate(-22deg);animation:core-pulse 2.2s ease-in-out infinite}
-.ax-ravin-orbit.ro2{width:59%;opacity:.4;animation-delay:.5s}
-@keyframes core-pulse{50%{opacity:.3;transform:translate(-50%,-50%) rotate(-22deg) scale(.94)}}
-.ax-ravin-flow{position:absolute;inset:0;width:100%;height:100%}.ax-ravin-flow path{fill:none;stroke:#93b8e966;stroke-width:1.2;vector-effect:non-scaling-stroke;stroke-dasharray:4 6}
-.ax-ravin-label{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:650;letter-spacing:.07em;white-space:nowrap;background:#030509;padding:8px;border:0;border-radius:0}
-.ax-ravin-label.input{left:15%;top:23%}.ax-ravin-label.output{left:78%;top:74%;animation:anchor-rise .6s 1.9s both}
-.ax-ravin-thoughts{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;gap:25px;font-size:11px;letter-spacing:.1em;color:#b0c6e8}
-.ax-ravin-thoughts span{animation:rise .7s both}.ax-ravin-thoughts span:nth-child(2){animation-delay:.7s}.ax-ravin-thoughts span:nth-child(3){animation-delay:1.4s}
-/* Relay: all paths share exactly the tower's beacon coordinates. */
-.ax-relay-links{position:absolute;inset:0;width:100%;height:100%}.ax-relay-links line{stroke:#a9c9f377;stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:3 5}
-.ax-tower{position:absolute;left:50%;top:31%;height:65%;width:140px;transform:translateX(-50%);overflow:visible}
-.ax-tower path{fill:#0c1624;stroke:#b9d3f3;stroke-width:1.6;stroke-linejoin:round}.ax-tower circle{fill:#fff;stroke:none}
-.ax-relay-beacon{position:absolute;left:50%;top:31%;width:0;height:0}.ax-relay-beacon i{position:absolute;left:-65px;top:-65px;width:130px;height:130px;border:1px solid #a3caff;border-radius:50%;animation:broadcast 2.4s infinite both}.ax-relay-beacon i:nth-child(2){animation-delay:.8s}.ax-relay-beacon i:nth-child(3){animation-delay:1.6s}
-@keyframes broadcast{from{opacity:.75;transform:scale(.1)}to{opacity:0;transform:scale(1.25)}}
-.ax-relay-end{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:7px;white-space:nowrap}
-.ax-packet{position:absolute;left:50%;top:31%;width:5px;height:5px;transform:translate(-50%,-50%);border-radius:50%;background:#f0f7ff;animation:packet 2.4s calc(var(--i)*.3s) infinite both}
-@keyframes packet{0%{left:50%;top:31%;opacity:0}12%{opacity:1}80%{left:var(--tx);top:var(--ty);opacity:1}100%{left:var(--tx);top:var(--ty);opacity:0}}
+.ax-visual-caption{position:absolute;left:0;right:0;bottom:-7px;text-align:center;font-size:12px;letter-spacing:.04em;color:#9d9d9d}
+/* RAVIN is a small white pulse, never a shaded orb. */
+.ax-ravin-core{position:absolute;left:50%;top:48%;width:10px;height:10px;border-radius:50%;background:#ffffff;transform:translate(-50%,-50%);animation:ravin-heart 1.65s ease-in-out infinite}
+.ax-ravin-pulse{position:absolute;left:50%;top:48%;width:10px;height:10px;border:1px solid #ffffff70;border-radius:50%;transform:translate(-50%,-50%);animation:ravin-wave 3.3s ease-out infinite}
+.ax-ravin-pulse.second{animation-delay:1.65s}
+@keyframes ravin-heart{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.75}45%{transform:translate(-50%,-50%) scale(1.5);opacity:1}}
+@keyframes ravin-wave{0%{transform:translate(-50%,-50%) scale(1);opacity:.55}100%{transform:translate(-50%,-50%) scale(16);opacity:0}}
+/* Three lower inputs arrive first. The tower sends a combined signal up to YOU. */
+.ax-relay-links{position:absolute;inset:0;width:100%;height:100%}
+.ax-relay-links path{fill:none;stroke:#ffffff38;stroke-width:1;vector-effect:non-scaling-stroke;stroke-dasharray:2 5}
+.ax-relay-links .ax-relay-uplink{stroke:#ffffff88;stroke-dasharray:none}
+.ax-tower{position:absolute;left:50%;top:38%;height:39%;width:100px;transform:translateX(-50%);overflow:visible}
+.ax-tower path{fill:#000000;stroke:#ffffff;stroke-width:1.5;stroke-linejoin:round}.ax-tower circle{fill:#ffffff;stroke:none}
+.ax-relay-beacon{position:absolute;left:50%;top:38%;width:0;height:0}
+.ax-relay-beacon i{position:absolute;left:-45px;top:-45px;width:90px;height:90px;border:1px solid #ffffff;border-radius:50%;animation:broadcast 2.8s infinite both}
+.ax-relay-beacon i:nth-child(2){animation-delay:.15s}
+@keyframes broadcast{0%,44%{opacity:0;transform:scale(.1)}48%{opacity:.8;transform:scale(.12)}80%,100%{opacity:0;transform:scale(1.4)}}
+.ax-relay-end{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;gap:7px;white-space:nowrap;font-size:12px;letter-spacing:.09em;background:#000000;padding:6px 8px}
+.ax-relay-end i{width:5px;height:5px;background:#ffffff;border-radius:50%}
+.ax-relay-user{border:1px solid #ffffff44;padding:9px 14px;animation:received 2.8s infinite}
+@keyframes received{0%,65%,100%{border-color:#ffffff44}75%{border-color:#ffffff}}
+.ax-packet{position:absolute;width:5px;height:5px;border-radius:50%;background:#ffffff;transform:translate(-50%,-50%)}
+.ax-inbound{animation:inbound 2.8s infinite both}
+@keyframes inbound{0%{left:var(--sx);top:86%;opacity:0}8%{opacity:1}44%{left:50%;top:38%;opacity:1}48%,100%{left:50%;top:38%;opacity:0}}
+.ax-outbound{animation:outbound 2.8s infinite both}
+@keyframes outbound{0%,48%{left:50%;top:38%;opacity:0}52%{opacity:1}74%{left:50%;top:12%;opacity:1}78%,100%{left:50%;top:12%;opacity:0}}
 /* Waypoint: separate inputs disappear individually before the route arrives. */
-.ax-waypoint-beacon{position:absolute;left:22%;top:48%;transform:translate(-50%,-50%);color:#dcecff}.ax-waypoint-beacon svg{width:clamp(90px,12vw,140px);height:auto}
-.ax-waypoint-input{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);font-size:12px;font-weight:650;letter-spacing:.07em;padding:8px 10px;border:1px solid #91b1df55;border-radius:3px;background:#0a101b;animation:resolve-input 1.7s calc(var(--i)*.13s) both}
+.ax-waypoint-beacon{position:absolute;left:22%;top:48%;transform:translate(-50%,-50%);color:#eaeaea}.ax-waypoint-beacon svg{width:clamp(90px,12vw,140px);height:auto}
+.ax-waypoint-input{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);font-size:12px;font-weight:650;letter-spacing:.07em;padding:8px 10px;border:1px solid #aeaeae55;border-radius:3px;background:#101010;animation:resolve-input 1.7s calc(var(--i)*.13s) both}
 @keyframes resolve-input{0%,30%{left:var(--x);top:var(--y);opacity:1}65%{opacity:.7}100%{left:22%;top:48%;opacity:0;transform:translate(-50%,-50%) scale(.15)}}
 .ax-waypoint-route{position:absolute;left:22%;right:22%;top:48%;height:2px;transform-origin:left;animation:route-in .8s 2s both}
-.ax-waypoint-route>i{position:absolute;inset:0;background:linear-gradient(90deg,#c6ddff,#7ba5df);height:2px}
-.ax-waypoint-route>span{position:absolute;top:50%;width:9px;height:9px;transform:translate(-50%,-50%);background:#e5f1ff;border:2px solid #729ad0;border-radius:50%;box-shadow:0 0 14px #8eb9ff44}.ax-waypoint-route .p1{left:28%}.ax-waypoint-route .p2{left:60%}.ax-waypoint-route .p3{left:92%}.ax-waypoint-route>b{position:absolute;right:-15px;top:-17px;font-size:26px;font-weight:300}
+.ax-waypoint-route>i{position:absolute;inset:0;background:linear-gradient(90deg,#dbdbdb,#a0a0a0);height:2px}
+.ax-waypoint-route>span{position:absolute;top:50%;width:9px;height:9px;transform:translate(-50%,-50%);background:#efefef;border:2px solid #959595;border-radius:50%;box-shadow:0 0 14px #b5b5b544}.ax-waypoint-route .p1{left:28%}.ax-waypoint-route .p2{left:60%}.ax-waypoint-route .p3{left:92%}.ax-waypoint-route>b{position:absolute;right:-15px;top:-17px;font-size:26px;font-weight:300}
 @keyframes route-in{from{opacity:0;transform:scaleX(.01)}to{opacity:1;transform:scaleX(1)}}
-.ax-waypoint-next{position:absolute;left:0;right:0;top:67%;text-align:center;animation:rise .7s 2.55s both}.ax-waypoint-next small{display:block;font-size:10px;letter-spacing:.16em;color:#9cb6dc}.ax-waypoint-next strong{display:block;font-size:clamp(16px,2vw,24px);font-weight:500;margin-top:10px;line-height:1.3}
+.ax-waypoint-next{position:absolute;left:0;right:0;top:67%;text-align:center;animation:rise .7s 2.55s both}.ax-waypoint-next small{display:block;font-size:10px;letter-spacing:.16em;color:#b3b3b3}.ax-waypoint-next strong{display:block;font-size:clamp(16px,2vw,24px);font-weight:500;margin-top:10px;line-height:1.3}
 /* Orbit: sphere and route lines are canvas, labels stay crisp in DOM. */
-.ax-orbit-destination{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:650;letter-spacing:.09em;display:flex;flex-direction:column;align-items:center;gap:12px;animation:anchor-rise .7s calc(.7s + var(--i)*.35s) both}.ax-orbit-destination i{width:6px;height:6px;border-radius:50%;background:#d9eaff}
-.ax-orbit-center{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);text-align:center;font-size:15px;font-weight:750;letter-spacing:.2em;background:#030509cc;padding:13px 12px;border-radius:50%;animation:orbit-label 1s 2.2s both}.ax-orbit-center span{display:block;font-size:8px;letter-spacing:.13em;font-weight:500;margin-top:9px;white-space:nowrap}
+.ax-orbit-destination{position:absolute;transform:translate(-50%,-50%);font-size:12px;font-weight:650;letter-spacing:.09em;display:flex;flex-direction:column;align-items:center;gap:12px;animation:anchor-rise .7s calc(.7s + var(--i)*.35s) both}.ax-orbit-destination i{width:6px;height:6px;border-radius:50%;background:#e8e8e8}
+.ax-orbit-center{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);text-align:center;font-size:15px;font-weight:750;letter-spacing:.2em;background:#000000cc;padding:13px 12px;border-radius:50%;animation:orbit-label 1s 2.2s both}.ax-orbit-center span{display:block;font-size:8px;letter-spacing:.13em;font-weight:500;margin-top:9px;white-space:nowrap}
 @keyframes orbit-label{from{opacity:0}to{opacity:1}}
 .ax-final-copy,.ax-landing-copy{position:absolute;inset:65px 6% max(40px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.ax-final-copy>svg{flex-shrink:0;margin-bottom:22px}.ax-final-copy small,.ax-landing-copy>small{font-size:10px;letter-spacing:.2em;color:#9cafce}
+.ax-final-copy>svg{flex-shrink:0;margin-bottom:22px}.ax-final-copy small,.ax-landing-copy>small{font-size:10px;letter-spacing:.2em;color:#adadad}
 .ax-final-copy h1{font-size:clamp(66px,9.5vw,140px);line-height:.87;letter-spacing:.02em;font-weight:250;margin:23px 0;animation:headline .8s .15s both}.ax-final-copy h1 b{font-weight:850}
-.ax-final-copy p{font-size:12px;letter-spacing:.2em;margin:0;animation:rise .8s .8s both}.ax-final-copy>strong{font-size:11px;letter-spacing:.19em;margin-top:15px;color:#98b2d6;animation:rise .8s 1.2s both}
-.ax-landing-copy>svg{margin-bottom:20px;flex-shrink:0}.ax-landing-copy h1{font-size:clamp(42px,6.5vw,92px);font-weight:300;letter-spacing:-.04em;line-height:1.07;margin:22px 0}.ax-landing-copy h1 b{font-weight:780}.ax-landing-copy p{font-size:clamp(14px,1.4vw,18px);line-height:1.7;color:#a9bcd8;margin:0;max-width:650px}
-.ax-actions{display:flex;gap:12px;margin-top:30px}.ax-actions button,.ax-actions a{min-height:48px;padding:16px 22px;font-size:10px;letter-spacing:.12em;font-weight:650;border:1px solid #8ca8d344;background:#09111e;border-radius:3px}.ax-actions a{background:#eef5ff;color:#0a1323}.ax-actions a:hover{background:white}.ax-actions button:hover{background:#17253a}
+.ax-final-copy p{font-size:12px;letter-spacing:.2em;margin:0;animation:rise .8s .8s both}.ax-final-copy>strong{font-size:11px;letter-spacing:.19em;margin-top:15px;color:#afafaf;animation:rise .8s 1.2s both}
+.ax-landing-copy>svg{margin-bottom:20px;flex-shrink:0}.ax-landing-copy h1{font-size:clamp(42px,6.5vw,92px);font-weight:300;letter-spacing:-.04em;line-height:1.07;margin:22px 0}.ax-landing-copy h1 b{font-weight:780}.ax-landing-copy p{font-size:clamp(14px,1.4vw,18px);line-height:1.7;color:#bababa;margin:0;max-width:650px}
+.ax-actions{display:flex;gap:12px;margin-top:30px}.ax-actions button,.ax-actions a{min-height:48px;padding:16px 22px;font-size:10px;letter-spacing:.12em;font-weight:650;border:1px solid #a5a5a544;background:#101010;border-radius:3px}.ax-actions a{background:#f4f4f4;color:#121212}.ax-actions a:hover{background:white}.ax-actions button:hover{background:#242424}
 /* Portrait: visualization and copy have separate, nonoverlapping regions. */
 @media(max-width:700px){
  .ax-brand{font-size:8px;letter-spacing:.1em;left:16px;top:max(24px,calc(env(safe-area-inset-top) + 16px))}.ax-brand span{display:none}
@@ -151,3 +154,7 @@ button:focus-visible,a:focus-visible{outline:2px solid #b8d3ff;outline-offset:6p
  .ax-landing-copy>small{display:none}.ax-landing-copy h1{font-size:42px;margin:6px 0 10px}.ax-landing-copy p{font-size:12px}.ax-actions{flex-direction:row;width:auto;max-width:none;margin-top:12px}.ax-actions button,.ax-actions a{width:auto;padding:12px 18px;font-size:9px;min-height:42px}
 }
 @media(prefers-reduced-motion:reduce){.ax-start-target{animation:none}.ax-title-shatter{animation:none}.ax-scene *{scroll-behavior:auto}}
+
+.ax-scene-4,.ax-scene-5,.ax-scene-6,.ax-scene-7,.ax-scene-8,.ax-scene-9,.ax-scene-10,.ax-scene-11{animation:scene-dissolve var(--scene-duration) linear both}
+@keyframes scene-dissolve{0%,100%{opacity:0}8%,93%{opacity:1}}
+.ax-orbit-center{display:none}

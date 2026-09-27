@@ -115,3 +115,23 @@ geometry. A muted amber chapter/progress accent gives the monochrome system a
 consistent secondary color. Existing browser checks now also verify mobile
 centering, visualization proportions, Atlas label bounds, and the RAVIN center.
 Physical-device Safari remains a separate real-device follow-up.
+
+
+## Restore the original visual direction
+
+Supersedes the previous amber accent and shaded RAVIN treatment.
+The active experience is strictly black, white, and neutral gray.
+
+- Ignition retains the surrounding arrows until the pressure front reaches them,
+  breaks them into outward-moving fragments, and launches the hero up the center
+  through a sustained white beam. All beam/glow/word textures are cached before start.
+- Chaos words now advance from a vanishing point toward and past the viewer, with
+  perspective scaling and edge fades, rather than drifting on a flat plane.
+- Orbit uses unchanged source files from the actual repository (see orbit-source README).
+- RAVIN is a small white breathing point with restrained expanding pulse rings.
+- Relay receives three lower inputs, pulses, then sends upward to YOU.
+- Module transitions use clock-synchronized fade-in/fade-out envelopes.
+
+Validation includes frame-by-frame ignition/word/Relay contact sheets, mobile
+layout review, browser checks for monochrome canvas pixels and the exact Relay
+three-below/one-above hierarchy, and comparison of the copied Orbit files to upstream.

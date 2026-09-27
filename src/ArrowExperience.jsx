@@ -42,23 +42,21 @@ function AtlasVisual() {
 }
 function RavinVisual() {
   return <div className="ax-visual ax-ravin-world" aria-hidden="true">
-    <svg className="ax-ravin-flow" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M12 28 Q35 28 50 48 Q65 68 88 68"/></svg>
-    <div className="ax-ravin-orbit ro1"/><div className="ax-ravin-orbit ro2"/>
-    <div className="ax-ravin-core"><i/><b/><em/></div>
-    <div className="ax-ravin-label input">CONTEXT</div><div className="ax-ravin-label output">CLEAR NEXT STEP</div>
-    <div className="ax-ravin-thoughts"><span>UNDERSTAND</span><span>REASON</span><span>ACT</span></div>
+    <div className="ax-ravin-core"/><div className="ax-ravin-pulse"/><div className="ax-ravin-pulse second"/>
   </div>;
 }
 function RelayVisual() {
-  const endpoints = [[17,23,'SCHOOL'],[83,23,'YOU'],[17,74,'FRIENDS'],[83,74,'GROUPS']];
+  const inputs = [[18,'SCHOOL'],[50,'FRIENDS'],[82,'GROUPS']];
   return <div className="ax-visual ax-relay-world" aria-hidden="true">
     <svg className="ax-relay-links" viewBox="0 0 100 100" preserveAspectRatio="none">
-      {endpoints.map(([x,y,label]) => <line key={label} x1="50" y1="31" x2={x} y2={y}/>)}
+      {inputs.map(([x,label]) => <path key={label} d={`M${x} 86 L50 38`} />)}
+      <path className="ax-relay-uplink" d="M50 38 L50 12"/>
     </svg>
     <svg className="ax-tower" viewBox="0 0 140 240" preserveAspectRatio="xMidYMin meet"><path d="M70 0 L26 226 H114 Z M70 0 V226 M56 79 H84 M42 148 H98 M56 79 L98 148 L26 226 M84 79 L42 148 L114 226"/><circle cx="70" cy="0" r="5"/></svg>
-    <div className="ax-relay-beacon"><i/><i/><i/></div>
-    {endpoints.map(([x,y,label],i) => <React.Fragment key={label}><div className="ax-relay-end" style={{left:x+'%',top:y+'%'}}><i/>{label}</div><span className="ax-packet" style={{'--tx':x+'%','--ty':y+'%','--i':i}}/></React.Fragment>)}
-
+    <div className="ax-relay-beacon"><i/><i/></div>
+    <div className="ax-relay-end ax-relay-user" style={{left:'50%',top:'8%'}}><i/>YOU</div>
+    {inputs.map(([x,label],i) => <React.Fragment key={label}><div className="ax-relay-end ax-relay-input" style={{left:x+'%',top:'91%'}}><i/>{label}</div><span className="ax-packet ax-inbound" style={{'--sx':x+'%','--i':i}}/></React.Fragment>)}
+    <span className="ax-packet ax-outbound"/>
   </div>;
 }
 function WaypointVisual() {
@@ -148,7 +146,7 @@ export function ArrowExperience() {
     <><div className="ax-title-shatter">ARROW</div><p className="ax-lock">SCATTERED. UNCONNECTED.<br/><b>CHOOSE A DIRECTION.</b></p></>,
     <p className="ax-lock ignition-lock">DIRECTION LOCKED</p>,
     <div className="ax-direction-copy"><span>GIVE YOUR LIFE</span><h1>DIRECTION.</h1><p>One connected system for the things you do,<br className="desktop-break"/> know, create, and share.</p></div>,
-    <><Information/><StoryCopy role="YOUR LIFE IS EVERYWHERE" title={<>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></>}>The pieces are there. The connections are missing.</StoryCopy></>,
+    <><StoryCopy role="YOUR LIFE IS EVERYWHERE" title={<>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></>}>The pieces are there. The connections are missing.</StoryCopy></>,
     <><Information organized/><StoryCopy role="ARROW CONNECTS THE PIECES" title={<>Chaos becomes <b>direction.</b></>}>Your projects, conversations, and plans belong together.</StoryCopy></>,
     <><AtlasVisual/><ModuleCopy role="01 / YOUR COLLECTION" name="ATLAS">Keep your files, links, and projects connected.</ModuleCopy></>,
     <><RavinVisual/><ModuleCopy role="02 / YOUR ASSISTANT" name="RAVIN">Work through questions with the context already in view.</ModuleCopy></>,
@@ -159,12 +157,12 @@ export function ArrowExperience() {
     <div className="ax-landing-copy"><ArrowMark size={48} className="ax-up"/><small>PROJECT ARROW</small><h1>Your digital life.<br/><b>Moving together.</b></h1><p>Atlas. RAVIN. Relay. Orbit. Waypoint.<br/>One connected system to give your life direction.</p><div className="ax-actions"><a href="https://link9060.github.io/Resonant-Orbit/">EXPLORE ARROW <span>↗</span></a><button onClick={replay}>REPLAY EXPERIENCE</button></div></div>,
   ];
 
-  return <main className={'arrow-experience scene-'+scene} data-build="cinematic-motion-50">
+  return <main className={'arrow-experience scene-'+scene} data-build="cinematic-vision-51">
     <div className="ax-visual ax-visual-slot" ref={visualSlot} aria-hidden="true"/>
     <CinematicStage ref={canvas} slotRef={visualSlot}/>
     <header className="ax-brand">RESONANT ASSIST <span>/ PROJECT ARROW</span></header>
     {scene>0&&scene<12&&<button className="ax-skip" onClick={skip}>SKIP <span>EXPERIENCE</span> ↗</button>}
-    <section ref={sceneElement} key={scene+'-'+run} data-scene={scene} className={'ax-scene ax-scene-'+scene} aria-label={scene===0?'Start ARROW':SCENES[scene-1].name}>{scenes[scene]}</section>
+    <section ref={sceneElement} key={scene+'-'+run} data-scene={scene} style={{'--scene-duration': ((SCENES[scene]?.at ?? DURATION+100000) - (SCENES[scene-1]?.at ?? 0))+'ms'}} className={'ax-scene ax-scene-'+scene} aria-label={scene===0?'Start ARROW':SCENES[scene-1].name}>{scenes[scene]}</section>
     {scene>0&&scene<12&&<div className="ax-progress" aria-hidden="true"><span>{String(scene).padStart(2,'0')} / {SCENES[scene-1].name}</span><div><i ref={progress}/></div></div>}
   </main>;
 }
