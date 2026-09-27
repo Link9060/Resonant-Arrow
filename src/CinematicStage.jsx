@@ -38,6 +38,7 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
     const m=mask.getContext('2d',{willReadFrequently:true});m.font='800 88px sans-serif';m.textAlign='center';m.fillText('ARROW',250,80);
     const pixels=m.getImageData(0,0,500,100).data,shards=[];
     for(let y=8;y<90;y+=5)for(let x=30;x<470;x+=5){if(pixels[(y*500+x)*4+3]>100&&rnd()>.55)shards.push({x:x/500,y:y/100,a:rnd()*TAU,r:rnd(),s:1+rnd()*2});}
+    let introTime=0;
     let w=1,h=1,area={x:0,y:0,w:1,h:1},mobile=false,dpr=1;
     function fit(){
       const b=canvas.parentElement.getBoundingClientRect();w=Math.max(1,b.width);h=Math.max(1,b.height);
@@ -52,7 +53,7 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
     function line(x1,y1,x2,y2,alpha=.5,width=1){ctx.globalAlpha=clamp(alpha);ctx.strokeStyle='#c9dcff';ctx.lineWidth=width;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();ctx.globalAlpha=1;}
     function craft(x,y,angle=-Math.PI/2,size=42,trail=0,alpha=1){
       // Rotation belongs only here. No CSS or parent transform can compete.
-      light(x,y,size*3,.43*alpha);
+      light(x,y,size*2.5,.24*alpha);
       ctx.save();ctx.translate(x,y);ctx.rotate(angle);ctx.globalAlpha=alpha;
       if(trail>0){ctx.strokeStyle='#b9d3ff';for(let i=0;i<6;i++){ctx.globalAlpha=alpha*(1-i/6)*.3;ctx.lineWidth=Math.max(.6,3-i*.4);ctx.beginPath();ctx.moveTo(-size*.3-i*trail/6,0);ctx.lineTo(-size*.3-(i+1)*trail/6,0);ctx.stroke();}}
       ctx.globalAlpha=alpha;ctx.scale(size/24,size/24);ctx.translate(-12,-12);ctx.fillStyle='#f8fbff';ctx.fill(path);ctx.restore();
@@ -91,13 +92,21 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
       const time=reduced?0:(scene===0||scene===12?idle:elapsed);
       // Quiet fixed-size star field; no blur, filters, readback or layout reads.
       if(scene!==2){ctx.fillStyle='#bed1f0';for(let i=0;i<(mobile?36:70);i++){const p=particles[i];ctx.globalAlpha=.12+p.r*.2;ctx.fillRect(fract(p.x+time*.001*p.r)*w,fract(p.y+time*.002*p.r)*h,1,1);}ctx.globalAlpha=1;}
+      if(scene===0)introTime=time;
       if(scene===0||scene===1){
         const p=scene===1?smooth(t/2.62):0;
         const hx=mix(introX,cx,p),hy=mix(introY,cy,p);
         for(let i=0;i<(mobile?34:62);i++){
-          const a=particles[i],x=(a.x-.5)*w,y=(a.y-.5)*h,r=Math.hypot(x,y)*(1-p),angle=Math.atan2(y,x)+p*1.5;
+          const a=particles[i],motion=reduced?0:(scene===0?time:introTime+t);
+          // Independent orbit, drift and full rotation; freeze neither position
+          // nor orientation at activation. Convergence inherits the idle phase.
+          const orbit=a.a+motion*(i%2?1:-1)*(.055+a.s*.04);
+          const radius=.23+a.r*.43;
+          const x=Math.cos(orbit)*w*radius+Math.sin(motion*.38+a.phase)*w*.055;
+          const y=Math.sin(orbit)*h*radius+Math.cos(motion*.3+a.phase)*h*.045;
+          const r=Math.hypot(x,y)*(1-p),angle=Math.atan2(y,x)+p*1.5;
           const px=cx+Math.cos(angle)*r,py=cy+Math.sin(angle)*r;
-          ctx.save();ctx.translate(px,py);ctx.rotate(scene===1?angle+Math.PI:a.a+Math.sin(time*.3+a.phase)*.2);ctx.scale(.6*(1-p*.6),.6*(1-p*.6));ctx.translate(-12,-12);ctx.globalAlpha=(.16+a.r*.2)*(1-p);ctx.fillStyle='#b4c5e5';ctx.fill(path);ctx.restore();
+          ctx.save();ctx.translate(px,py);ctx.rotate(mix(a.phase+motion*(i%2?1:-1)*(.35+a.s*.32),angle+Math.PI,p));const size=(.45+a.r*.55)*(1-p*.6);ctx.scale(size,size);ctx.translate(-12,-12);ctx.globalAlpha=(.22+a.r*.32)*(1-p);ctx.fillStyle='#b4c5e5';ctx.fill(path);ctx.restore();
         }
         light(hx,hy,120+80*p-(scene===1?130*smooth((t-2.2)/.4):0),.35+.38*p);
         craft(hx,hy,-Math.PI/2,scene===0?52:52-14*smooth((t-1.9)/.7),0);
@@ -169,7 +178,7 @@ export const CinematicStage=forwardRef(function CinematicStage({slotRef},ref){
         const q=smooth(t/.6),angle=t*.8,x=gx+Math.cos(angle)*r*1.18,y=gy+Math.sin(angle)*r*.5;
         craft(mix(ax(.82),x,q),mix(ay(.48),y,q),mix(0,Math.atan2(Math.cos(angle)*.5,-Math.sin(angle)),q),30,30,(1-smooth((t-6)/1)));
       } else if(scene===11){light(cx,h*.42,Math.min(w,h)*1.1,.2*(1-smooth(t/4)));}
-      else if(scene===12&&!reduced){globe(time*.3,.16,.85);}
+      // End on a quiet title card; no sphere behind readable text.
       ctx.globalAlpha=1;
     };
     return()=>{observer.disconnect();drawRef.current=()=>{};canvas.width=1;canvas.height=1;};
