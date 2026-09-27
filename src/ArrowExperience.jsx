@@ -1,409 +1,170 @@
-import React,{useEffect,useMemo,useRef,useState}from'react';
-import{ArrowMark}from'./ArrowMark';
-import{WaypointMark}from'./WaypointMark';
-import{OrbitPlanet}from'./OrbitPlanet';
-import{LostArrowCanvas,SpaceFieldCanvas}from'./CinematicCanvases';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { ArrowMark } from './ArrowMark';
+import { WaypointMark } from './WaypointMark';
+import { CinematicStage } from './CinematicStage';
+import { createClock, SCENES, sceneAt, DURATION } from './playback';
 
-const SCENES=[
-  {id:1,at:0},
-  {id:2,at:6500},
-  {id:3,at:14000},
-  {id:4,at:22500},
-  {id:5,at:31500},
-  {id:6,at:39500},
-  {id:7,at:48500},
-  {id:8,at:56500},
-  {id:9,at:64500},
-  {id:10,at:73000},
-  {id:11,at:82000},
-  {id:12,at:89500},
-];
+const MODULES = ['ATLAS', 'RAVIN', 'RELAY', 'ORBIT', 'WAYPOINT'];
+const WORDS = ['MESSAGES', 'FILES', 'PROJECTS', 'PEOPLE', 'EVENTS', 'IDEAS', 'TASKS', 'MUSIC', 'NOTES', 'AI', 'CALENDAR', 'MEMORIES', 'LINKS', 'GOALS'];
+const WORD_POS = [[15,14],[70,12],[17,76],[78,74],[44,9],[12,42],[82,42],[42,80],[29,32],[62,60],[62,29],[24,62],[36,52],[65,83]];
+const GROUPS = [2,0,0,2,4,1,4,0,0,1,4,0,0,4];
+const DEST_POS = [[20,25],[80,25],[20,73],[50,48],[80,73]];
 
-function seeded(seed){
-  let s=seed|0;
-  return()=>{s=(Math.imul(s,1664525)+1013904223)|0;return(s>>>0)/4294967296};
+function ModuleCopy({ role, name, children }) {
+  return <div className="ax-module-copy"><div className="ax-role">{role}</div><h2>{name}</h2><p>{children}</p></div>;
 }
-
-function ModuleCopy({role,name,children}){
-  return <div className="ax-module-copy">
-    <div className="ax-role">{role}</div>
-    <h2>{name}</h2>
-    <p>{children}</p>
-  </div>;
+function StoryCopy({ role, title, children }) {
+  return <div className="ax-story-copy"><div className="ax-role">{role}</div><h2>{title}</h2><p>{children}</p></div>;
 }
-
-function TravelCraft({variant='default'}){
-  return <div className={'ax-travel-craft ax-travel-'+variant}>
-    <ArrowMark size={42}/>
-    <i/>
-  </div>;
-}
-
-function AtlasVisual(){
-  const anchors=useMemo(()=>[
-    {id:'files',label:'FILES',x:18,y:28},
-    {id:'projects',label:'PROJECTS',x:70,y:23},
-    {id:'links',label:'LINKS',x:25,y:68},
-    {id:'accounts',label:'ACCOUNTS',x:75,y:66},
-    {id:'media',label:'MEDIA',x:51,y:46},
-  ],[]);
-
-  const nodes=useMemo(()=>{
-    const rnd=seeded(232);
-    return Array.from({length:64},(_,i)=>{
-      const group=i%anchors.length;
-      const a=anchors[group];
-      return{
-        id:i,
-        group,
-        x:Math.max(5,Math.min(95,a.x+(rnd()-.5)*30)),
-        y:Math.max(7,Math.min(91,a.y+(rnd()-.5)*24)),
-        size:2+rnd()*4.6,
-        delay:rnd()*2.8,
-      };
-    });
-  },[anchors]);
-
-  const edges=useMemo(()=>{
-    const list=[];
-    nodes.forEach((n,i)=>{
-      const a=anchors[n.group];
-      list.push({x1:n.x,y1:n.y,x2:a.x,y2:a.y,key:'a'+i});
-      if(i>5&&i%3===0){
-        const p=nodes[i-5];
-        list.push({x1:n.x,y1:n.y,x2:p.x,y2:p.y,key:'p'+i});
-      }
-    });
-    return list;
-  },[anchors,nodes]);
-
-  return <div className="ax-atlas-map" aria-hidden="true">
-    <div className="ax-atlas-grid"/>
-    <div className="ax-atlas-orbit ao1"/><div className="ax-atlas-orbit ao2"/>
-    <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-      {edges.map(e=><line key={e.key} x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2}/>)}
+function Information({ organized = false }) {
+  return <div className={'ax-visual ax-information ' + (organized ? 'is-organized' : '')} aria-hidden="true">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="ax-connect-links">
+      {DEST_POS.map(([x,y], i) => <line key={i} x1="50" y1="48" x2={x} y2={y} />)}
     </svg>
-    {nodes.map(n=><i key={n.id} className={'ax-atlas-node g'+n.group} style={{
-      left:n.x+'%',top:n.y+'%',width:n.size+'px',height:n.size+'px','--delay':n.delay+'s'
-    }}/>)}
-    {anchors.map((a,i)=><div key={a.id} className={'ax-atlas-anchor a'+i} style={{left:a.x+'%',top:a.y+'%'}}>
-      <b/><span>{a.label}</span>
-    </div>)}
-    <div className="ax-atlas-legend"><span><i/>POINT = SOMETHING IN YOUR WORLD</span><span><em/>LINE = A RELATIONSHIP</span></div>
+    {WORDS.map((word,i) => <span key={word} className="ax-word" style={{ '--x': WORD_POS[i][0]+'%', '--y': WORD_POS[i][1]+'%', '--tx': DEST_POS[GROUPS[i]][0]+'%', '--ty': DEST_POS[GROUPS[i]][1]+'%', '--i':i }}>{word}</span>)}
+    {organized && DEST_POS.map(([x,y],i) => <div key={i} className={'ax-destination dest-'+i} style={{left:x+'%',top:y+'%', '--i':i}}><i/>{MODULES[i]}</div>)}
+  </div>;
+}
+function AtlasVisual() {
+  const anchors = [[20,24,'FILES'],[76,21,'PROJECTS'],[20,73,'LINKS'],[77,72,'ACCOUNTS'],[50,46,'MEDIA']];
+  return <div className="ax-visual ax-atlas-map" aria-hidden="true">
+    <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="ax-atlas-links">
+      {anchors.map(([x,y],i) => <line key={'main'+i} x1="50" y1="46" x2={x} y2={y} className="ax-main-link" style={{'--i':i}} />)}
+      {Array.from({length:35},(_,i) => {
+        const a = anchors[i%5], angle = i*2.39996, r = 7+(i%4)*2;
+        const x=a[0]+Math.cos(angle)*r, y=a[1]+Math.sin(angle)*r;
+        return <g key={i} style={{'--i':i%5}}><line x1={a[0]} y1={a[1]} x2={x} y2={y}/><circle cx={x} cy={y} r=".35"/></g>;
+      })}
+    </svg>
+    {anchors.map(([x,y,label],i) => <div key={label} className="ax-map-anchor" style={{left:x+'%',top:y+'%','--i':i}}><i/><span>{label}</span></div>)}
+    <div className="ax-visual-caption">Your files. Their connections. One map.</div>
+  </div>;
+}
+function RavinVisual() {
+  return <div className="ax-visual ax-ravin-world" aria-hidden="true">
+    <svg className="ax-ravin-flow" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M12 28 Q35 28 50 48 Q65 68 88 68"/></svg>
+    <div className="ax-ravin-orbit ro1"/><div className="ax-ravin-orbit ro2"/>
+    <div className="ax-ravin-core"><i/><b/><em/></div>
+    <div className="ax-ravin-label input">CONTEXT</div><div className="ax-ravin-label output">CLEAR NEXT STEP</div>
+    <div className="ax-ravin-thoughts"><span>UNDERSTAND</span><span>REASON</span><span>ACT</span></div>
+  </div>;
+}
+function RelayVisual() {
+  const endpoints = [[17,23,'SCHOOL'],[83,23,'YOU'],[17,74,'FRIENDS'],[83,74,'GROUPS']];
+  return <div className="ax-visual ax-relay-world" aria-hidden="true">
+    <svg className="ax-relay-links" viewBox="0 0 100 100" preserveAspectRatio="none">
+      {endpoints.map(([x,y,label]) => <line key={label} x1="50" y1="31" x2={x} y2={y}/>)}
+    </svg>
+    <svg className="ax-tower" viewBox="0 0 140 240" preserveAspectRatio="xMidYMin meet"><path d="M70 0 L26 226 H114 Z M70 0 V226 M56 79 H84 M42 148 H98 M56 79 L98 148 L26 226 M84 79 L42 148 L114 226"/><circle cx="70" cy="0" r="5"/></svg>
+    <div className="ax-relay-beacon"><i/><i/><i/></div>
+    {endpoints.map(([x,y,label],i) => <React.Fragment key={label}><div className="ax-relay-end" style={{left:x+'%',top:y+'%'}}><i/>{label}</div><span className="ax-packet" style={{'--tx':x+'%','--ty':y+'%','--i':i}}/></React.Fragment>)}
+    <div className="ax-visual-caption">A signal becomes a conversation.</div>
+  </div>;
+}
+function WaypointVisual() {
+  const inputs = [[15,20,'IDEA'],[70,17,'TASK'],[18,77,'DEADLINE'],[80,75,'GOAL'],[48,86,'LATER']];
+  return <div className="ax-visual ax-waypoint-world" aria-hidden="true">
+    <div className="ax-waypoint-beacon"><WaypointMark size={124}/></div>
+    {inputs.map(([x,y,label],i) => <span className="ax-waypoint-input" key={label} style={{'--x':x+'%','--y':y+'%','--i':i}}>{label}</span>)}
+    <div className="ax-waypoint-route"><i/><span className="p1"/><span className="p2"/><span className="p3"/><b>→</b></div>
+    <div className="ax-waypoint-next"><small>DESTINATION CHOSEN</small><strong>Take the first clear step.</strong></div>
+  </div>;
+}
+function OrbitVisual() {
+  return <div className="ax-visual ax-orbit-world" aria-hidden="true">
+    {[[15,21,'ATLAS'],[85,21,'RAVIN'],[15,76,'RELAY'],[85,76,'WAYPOINT']].map(([x,y,label],i) => <div className="ax-orbit-destination" key={label} style={{left:x+'%',top:y+'%','--i':i}}><i/>{label}</div>)}
+    <div className="ax-orbit-center">ORBIT<span>ONE CONNECTED WORLD</span></div>
   </div>;
 }
 
-function RavinVisual(){
-  const bits=useMemo(()=>{
-    const rnd=seeded(811);
-    return Array.from({length:44},(_,i)=>({
-      id:i,x:7+rnd()*86,y:9+rnd()*82,d:rnd()*2.6,s:2+rnd()*3.2
-    }));
+export function ArrowExperience() {
+  const [scene,setScene] = useState(0);
+  const [reduced,setReduced] = useState(() => matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const clock = useRef(createClock());
+  const sceneRef = useRef(0);
+  const canvas = useRef(null);
+  const visualSlot = useRef(null);
+  const sceneElement = useRef(null);
+  const animations = useRef([]);
+  const progress = useRef(null);
+  const [run,setRun] = useState(0);
+
+  // CSS animations are scrubbed by the same elapsed time as the canvas. No
+  // independent timers, animation delays on a default-facing craft, or catch-up
+  // jumps after a hidden tab. New scene markup catches up before its first paint.
+  useLayoutEffect(() => {
+    animations.current = sceneElement.current?.getAnimations({subtree:true}) || [];
+    const local = scene === 0 ? 0 : clock.current.elapsed - SCENES[scene-1].at;
+    for (const animation of animations.current) { animation.pause(); animation.currentTime = Math.max(0,local); }
+  },[scene,run]);
+
+  useEffect(() => {
+    const mq = matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => { setReduced(mq.matches); if (mq.matches) { clock.current.finish(); sceneRef.current=12; setScene(12); } };
+    mq.addEventListener('change',update);
+    return () => mq.removeEventListener('change',update);
   },[]);
 
-  return <div className="ax-ravin-world" aria-hidden="true">
-    <div className="ax-ravin-mesh"/>
-    <div className="ax-ravin-ring rr1"/><div className="ax-ravin-ring rr2"/><div className="ax-ravin-ring rr3"/>
-    <div className="ax-ravin-core"><span>CONTEXT</span><b>→</b><span>DECISION</span></div>
-    <div className="ax-ravin-rays">{Array.from({length:20},(_,i)=><i key={i} style={{'--i':i}}/>)}</div>
-    <div className="ax-ravin-bits">{bits.map(b=><i key={b.id} style={{left:b.x+'%',top:b.y+'%',width:b.s+'px',height:b.s+'px','--d':b.d+'s'}}/>)}</div>
-    <div className="ax-ravin-steps"><span>UNDERSTAND</span><span>REASON</span><span>ACT</span></div>
-    <div className="ax-ravin-inputs"><span>FILES</span><span>MESSAGES</span><span>PLANS</span></div>
-  </div>;
-}
+  useEffect(() => {
+    let frame=0, idle=0, last=performance.now();
+    function draw(now) {
+      frame=0;
+      if(document.hidden) return;
+      idle += Math.min(50,Math.max(0,now-last)); last=now;
+      const elapsed=clock.current.tick(now);
+      const next=sceneRef.current===0?0:sceneAt(elapsed).id;
+      if(next!==sceneRef.current) { sceneRef.current=next; setScene(next); }
+      const local=next===0?idle:elapsed-SCENES[next-1].at;
+      // Don't scrub outgoing DOM with the new scene's local time.
+      if (Number(sceneElement.current?.dataset.scene)===next) {
+        for (const animation of animations.current) animation.currentTime=reduced?100000:local;
+      }
+      if(progress.current) progress.current.style.transform=`scaleX(${elapsed/DURATION})`;
+      canvas.current?.draw({scene:next, local:local/1000, elapsed:elapsed/1000, idle:idle/1000, reduced});
+      if(!reduced || clock.current.running) frame=requestAnimationFrame(draw);
+    }
+    const resume = () => {
+      clock.current.pause(); last=performance.now();
+      cancelAnimationFrame(frame); frame=0;
+      if(!document.hidden) frame=requestAnimationFrame(draw);
+    };
+    document.addEventListener('visibilitychange',resume);
+    window.addEventListener('pageshow',resume);
+    window.addEventListener('resize',resume);
+    if(!document.hidden) frame=requestAnimationFrame(draw);
+    return () => {cancelAnimationFrame(frame);document.removeEventListener('visibilitychange',resume);window.removeEventListener('pageshow',resume);window.removeEventListener('resize',resume);};
+  },[reduced,run]);
 
-function RelayVisual(){
-  const endpoints=useMemo(()=>[
-    {id:'you',label:'YOU',x:50,y:10},
-    {id:'friends',label:'FRIENDS',x:14,y:72},
-    {id:'groups',label:'GROUPS',x:86,y:72},
-    {id:'school',label:'SCHOOL',x:14,y:18},
-  ],[]);
-  const hub=useMemo(()=>({x:50,y:31}),[]);
+  function begin() {
+    if(sceneRef.current!==0) return;
+    if(reduced) { skip(); return; }
+    clock.current.start(performance.now()); sceneRef.current=1; setScene(1);
+  }
+  function skip() { clock.current.finish(); sceneRef.current=12; setScene(12);setRun(v=>v+1); }
+  function replay() {clock.current.reset();sceneRef.current=0;setScene(0);setRun(v=>v+1);}
 
-  const packets=useMemo(()=>{
-    const rnd=seeded(404);
-    return Array.from({length:32},(_,i)=>{
-      const endpoint=endpoints[i%endpoints.length];
-      return{
-        id:i,
-        x:endpoint.x,
-        y:endpoint.y,
-        delay:-rnd()*4.8,
-        dur:2.8+rnd()*2.7,
-        size:3+rnd()*3.5,
-        outbound:i%4===0,
-      };
-    });
-  },[endpoints]);
-
-  return <div className="ax-relay-world" aria-hidden="true">
-    <div className="ax-relay-grid"/><div className="ax-relay-status">SIGNAL ROUTING THROUGH RELAY</div>
-    <svg className="ax-relay-links" viewBox="0 0 100 100" preserveAspectRatio="none">
-      {endpoints.map(e=><line key={e.id} x1={e.x} y1={e.y} x2={hub.x} y2={hub.y}/>)}
-    </svg>
-    <div className="ax-relay-tower">
-      <span className="ax-relay-beacon"/>
-      <span className="ax-relay-mast"/>
-      <span className="ax-relay-leg left"/>
-      <span className="ax-relay-leg right"/>
-      <i/><i/><i/><b/><b/><b/>
-    </div>
-    {endpoints.map(e=><div key={e.id} className="ax-relay-end" style={{left:e.x+'%',top:e.y+'%'}}><i/>{e.label}</div>)}
-    {packets.map(p=><span key={p.id} className={'ax-relay-packet'+(p.outbound?' outbound':'')} style={{
-      '--sx':p.x+'%','--sy':p.y+'%','--hx':hub.x+'%','--hy':hub.y+'%',
-      '--delay':p.delay+'s','--dur':p.dur+'s','--size':p.size+'px'
-    }}/>)}
-  </div>;
-}
-
-function WaypointVisual(){
-  const inputs=[
-    ['IDEA','-34vw','-17vh','-7deg'],
-    ['TASK','31vw','-19vh','9deg'],
-    ['DEADLINE','-31vw','20vh','6deg'],
-    ['GOAL','33vw','18vh','-9deg'],
-    ['MAYBE LATER','-4vw','27vh','4deg'],
+  const scenes = [
+    <><div className="ax-intro-title">ARROW</div><button className="ax-start" onClick={begin}><span className="ax-start-target"/><strong>FIND YOUR DIRECTION</strong><small>{reduced?'EXPLORE ARROW':'TAP OR CLICK TO BEGIN'}</small></button><p className="ax-intro-note">Everything is moving.<br/>Not everything is moving together.</p></>,
+    <><div className="ax-title-shatter">ARROW</div><p className="ax-lock">SCATTERED. UNCONNECTED.<br/><b>CHOOSE A DIRECTION.</b></p></>,
+    <p className="ax-lock ignition-lock">DIRECTION LOCKED</p>,
+    <div className="ax-direction-copy"><span>GIVE YOUR LIFE</span><h1>DIRECTION.</h1><p>One connected system for the things you do,<br className="desktop-break"/> know, create, and share.</p></div>,
+    <><Information/><StoryCopy role="YOUR LIFE IS EVERYWHERE" title={<>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></>}>Everything matters. Nothing connects.</StoryCopy></>,
+    <><Information organized/><StoryCopy role="ARROW CONNECTS THE PIECES" title={<>Chaos becomes <b>direction.</b></>}>Five focused places. One connected system.</StoryCopy></>,
+    <><AtlasVisual/><ModuleCopy role="PERSONAL LIFE MAP" name="ATLAS">Files, ideas, and projects — connected in one living map.</ModuleCopy></>,
+    <><RavinVisual/><ModuleCopy role="INTELLIGENCE CORE" name="RAVIN">Connect the context. Understand the problem. Find your next move.</ModuleCopy></>,
+    <><RelayVisual/><ModuleCopy role="COMMUNICATION CENTER" name="RELAY">Your people, conversations, and plans — moving together.</ModuleCopy></>,
+    <><WaypointVisual/><ModuleCopy role="INTENTION & EXECUTION" name="WAYPOINT">Capture the mess. Choose a direction. Take the next step.</ModuleCopy></>,
+    <><OrbitVisual/><ModuleCopy role="CENTRAL NAVIGATION" name="ORBIT">Your whole world, connected. A place to return. A way forward.</ModuleCopy></>,
+    <div className="ax-final-copy"><ArrowMark size={70} className="ax-up"/><small>RESONANT ASSIST PRESENTS</small><h1>PROJECT<br/><b>ARROW</b></h1><p>YOUR LIFE. CONNECTED.</p><strong>GIVE IT DIRECTION.</strong></div>,
+    <div className="ax-landing-copy"><ArrowMark size={48} className="ax-up"/><small>PROJECT ARROW</small><h1>Your digital life.<br/><b>Moving together.</b></h1><p>Atlas. RAVIN. Relay. Orbit. Waypoint.<br/>One connected system to give your life direction.</p><div className="ax-actions"><a href="https://link9060.github.io/Resonant-Orbit/">EXPLORE ARROW <span>↗</span></a><button onClick={replay}>REPLAY EXPERIENCE</button></div></div>,
   ];
 
-  return <div className="ax-waypoint-world" aria-hidden="true">
-    <div className="ax-waypoint-grid"/>
-    <div className="ax-waypoint-beacon">
-      <div className="ax-beacon-glow"/>
-      <WaypointMark size={178} active/>
-    </div>
-    <div className="ax-waypoint-inputs">
-      {inputs.map(([label,x,y,r],i)=><span key={label} className={'w'+i} style={{'--x':x,'--y':y,'--r':r}}>{label}</span>)}
-    </div>
-    <div className="ax-waypoint-route">
-      <i className="route"/>
-      <i className="point p1"/><i className="point p2"/><i className="point p3"/>
-      <b>→</b>
-    </div>
-    <div className="ax-waypoint-next"><span>DESTINATION CHOSEN</span><strong>NEXT → DO THE FIRST CLEAR THING</strong></div>
-  </div>;
-}
-
-function Intro({onStart}){
-  return <section className="ax-scene ax-intro">
-    <LostArrowCanvas mode="wander"/>
-    <div className="ax-intro-title">ARROW</div>
-    <button className="ax-start" onClick={onStart}>
-      <span className="ax-hero-ring r1"/><span className="ax-hero-ring r2"/>
-      <ArrowMark size={84} className="ax-hero-mark"/>
-      <strong>FIND YOUR DIRECTION</strong>
-      <small>CLICK TO BEGIN</small>
-    </button>
-    <p className="ax-intro-note">Everything is moving. Not everything is moving together.</p>
-  </section>;
-}
-
-function Converge(){
-  return <section className="ax-scene ax-converge">
-    <LostArrowCanvas mode="converge"/>
-    <div className="ax-title-shatter" aria-hidden="true">{['A','R','R','O','W'].map((x,i)=><span key={i}>{x}</span>)}</div>
-    <div className="ax-charge"><ArrowMark size={88}/></div>
-    <div className="ax-converge-copy"><span>SCATTERED.</span><span>UNCONNECTED.</span><b>CHOOSE A DIRECTION.</b></div>
-  </section>;
-}
-
-function Ignition(){
-  const streaks=Array.from({length:36},(_,i)=>i);
-  return <section className="ax-scene ax-ignition">
-    <div className="ax-impact-flash"/><div className="ax-impact-core"/><div className="ax-impact-ring ir1"/>
-    <div className="ax-burst-streaks" aria-hidden="true">{streaks.map(i=><i key={i} style={{'--i':i,'--a':(i*137.508)+'deg','--d':(i%7)*-.018+'s'}}/>)}</div>
-    <div className="ax-beam soft"/><div className="ax-beam core"/>
-    <div className="ax-hit-glow"/>
-    <div className="ax-shock s1"/><div className="ax-shock s2"/>
-    <div className="ax-launch"><ArrowMark size={82}/></div>
-    <div className="ax-lock">DIRECTION LOCKED</div>
-  </section>;
-}
-
-function Direction(){
-  return <section className="ax-scene ax-direction">
-    <div className="ax-speed-tunnel"/>
-    <div className="ax-direction-copy">
-      <span>GIVE YOUR LIFE</span>
-      <strong>DIRECTION.</strong>
-      <p>One connected system for the things you do, know, build, remember, and share.</p>
-    </div>
-    <div className="ax-direction-craft"><ArrowMark size={72}/><i/></div>
-  </section>;
-}
-
-function Chaos(){
-  const words=['MESSAGES','FILES','PROJECTS','PEOPLE','EVENTS','IDEAS','TASKS','MUSIC','NOTES','AI','CALENDAR','MEMORIES','LINKS','GOALS'];
-  return <section className="ax-scene ax-chaos">
-    <div className="ax-chaos-words" aria-hidden="true">{words.map((w,i)=><span key={w} className={'c'+i}>{w}</span>)}</div>
-    <div className="ax-chaos-craft"><ArrowMark size={72}/></div>
-    <div className="ax-story-copy">
-      <div className="ax-role">YOUR LIFE IS EVERYWHERE</div>
-      <h2>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></h2>
-      <p>Different parts of your life stay distinct — ARROW gives them one shared direction.</p>
-    </div>
-  </section>;
-}
-
-function Organize(){
-  return <section className="ax-scene ax-organize">
-    <div className="ax-organize-lines">{Array.from({length:28},(_,i)=><i key={i} style={{'--i':i}}/>)}</div>
-    <div className="ax-organize-dots">{Array.from({length:36},(_,i)=><i key={i} style={{'--i':i}}/>)}</div>
-    <div className="ax-organize-arrow"><ArrowMark size={78}/></div>
-    <div className="ax-story-copy">
-      <div className="ax-role">ARROW CONNECTS THE PIECES</div>
-      <h2>Chaos becomes <b>direction.</b></h2>
-      <p>Nothing disappears. It resolves into focused places — each with one clear job.</p>
-    </div>
-  </section>;
-}
-
-function Atlas(){
-  return <section className="ax-scene ax-module ax-atlas">
-    <AtlasVisual/>
-    <TravelCraft variant="atlas"/>
-    <ModuleCopy role="PERSONAL LIFE MAP" name="ATLAS">
-      Your digital world becomes a map: things become points, relationships become lines, and connected context becomes visible.
-    </ModuleCopy>
-  </section>;
-}
-
-function Ravin(){
-  return <section className="ax-scene ax-module ax-ravin">
-    <RavinVisual/>
-    <TravelCraft variant="ravin"/>
-    <ModuleCopy role="INTELLIGENCE CORE" name="RAVIN">
-      Your intelligence layer: understand context, reason across your world, then help turn an answer into action.
-    </ModuleCopy>
-  </section>;
-}
-
-function Relay(){
-  return <section className="ax-scene ax-module ax-relay">
-    <RelayVisual/>
-    <TravelCraft variant="relay"/>
-    <ModuleCopy role="COMMUNICATIONS CENTER" name="RELAY">
-      Your communications center: people, groups, and coordination stay connected to the rest of your system.
-    </ModuleCopy>
-  </section>;
-}
-
-function Waypoint(){
-  return <section className="ax-scene ax-module ax-waypoint">
-    <WaypointVisual/>
-    <TravelCraft variant="waypoint"/>
-    <ModuleCopy role="INTENTION & EXECUTION" name="WAYPOINT">
-      Your execution layer: capture the mess, choose the destination, and turn it into the next clear move.
-    </ModuleCopy>
-  </section>;
-}
-
-function Orbit(){
-  return <section className="ax-scene ax-module ax-orbit">
-    <div className="ax-orbit-stage"><OrbitPlanet active introMix={1} showDestinations={false} showCore={false} showCraft={true}/></div>
-    <ModuleCopy role="CENTRAL NAVIGATION" name="ORBIT">
-      Your central world — the place you return to and navigate outward from, without module labels pinned onto the sphere.
-    </ModuleCopy>
-  </section>;
-}
-
-function Final(){
-  return <section className="ax-scene ax-final">
-    <div className="ax-final-sun"/>
-    <ArrowMark size={96} className="ax-final-mark"/>
-    <div className="ax-final-copy">
-      <small>RESONANT ASSIST PRESENTS</small>
-      <h1>PROJECT<br/><b>ARROW</b></h1>
-      <p>YOUR LIFE. CONNECTED.</p>
-      <strong>GIVE IT DIRECTION.</strong>
-    </div>
-  </section>;
-}
-
-function Landing({onReplay}){
-  return <section className="ax-scene ax-landing">
-    <div className="ax-landing-orbit"><OrbitPlanet active introMix={1} showDestinations={false} showCore={false} showCraft={true}/></div>
-    <div className="ax-landing-shade"/>
-    <div className="ax-landing-copy">
-      <ArrowMark size={54}/>
-      <small>PROJECT ARROW</small>
-      <h1>Your digital life.<br/><b>Moving together.</b></h1>
-      <p>Atlas. RAVIN. Relay. Orbit. Waypoint. One connected system designed to give the moving parts of your life a direction.</p>
-      <div className="ax-actions"><button onClick={()=>{window.location.href="https://link9060.github.io/Resonant-Orbit/"}}>EXPLORE ARROW <span>→</span></button><button onClick={onReplay}>REPLAY EXPERIENCE</button></div>
-    </div>
-  </section>;
-}
-
-export function ArrowExperience(){
-  const[scene,setScene]=useState(0);
-  const[running,setRunning]=useState(false);
-  const[reduced,setReduced]=useState(false);
-  const timers=useRef([]);
-
-  useEffect(()=>{
-    const mq=matchMedia('(prefers-reduced-motion: reduce)');
-    const update=()=>setReduced(mq.matches);
-    update();
-    mq.addEventListener?.('change',update);
-    return()=>mq.removeEventListener?.('change',update);
-  },[]);
-
-  useEffect(()=>{
-    const move=e=>{
-      const mx=(e.clientX/innerWidth-.5)*2;
-      const my=(e.clientY/innerHeight-.5)*2;
-      document.documentElement.style.setProperty('--mx',mx.toFixed(3));
-      document.documentElement.style.setProperty('--my',my.toFixed(3));
-      document.documentElement.style.setProperty('--mxp',(mx*3).toFixed(2)+'%');
-      document.documentElement.style.setProperty('--myp',(my*3).toFixed(2)+'%');
-    };
-    addEventListener('pointermove',move,{passive:true});
-    return()=>removeEventListener('pointermove',move);
-  },[]);
-
-  useEffect(()=>()=>timers.current.forEach(clearTimeout),[]);
-
-  function clear(){
-    timers.current.forEach(clearTimeout);
-    timers.current=[];
-  }
-
-  function begin(){
-    if(running)return;
-    document.documentElement.requestFullscreen?.().catch(()=>{});
-    clear();
-    setRunning(true);
-    if(reduced){setScene(12);return;}
-    setScene(1);
-    for(const item of SCENES.slice(1)){
-      timers.current.push(setTimeout(()=>setScene(item.id),item.at));
-    }
-  }
-
-  function skip(){
-    clear();
-    setRunning(true);
-    setScene(12);
-  }
-
-  function replay(){
-    clear();
-    setRunning(false);
-    setScene(0);
-  }
-
-  const progress=scene===0?0:scene>=12?100:Math.round((scene/12)*100);
-  const sceneNames=['READY','ALIGN','IGNITION','DIRECTION','CHAOS','CONNECT','ATLAS','RAVIN','RELAY','WAYPOINT','ORBIT','ARROW','EXPLORE'];
-
-  const views=[<Intro onStart={begin}/>,<Converge/>,<Ignition/>,<Direction/>,<Chaos/>,<Organize/>,<Atlas/>,<Ravin/>,<Relay/>,<Waypoint/>,<Orbit/>,<Final/>,<Landing onReplay={replay}/>];
-
-  return <main className={'arrow-experience scene-'+scene}>
-    <SpaceFieldCanvas scene={scene}/>
-    <div className="ax-grain"/><div className="ax-vignette"/><div className="ax-ambient"/>
-    <header className="ax-brand">RESONANT ASSIST <i>/</i> PROJECT ARROW</header>
-    {running&&scene<12?<button className="ax-skip" onClick={skip}>SKIP EXPERIENCE</button>:null}
-    {running&&scene>0&&scene<12?<div className="ax-progress" aria-hidden="true"><i style={{width:progress+'%'}}/><span>{sceneNames[scene]}</span></div>:null}
-    <div key={scene} className={'ax-scene-transition t'+scene} aria-hidden="true"/>
-    {views[scene]}
+  return <main className={'arrow-experience scene-'+scene} data-build="cinematic-49">
+    <div className="ax-visual ax-visual-slot" ref={visualSlot} aria-hidden="true"/>
+    <CinematicStage ref={canvas} slotRef={visualSlot}/>
+    <header className="ax-brand">RESONANT ASSIST <span>/ PROJECT ARROW</span></header>
+    {scene>0&&scene<12&&<button className="ax-skip" onClick={skip}>SKIP <span>EXPERIENCE</span> ↗</button>}
+    <section ref={sceneElement} key={scene+'-'+run} data-scene={scene} className={'ax-scene ax-scene-'+scene} aria-label={scene===0?'Start ARROW':SCENES[scene-1].name}>{scenes[scene]}</section>
+    {scene>0&&scene<12&&<div className="ax-progress" aria-hidden="true"><span>{String(scene).padStart(2,'0')} / {SCENES[scene-1].name}</span><div><i ref={progress}/></div></div>}
   </main>;
 }
