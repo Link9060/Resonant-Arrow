@@ -40,7 +40,17 @@ try {
       const core=document.querySelector('.ax-ravin-core');
       if(core&&Math.abs(core.getBoundingClientRect().x+core.getBoundingClientRect().width/2-(visual.left+visual.right)/2)>1)clips.push('off-center core');
       const canvas=document.querySelector('canvas');
-      return{scene:Number(document.querySelector('.ax-scene').dataset.scene),clips,copyOverlap:copy?!(copy.top>=visual.bottom-1||copy.left>=visual.right-1):false,canvasPixels:canvas.width*canvas.height,canvasCount:document.querySelectorAll('canvas').length};
+      const rgba=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+      let tintedPixels=0;for(let i=0;i<rgba.length;i+=16){if(Math.max(rgba[i],rgba[i+1],rgba[i+2])-Math.min(rgba[i],rgba[i+1],rgba[i+2])>1)tintedPixels++;}
+      const relay=document.querySelector('.ax-relay-world');
+      if(relay){
+        const tower=relay.querySelector('.ax-tower').getBoundingClientRect();
+        const user=relay.querySelector('.ax-relay-user').getBoundingClientRect();
+        if(user.bottom>=tower.top)clips.push('Relay user must be above tower');
+        const inputs=[...relay.querySelectorAll('.ax-relay-input')];
+        if(inputs.length!==3||inputs.some(el=>el.getBoundingClientRect().top<=tower.bottom))clips.push('Relay needs three inputs below tower');
+      }
+      return{tintedPixels,scene:Number(document.querySelector('.ax-scene').dataset.scene),clips,copyOverlap:copy?!(copy.top>=visual.bottom-1||copy.left>=visual.right-1):false,canvasPixels:canvas.width*canvas.height,canvasCount:document.querySelectorAll('canvas').length};
      });
      await page.screenshot({path:`${output}/${engine}-${name}-${label}.png`});
      results.push({engine,name,label,...data,errors:[...errors]});
@@ -48,6 +58,7 @@ try {
      assert.deepEqual(data.clips,[],`${engine}/${name}/${label}: clipped UI`);
      assert.equal(data.copyOverlap,false,`${engine}/${name}/${label}: copy overlaps visual`);
      assert.equal(data.canvasCount,1,'Exactly one active canvas');
+     assert.equal(data.tintedPixels,0,'Canvas must remain strictly monochrome');
      assert(data.canvasPixels<=(name==='desktop'?2505000:1105000),'Canvas pixel budget');
      assert.deepEqual(errors,[],`${engine}/${name}/${label}: browser error`);
     }
