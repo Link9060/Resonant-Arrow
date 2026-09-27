@@ -98,3 +98,20 @@ texture, without a hard rectangular tail. Surface/particle caps are unchanged.
 The stronger burst's local normal-speed phone-viewport check recorded a 16.8 ms
 maximum frame, with no long tasks. Chromium layout/playback checks passed. The
 branch workflow also checks WebKit before any subsequent publishing.
+
+
+## Follow-up: motion and mobile composition
+
+Restored continuous, independently phased drift and spin to the opening arrow field.
+Convergence inherits the idle motion instead of snapping from fixed positions.
+Mobile visual slots now have bounded proportions and share their measured center
+with the canvas; RAVIN rings preserve their proportions. The viewport follows
+mobile browser chrome using dvh. Atlas labels sit below their actual connection
+points, and Waypoint's supporting text is centered on the composition.
+
+Tightened headline tracking, removed redundant captions and label boxes, reduced
+craft glow, simplified module copy, and kept the final card free of background
+geometry. A muted amber chapter/progress accent gives the monochrome system a
+consistent secondary color. Existing browser checks now also verify mobile
+centering, visualization proportions, Atlas label bounds, and the RAVIN center.
+Physical-device Safari remains a separate real-device follow-up.

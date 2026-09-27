@@ -30,10 +30,15 @@ try {
      const data=await page.evaluate(()=>{
       const visual=document.querySelector('.ax-visual-slot').getBoundingClientRect(),copy=document.querySelector('.ax-module-copy,.ax-story-copy')?.getBoundingClientRect();
       const clips=[];
-      for(const el of document.querySelectorAll('.ax-module-copy,.ax-story-copy,.ax-direction-copy,.ax-map-anchor,.ax-relay-end,.ax-ravin-label,.ax-waypoint-next,.ax-orbit-destination,.ax-actions,.ax-final-copy,.ax-landing-copy')){
+      for(const el of document.querySelectorAll('.ax-module-copy,.ax-story-copy,.ax-direction-copy,.ax-map-anchor,.ax-map-anchor span,.ax-relay-end,.ax-ravin-label,.ax-waypoint-next,.ax-orbit-destination,.ax-actions,.ax-final-copy,.ax-landing-copy')){
        if(Number(getComputedStyle(el).opacity)<.1)continue;
        const r=el.getBoundingClientRect();if(r.left<-.5||r.right>innerWidth+.5||r.top<-.5||r.bottom>innerHeight+.5)clips.push(el.className);
       }
+      const portrait=innerWidth<700&&innerHeight>520;
+      if(portrait&&Math.abs((visual.left+visual.right)/2-innerWidth/2)>1)clips.push('off-center visual');
+      if(portrait&&visual.height>visual.width+1)clips.push('stretched mobile visual');
+      const core=document.querySelector('.ax-ravin-core');
+      if(core&&Math.abs(core.getBoundingClientRect().x+core.getBoundingClientRect().width/2-(visual.left+visual.right)/2)>1)clips.push('off-center core');
       const canvas=document.querySelector('canvas');
       return{scene:Number(document.querySelector('.ax-scene').dataset.scene),clips,copyOverlap:copy?!(copy.top>=visual.bottom-1||copy.left>=visual.right-1):false,canvasPixels:canvas.width*canvas.height,canvasCount:document.querySelectorAll('canvas').length};
      });

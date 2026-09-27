@@ -37,7 +37,7 @@ function AtlasVisual() {
       })}
     </svg>
     {anchors.map(([x,y,label],i) => <div key={label} className="ax-map-anchor" style={{left:x+'%',top:y+'%','--i':i}}><i/><span>{label}</span></div>)}
-    <div className="ax-visual-caption">Your files. Their connections. One map.</div>
+
   </div>;
 }
 function RavinVisual() {
@@ -58,7 +58,7 @@ function RelayVisual() {
     <svg className="ax-tower" viewBox="0 0 140 240" preserveAspectRatio="xMidYMin meet"><path d="M70 0 L26 226 H114 Z M70 0 V226 M56 79 H84 M42 148 H98 M56 79 L98 148 L26 226 M84 79 L42 148 L114 226"/><circle cx="70" cy="0" r="5"/></svg>
     <div className="ax-relay-beacon"><i/><i/><i/></div>
     {endpoints.map(([x,y,label],i) => <React.Fragment key={label}><div className="ax-relay-end" style={{left:x+'%',top:y+'%'}}><i/>{label}</div><span className="ax-packet" style={{'--tx':x+'%','--ty':y+'%','--i':i}}/></React.Fragment>)}
-    <div className="ax-visual-caption">A signal becomes a conversation.</div>
+
   </div>;
 }
 function WaypointVisual() {
@@ -148,18 +148,18 @@ export function ArrowExperience() {
     <><div className="ax-title-shatter">ARROW</div><p className="ax-lock">SCATTERED. UNCONNECTED.<br/><b>CHOOSE A DIRECTION.</b></p></>,
     <p className="ax-lock ignition-lock">DIRECTION LOCKED</p>,
     <div className="ax-direction-copy"><span>GIVE YOUR LIFE</span><h1>DIRECTION.</h1><p>One connected system for the things you do,<br className="desktop-break"/> know, create, and share.</p></div>,
-    <><Information/><StoryCopy role="YOUR LIFE IS EVERYWHERE" title={<>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></>}>Everything matters. Nothing connects.</StoryCopy></>,
-    <><Information organized/><StoryCopy role="ARROW CONNECTS THE PIECES" title={<>Chaos becomes <b>direction.</b></>}>Five focused places. One connected system.</StoryCopy></>,
-    <><AtlasVisual/><ModuleCopy role="PERSONAL LIFE MAP" name="ATLAS">Files, ideas, and projects — connected in one living map.</ModuleCopy></>,
-    <><RavinVisual/><ModuleCopy role="INTELLIGENCE CORE" name="RAVIN">Connect the context. Understand the problem. Find your next move.</ModuleCopy></>,
-    <><RelayVisual/><ModuleCopy role="COMMUNICATION CENTER" name="RELAY">Your people, conversations, and plans — moving together.</ModuleCopy></>,
-    <><WaypointVisual/><ModuleCopy role="INTENTION & EXECUTION" name="WAYPOINT">Capture the mess. Choose a direction. Take the next step.</ModuleCopy></>,
-    <><OrbitVisual/><ModuleCopy role="CENTRAL NAVIGATION" name="ORBIT">Your whole world, connected. A place to return. A way forward.</ModuleCopy></>,
+    <><Information/><StoryCopy role="YOUR LIFE IS EVERYWHERE" title={<>Messages. Files. Ideas. People.<br/><b>All moving separately.</b></>}>The pieces are there. The connections are missing.</StoryCopy></>,
+    <><Information organized/><StoryCopy role="ARROW CONNECTS THE PIECES" title={<>Chaos becomes <b>direction.</b></>}>Your projects, conversations, and plans belong together.</StoryCopy></>,
+    <><AtlasVisual/><ModuleCopy role="01 / YOUR COLLECTION" name="ATLAS">Keep your files, links, and projects connected.</ModuleCopy></>,
+    <><RavinVisual/><ModuleCopy role="02 / YOUR ASSISTANT" name="RAVIN">Work through questions with the context already in view.</ModuleCopy></>,
+    <><RelayVisual/><ModuleCopy role="03 / YOUR PEOPLE" name="RELAY">Keep conversations close to the things you’re working on.</ModuleCopy></>,
+    <><WaypointVisual/><ModuleCopy role="05 / YOUR NEXT STEP" name="WAYPOINT">Turn an idea into a plan you can follow.</ModuleCopy></>,
+    <><OrbitVisual/><ModuleCopy role="04 / YOUR HOME" name="ORBIT">One place to move between everything in ARROW.</ModuleCopy></>,
     <div className="ax-final-copy"><ArrowMark size={70} className="ax-up"/><small>RESONANT ASSIST PRESENTS</small><h1>PROJECT<br/><b>ARROW</b></h1><p>YOUR LIFE. CONNECTED.</p><strong>GIVE IT DIRECTION.</strong></div>,
     <div className="ax-landing-copy"><ArrowMark size={48} className="ax-up"/><small>PROJECT ARROW</small><h1>Your digital life.<br/><b>Moving together.</b></h1><p>Atlas. RAVIN. Relay. Orbit. Waypoint.<br/>One connected system to give your life direction.</p><div className="ax-actions"><a href="https://link9060.github.io/Resonant-Orbit/">EXPLORE ARROW <span>↗</span></a><button onClick={replay}>REPLAY EXPERIENCE</button></div></div>,
   ];
 
-  return <main className={'arrow-experience scene-'+scene} data-build="cinematic-49">
+  return <main className={'arrow-experience scene-'+scene} data-build="cinematic-motion-50">
     <div className="ax-visual ax-visual-slot" ref={visualSlot} aria-hidden="true"/>
     <CinematicStage ref={canvas} slotRef={visualSlot}/>
     <header className="ax-brand">RESONANT ASSIST <span>/ PROJECT ARROW</span></header>
