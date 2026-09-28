@@ -50,12 +50,18 @@ function proxy(target, pathRewrite) {
   });
 }
 
-// The path-aware Next exports already include their public base path, so preserve
-// the browser-visible path exactly when forwarding.
-const preserveOriginalPath = (_path, req) => req.originalUrl;
-app.use('/orbit', proxy(ORBIT, preserveOriginalPath));
-app.use('/relay', proxy(RELAY, preserveOriginalPath));
-app.use('/waypoint', proxy(WAYPOINT, preserveOriginalPath));
+// Browser-visible center prefixes belong to the gateway. Dedicated upstreams
+// serve their exported files from /, while the generated HTML/assets still
+// reference the public base path (e.g. /orbit/_next/...). Strip exactly one
+// center prefix when proxying upstream.
+const stripPrefix = (prefix) => (_path, req) => {
+  const rewritten = req.originalUrl.replace(new RegExp('^/' + prefix + '(?=/|\\?|$)'), '');
+  return rewritten || '/';
+};
+
+app.use('/orbit', proxy(ORBIT, stripPrefix('orbit')));
+app.use('/relay', proxy(RELAY, stripPrefix('relay')));
+app.use('/waypoint', proxy(WAYPOINT, stripPrefix('waypoint')));
 
 // Atlas currently publishes from Resonant-Field GitHub Pages.
 app.use('/atlas', proxy(ATLAS, (_path, req) =>
@@ -63,10 +69,7 @@ app.use('/atlas', proxy(ATLAS, (_path, req) =>
 ));
 
 // RAVIN remains a live server. Strip /ravin so its existing /api endpoints stay intact.
-app.use('/ravin', proxy(RAVIN, (_path, req) => {
-  const rewritten = req.originalUrl.replace(/^\/ravin(?=\/|\?|$)/, '');
-  return rewritten || '/';
-}));
+app.use('/ravin', proxy(RAVIN, stripPrefix('ravin')));
 
 // Friendly path normalization.
 for (const center of ['orbit','relay','ravin','atlas','waypoint']) {
