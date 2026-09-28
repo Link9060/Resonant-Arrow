@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>ARROW — Give your life direction</title>
+<title>ARROW — Sign in</title>
 <meta name="theme-color" content="#050505">
-<link rel="stylesheet" href="/gateway.css">
+<link rel="stylesheet" href="/gateway.css?v=auth-v2">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.4/dist/umd/supabase.js"></script>
 </head>
 <body>
@@ -15,25 +15,65 @@
       <span class="mark" aria-hidden="true"></span>
       <div><p>RESONANT ASSIST</p><h1 id="title">ARROW</h1></div>
     </div>
+
     <div class="copy">
       <p class="kicker">ONE ACCOUNT · EVERY CENTER</p>
       <h2>Give your life direction.</h2>
-      <p>Sign in once, then enter Orbit and move through Relay, RAVIN, Atlas, and Waypoint as one connected system.</p>
+      <p>Sign in once, then move through Orbit, Relay, RAVIN, Atlas, and Waypoint with one ARROW account.</p>
     </div>
+
+    <div class="managed-note">
+      <strong>Use a personal account.</strong>
+      <span>Do not use a school-administered, work-managed, or other administrator-controlled email. Managed accounts can block sign-in or connected permissions, and the organization can disable the account later.</span>
+    </div>
+
     <div id="checking" class="checking"><span></span>Checking your ARROW session</div>
+
     <div id="actions" hidden>
       <button id="google" class="primary" type="button">Continue with Google</button>
+
       <div class="divider"><span></span>or<span></span></div>
-      <form id="emailForm">
-        <label for="email">Personal email address</label>
-        <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
-        <button class="secondary" type="submit">Email me a sign-in link</button>
-      </form>
+
+      <div class="method-tabs" role="tablist" aria-label="Sign-in method">
+        <button id="emailTab" class="method-tab is-active" type="button" role="tab" aria-selected="true">Email</button>
+        <button id="phoneTab" class="method-tab" type="button" role="tab" aria-selected="false">Phone</button>
+      </div>
+
+      <section id="emailPanel" class="method-panel">
+        <form id="emailForm">
+          <label for="email">Personal email address</label>
+          <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+          <button class="secondary" type="submit">Email me a sign-in link</button>
+        </form>
+      </section>
+
+      <section id="phonePanel" class="method-panel" hidden>
+        <form id="phoneForm">
+          <label for="phone">Mobile phone number</label>
+          <input id="phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="+1 555 123 4567">
+          <button class="secondary" type="submit">Text me a sign-in code</button>
+          <p class="field-note">Use a phone number you control. SMS/message rates may apply.</p>
+        </form>
+
+        <form id="phoneVerifyForm" hidden>
+          <label for="phoneCode">6-digit code</label>
+          <input id="phoneCode" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required placeholder="123456">
+          <button class="secondary" type="submit">Verify and enter ARROW</button>
+          <button id="changePhone" class="text-action" type="button">Use a different number</button>
+        </form>
+      </section>
     </div>
+
     <p id="message" class="message" role="status"></p>
-    <p class="note"><strong>Use a personal account.</strong> Managed school/work accounts can block sign-in or connected permissions.</p>
+
+    <div class="after-signin">
+      <strong>What happens after sign-in?</strong>
+      <span>You’ll return to the ARROW center you were opening. The first time you use Relay, it may ask you to finish your profile, choose a username, and create your Relay Number.</span>
+    </div>
+
+    <p class="legal">By continuing, you agree to the applicable Resonant Assist terms and privacy policy for the ARROW centers you use.</p>
   </section>
 </main>
-<script src="/gateway-auth.js"></script>
+<script src="/gateway-auth.js?v=auth-v2"></script>
 </body>
 </html>
