@@ -25,6 +25,18 @@ app.use(express.static(path.join(__dirname,'public'), {
   extensions:['html'],
   maxAge:'5m',
   etag:true,
+  setHeaders(res, filePath) {
+    const name = path.basename(filePath);
+    if (
+      name === 'index.html' ||
+      name === 'gateway-auth.js' ||
+      name === 'gateway-callback.js' ||
+      name === 'gateway-signout.js' ||
+      name === 'arrow-auth-guard.js'
+    ) {
+      res.setHeader('Cache-Control', 'no-store');
+    }
+  },
 }));
 
 function proxy(target, pathRewrite) {
