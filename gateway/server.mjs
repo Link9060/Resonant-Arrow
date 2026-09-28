@@ -50,16 +50,23 @@ function proxy(target, pathRewrite) {
   });
 }
 
-// The path-aware Next exports already include their public base path, so preserve it.
-app.use('/orbit', proxy(ORBIT));
-app.use('/relay', proxy(RELAY));
-app.use('/waypoint', proxy(WAYPOINT));
+// The path-aware Next exports already include their public base path, so preserve
+// the browser-visible path exactly when forwarding.
+const preserveOriginalPath = (_path, req) => req.originalUrl;
+app.use('/orbit', proxy(ORBIT, preserveOriginalPath));
+app.use('/relay', proxy(RELAY, preserveOriginalPath));
+app.use('/waypoint', proxy(WAYPOINT, preserveOriginalPath));
 
 // Atlas currently publishes from Resonant-Field GitHub Pages.
-app.use('/atlas', proxy(ATLAS, (p) => '/Resonant-Field' + (p === '/' ? '/' : p)));
+app.use('/atlas', proxy(ATLAS, (_path, req) =>
+  req.originalUrl.replace(/^\/atlas(?=\/|\?|$)/, '/Resonant-Field')
+));
 
 // RAVIN remains a live server. Strip /ravin so its existing /api endpoints stay intact.
-app.use('/ravin', proxy(RAVIN, (p) => p || '/'));
+app.use('/ravin', proxy(RAVIN, (_path, req) => {
+  const rewritten = req.originalUrl.replace(/^\/ravin(?=\/|\?|$)/, '');
+  return rewritten || '/';
+}));
 
 // Friendly path normalization.
 for (const center of ['orbit','relay','ravin','atlas','waypoint']) {
