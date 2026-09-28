@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ARROW — Give your life direction</title>
+<meta name="theme-color" content="#050505">
+<link rel="stylesheet" href="/gateway.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.112.4/dist/umd/supabase.js"></script>
+</head>
+<body>
+<main class="gate">
+  <section class="card" aria-labelledby="title">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <div><p>RESONANT ASSIST</p><h1 id="title">ARROW</h1></div>
+    </div>
+    <div class="copy">
+      <p class="kicker">ONE ACCOUNT · EVERY CENTER</p>
+      <h2>Give your life direction.</h2>
+      <p>Sign in once, then enter Orbit and move through Relay, RAVIN, Atlas, and Waypoint as one connected system.</p>
+    </div>
+    <div id="checking" class="checking"><span></span>Checking your ARROW session</div>
+    <div id="actions" hidden>
+      <button id="google" class="primary" type="button">Continue with Google</button>
+      <div class="divider"><span></span>or<span></span></div>
+      <form id="emailForm">
+        <label for="email">Personal email address</label>
+        <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+        <button class="secondary" type="submit">Email me a sign-in link</button>
+      </form>
+    </div>
+    <p id="message" class="message" role="status"></p>
+    <p class="note"><strong>Use a personal account.</strong> Managed school/work accounts can block sign-in or connected permissions.</p>
+  </section>
+</main>
+<script src="/gateway-auth.js"></script>
+</body>
+</html>
