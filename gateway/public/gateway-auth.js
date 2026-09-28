@@ -48,9 +48,16 @@
   function rememberRequestedDestination() {
     const url = new URL(window.location.href);
     const requested = safeNext(url.searchParams.get('next'));
-    if (requested) {
-      try { localStorage.setItem(NEXT_KEY, requested); } catch {}
-    }
+
+    try {
+      if (requested) {
+        localStorage.setItem(NEXT_KEY, requested);
+      } else {
+        // A bare visit to the ARROW front door must never reuse an old center.
+        // This prevents a stale Relay/RAVIN destination from becoming a loop.
+        localStorage.removeItem(NEXT_KEY);
+      }
+    } catch {}
   }
 
   function destination() {
