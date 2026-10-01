@@ -31,10 +31,9 @@
   document.documentElement.style.visibility = 'hidden';
 
   let accessToken = '';
-  let session = null;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    session = raw ? JSON.parse(raw) : null;
+    const session = raw ? JSON.parse(raw) : null;
     accessToken = session?.access_token || '';
   } catch {}
 
@@ -46,27 +45,28 @@
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), 4500);
 
-  async function verify() {
-    try {
-      if(session?.refresh_token && session.expires_at && Number(session.expires_at)*1000<Date.now()+30000) {
-        if(!window.__arrowSessionRefreshPromise) window.__arrowSessionRefreshPromise=(async()=>{
-          const response=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,{method:'POST',headers:{apikey:SUPABASE_KEY,'content-type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token}),signal:controller.signal});
-          if(!response.ok)return null;const fresh={...session,...await response.json()};localStorage.setItem(STORAGE_KEY,JSON.stringify(fresh));return fresh;
-        })();
-        try{const fresh=await window.__arrowSessionRefreshPromise;if(fresh)accessToken=fresh.access_token;}finally{window.__arrowSessionRefreshPromise=null;}
+  fetch(`${SUPABASE_URL}/auth/v1/user`, {
+    headers: {
+      apikey: SUPABASE_KEY,
+      authorization: `Bearer ${accessToken}`,
+    },
+    signal: controller.signal,
+  })
+    .then(response => {
+      window.clearTimeout(timer);
+      if (response.ok) {
+        reveal();
+        return;
       }
-      const headers={apikey:SUPABASE_KEY,authorization:`Bearer ${accessToken}`};
-      const response=await fetch(`${SUPABASE_URL}/auth/v1/user`,{headers,signal:controller.signal});
-      if(response.status===401||response.status===403){goToLogin();return;}
-      if(!response.ok){reveal();return;}
-      const user=await response.json();
-      const profileResponse=await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(user.id)}&select=banned_at`,{headers,signal:controller.signal});
-      if(profileResponse.ok){const profiles=await profileResponse.json();if(profiles[0]?.banned_at){
-        reveal();document.body.replaceChildren();const main=document.createElement('main');main.style.cssText='max-width:560px;margin:10vh auto;padding:24px;font:16px system-ui;line-height:1.6';
-        const title=document.createElement('h1');title.textContent='Account suspended';const copy=document.createElement('p');copy.textContent='This account cannot access ARROW. Contact Resonant Assist support if you believe this is a mistake.';const signout=document.createElement('a');signout.href='/signout/';signout.textContent='Sign out';main.append(title,copy,signout);document.body.append(main);return;
-      }}
+      if (response.status === 401 || response.status === 403) {
+        goToLogin();
+        return;
+      }
       reveal();
-    }catch{reveal();}finally{window.clearTimeout(timer);}
-  }
-  void verify();
+    })
+    .catch(() => {
+      window.clearTimeout(timer);
+      // Do not lock users out during a temporary network failure.
+      reveal();
+    });
 })();
