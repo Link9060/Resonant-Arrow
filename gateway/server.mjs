@@ -1,4 +1,5 @@
 import express from 'express';
+import {canonicalCenterPath,gatewayRedirect} from './center-routes.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createProxyMiddleware } from 'http-proxy-middleware';
@@ -39,7 +40,9 @@ app.use(express.static(path.join(__dirname,'public'), {
   },
 }));
 
-function proxy(target, pathRewrite) {
+app.use((req,res,next)=>{const canonical=canonicalCenterPath(req.path);if(canonical)return res.redirect(308,canonical+req.url.slice(req.path.length));next();});
+
+function proxy(target, pathRewrite, center, upstreamPrefix = '') {
   return createProxyMiddleware({
     target,
     changeOrigin:true,
@@ -50,6 +53,9 @@ function proxy(target, pathRewrite) {
       proxyReq(proxyReq, req) {
         proxyReq.setHeader('x-arrow-gateway','enterarrow.com');
         proxyReq.setHeader('x-forwarded-host',req.headers.host || 'enterarrow.com');
+      },
+      proxyRes(response, req) {
+        if(response.headers.location) response.headers.location=gatewayRedirect(response.headers.location,target,pathRewrite(req.url,req),center,upstreamPrefix);
       },
       error(error, req, res) {
         console.error('[ARROW gateway proxy]', req.url, error?.message || error);
@@ -71,17 +77,17 @@ const stripPrefix = (prefix) => (_path, req) => {
   return rewritten || '/';
 };
 
-app.use('/orbit', proxy(ORBIT, stripPrefix('orbit')));
-app.use('/relay', proxy(RELAY, stripPrefix('relay')));
-app.use('/waypoint', proxy(WAYPOINT, stripPrefix('waypoint')));
+app.use('/orbit', proxy(ORBIT, stripPrefix('orbit'), 'orbit'));
+app.use('/relay', proxy(RELAY, stripPrefix('relay'), 'relay'));
+app.use('/waypoint', proxy(WAYPOINT, stripPrefix('waypoint'), 'waypoint'));
 
 // Atlas currently publishes from Resonant-Field GitHub Pages.
 app.use('/atlas', proxy(ATLAS, (_path, req) =>
-  req.originalUrl.replace(/^\/atlas(?=\/|\?|$)/, '/Resonant-Field')
+  req.originalUrl.replace(/^\/atlas(?=\/|\?|$)/, '/Resonant-Field'), 'atlas', '/Resonant-Field'
 ));
 
 // RAVIN remains a live server. Strip /ravin so its existing /api endpoints stay intact.
-app.use('/ravin', proxy(RAVIN, stripPrefix('ravin')));
+app.use('/ravin', proxy(RAVIN, stripPrefix('ravin'), 'ravin'));
 
 // Friendly path normalization.
 for (const center of ['orbit','relay','ravin','atlas','waypoint']) {
