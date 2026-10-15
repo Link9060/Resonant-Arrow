@@ -63,4 +63,5 @@ function revisionHtml(dir){for(const entry of readdirSync(dir,{withFileTypes:tru
 revisionHtml(output);
 writeFileSync(path.join(output,'release.json'),JSON.stringify({channel:'public',...release},null,2));
 for(const center of ['orbit','relay','waypoint','atlas','ravin'])if(!existsSync(path.join(output,center,'index.html')))throw Error('Missing public center '+center);
+rmSync(work,{recursive:true,force:true});
 console.log('Public ARROW release prepared:',release.relay);

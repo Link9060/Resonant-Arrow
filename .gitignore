@@ -1,3 +1,16 @@
 node_modules/
 dist/
 .test-output/
+
+# Generated public release artifacts
+gateway/.public-release/
+gateway/public/orbit/
+gateway/public/relay/
+gateway/public/waypoint/
+gateway/public/atlas/
+gateway/public/ravin/
+gateway/public/arrow-shell.js
+gateway/public/arrow-shell.css
+gateway/public/next-move.js
+gateway/public/autoPlanner.js
+gateway/public/release.json
