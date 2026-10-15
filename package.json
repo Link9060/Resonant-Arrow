@@ -6,7 +6,8 @@
     "test": "node --test tests/*.test.mjs",
     "test:browser": "node tests/browser.mjs",
     "gateway": "node gateway/server.mjs",
-    "start": "node gateway/server.mjs"
+    "start": "node gateway/server.mjs",
+    "postinstall": "node gateway/prepare-public-release.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
@@ -19,5 +20,8 @@
   "devDependencies": {
     "playwright": "^1.63.0"
   },
-  "type": "module"
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  }
 }

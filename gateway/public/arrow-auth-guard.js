@@ -9,6 +9,9 @@
 
   if (!CENTER_PREFIXES.some(prefix => currentPath.startsWith(prefix))) return;
 
+  // Public account entry and beta requests must remain reachable before sign-in.
+  if (['/relay/login/', '/relay/auth/callback/', '/relay/beta-access/'].includes(currentPath)) return;
+
   const SUPABASE_URL = 'https://cnorozrjugxpanpfmssa.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_yVNPiB7opT0WRvBfKTZ2BA_s5bOQLRg';
   const STORAGE_KEY = 'sb-cnorozrjugxpanpfmssa-auth-token';

@@ -1,0 +1,23 @@
+name: Public ARROW Release
+on:
+  pull_request:
+    paths:
+      - 'gateway/**'
+      - 'package.json'
+      - 'tests/public-release.test.mjs'
+      - '.github/workflows/public-release.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+env:
+  NODE_ENV: production
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-audit --no-fund
+      - run: node --test tests/auth-routing.test.mjs tests/public-release.test.mjs
