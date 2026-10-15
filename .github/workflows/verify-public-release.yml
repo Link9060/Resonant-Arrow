@@ -1,0 +1,37 @@
+name: Verify Published ARROW
+on:
+  push:
+    branches: [verify/public-arrow-20261015]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify public release and beta return navigation
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          const base='https://enterarrow.com';
+          async function get(url) {
+            let error;
+            for(let attempt=0;attempt<3;attempt++){
+              try {const response=await fetch(url,{signal:AbortSignal.timeout(25000),headers:{'cache-control':'no-cache'}});assert.equal(response.status,200,url+' status');return response;}
+              catch(caught){error=caught;await new Promise(resolve=>setTimeout(resolve,1500));}
+            }
+            throw error;
+          }
+          const health=await (await get(base+'/health')).json();assert.equal(health.ok,true);
+          const release=await (await get(base+'/release.json')).json();assert.equal(release.channel,'public');assert.equal(release.relay,'296712563065f0ab2d5ffb9017b5b971d390060b');
+          for(const route of ['/','/orbit/','/orbit/staff/','/relay/','/relay/login/','/relay/beta-access/','/waypoint/','/atlas/','/ravin/','/arrow-shell.js','/autoPlanner.js']){
+            const response=await get(base+route);const text=await response.text();assert.ok(text.length>0,route+' body');console.log('OK '+route);
+          }
+          const home=await (await get(base+'/')).text();assert.match(home,/Request Beta access/);assert.match(home,/Open Beta site/);
+          const beta=await (await get('https://link9060.github.io/Resonant-Relay/login/')).text();assert.match(beta,/Back to public ARROW/);
+          console.log('Public release verified: '+release.relay);
+          NODE
