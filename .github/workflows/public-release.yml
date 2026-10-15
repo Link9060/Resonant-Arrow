@@ -4,6 +4,7 @@ on:
     paths:
       - 'gateway/**'
       - 'package.json'
+      - 'tests/public-release.test.mjs'
       - '.github/workflows/public-release.yml'
   workflow_dispatch:
 permissions:
