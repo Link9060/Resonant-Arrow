@@ -7,7 +7,10 @@ const root=path.dirname(fileURLToPath(import.meta.url));
 const release=JSON.parse(readFileSync(path.join(root,'public-release.json'),'utf8'));
 const work=path.join(root,'.public-release');
 const output=path.join(root,'public');
-const run=(command,args,cwd,env={})=>execFileSync(command,args,{cwd,env:{...process.env,...env},stdio:'inherit'});
+const run=(command,args,cwd,env={})=>{
+ const testing=(command===process.execPath && args[0]==='--test') || (command==='npm' && args[0]==='run' && args[1]==='test:motion');
+ return execFileSync(command,args,{cwd,env:{...process.env,...(testing?{NODE_ENV:'test'}:{}),...env},stdio:'inherit'});
+};
 rmSync(work,{recursive:true,force:true});mkdirSync(work,{recursive:true});
 function source(repo,sha){
  if(!/^[a-f0-9]{40}$/.test(sha))throw Error('Invalid release commit for '+repo);
@@ -19,11 +22,11 @@ function source(repo,sha){
 function copy(from,to){rmSync(to,{recursive:true,force:true});cpSync(from,to,{recursive:true});}
 const relayRoot=source('Resonant-Relay',release.relay),relay=path.join(relayRoot,'relay');
 const relayEnv={NEXT_PUBLIC_RELAY_DEPLOY_TARGET:'arrow',NEXT_PUBLIC_RELAY_CHANNEL:'public',NEXT_PUBLIC_SITE_URL:'https://enterarrow.com/relay',NEXT_PUBLIC_ARROW_AUTH_ENTRY_URL:'https://enterarrow.com/',NEXT_PUBLIC_ARROW_ORBIT_URL:'/orbit/',NEXT_PUBLIC_ARROW_SHELL_BASE_URL:'/orbit',NEXT_PUBLIC_ARROW_SHELL_REVISION:release.relay.slice(0,12)};
-run('npm',['ci','--no-audit','--no-fund'],relay);
+run('npm',['ci','--include=dev','--no-audit','--no-fund'],relay);
 run('npm',['run','typecheck'],relay,relayEnv);run('npm',['run','test:motion'],relay,relayEnv);run('npm',['run','build'],relay,relayEnv);
 copy(path.join(relay,'out'),path.join(output,'relay'));
 function compile(repo,sha,center,key){
- const dir=source(repo,sha);run('npm',['ci','--no-audit','--no-fund'],dir);
+ const dir=source(repo,sha);run('npm',['ci','--include=dev','--no-audit','--no-fund'],dir);
  const layout=path.join(dir,'src/app/layout.tsx');
  writeFileSync(layout,readFileSync(layout,'utf8').replaceAll('v=review-20261006','v='+release.relay.slice(0,12)));
  const env={[key]:'/'+center,NEXT_PUBLIC_ARROW_SHELL_BASE:'/orbit'};

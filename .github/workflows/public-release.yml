@@ -8,6 +8,8 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+env:
+  NODE_ENV: production
 jobs:
   release:
     runs-on: ubuntu-latest
