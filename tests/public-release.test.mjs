@@ -9,6 +9,14 @@ test('release includes all five centers and matches pinned source',()=>{
  const shell=fs.readFileSync('gateway/public/arrow-shell.js','utf8');
  assert.match(shell,/Beta access/);assert.ok(fs.existsSync('gateway/public/autoPlanner.js'));
  for(const center of ['orbit','relay','waypoint'])assert.doesNotMatch(fs.readFileSync('gateway/public/'+center+'/index.html','utf8'),/Resonant-Relay\/arrow\/arrow-beta-guard/);
+ const history=JSON.parse(fs.readFileSync('gateway/public/arrow-release-log.json','utf8'));
+ assert.equal(history.history.length,11);
+ assert.ok(history.current.id);
+ assert.ok(fs.existsSync('gateway/public/arrow-quick-ravin.js'));
+ const notice=fs.readFileSync('gateway/public/arrow-whats-new.js','utf8');
+ assert.match(notice,/arrow_whats_new_seen_public/);
+ for(const center of ['orbit','relay','waypoint','atlas','ravin'])
+   assert.match(fs.readFileSync('gateway/public/'+center+'/index.html','utf8'),/arrow-whats-new\.js/,'Missing global release announcement: '+center);
 });
 test('public account entry and beta access remain reachable before authentication',()=>{
  const source=fs.readFileSync('gateway/public/arrow-auth-guard.js','utf8');
@@ -27,7 +35,7 @@ test('gateway serves the complete release while keeping RAVIN API proxying intac
   let ready=false;for(let attempt=0;attempt<100;attempt++){if(logs.includes('gateway listening')){ready=true;break;}if(child.exitCode!==null)break;await new Promise(resolve=>setTimeout(resolve,50));}
   assert.ok(ready,logs);
   const base='http://127.0.0.1:'+port;
-  for(const route of ['/','/orbit/','/orbit/staff/','/relay/','/relay/login/','/relay/beta-access/','/waypoint/','/atlas/','/ravin/','/arrow-shell.js','/autoPlanner.js','/release.json']){const response=await fetch(base+route);assert.equal(response.status,200,route);}
+  for(const route of ['/','/orbit/','/orbit/staff/','/relay/','/relay/login/','/relay/beta-access/','/waypoint/','/atlas/','/ravin/','/arrow-shell.js','/arrow-whats-new.js','/arrow-release-log.json','/arrow-quick-ravin.js','/autoPlanner.js','/release.json']){const response=await fetch(base+route);assert.equal(response.status,200,route);}
   const response=await fetch(base+'/ravin/api/health');assert.deepEqual(await response.json(),{path:'/api/health'});
  }finally{child.kill();await once(child,'exit');await new Promise(resolve=>upstream.close(resolve));}
 });
