@@ -13,6 +13,12 @@ test('release includes all five centers and matches pinned source',()=>{
  assert.equal(history.history.length,11);
  assert.ok(history.current.id);
  assert.ok(fs.existsSync('gateway/public/arrow-quick-ravin.js'));
+ const quick=fs.readFileSync('gateway/public/arrow-quick-ravin.js','utf8');
+ assert.match(quick,/publicGateway\?'\/ravin\/api\/v2\/chat\/stream'/,'Public Quick RAVIN must use the same-origin proxy');
+ assert.match(shell,/if\s*\(!\(BETA_BASE \|\| ON_ENTERARROW\)\)/,'Quick RAVIN must launch on the public ARROW domain');
+ const notes=history.current.groups.flatMap(group=>group.items);
+ assert.ok(notes.length>=45,'What’s New must cover all major features');
+ assert.equal(history.current.id,'arrow-workspace-nov-2026-complete-release-notes','Expanded release must be unread even for users who dismissed the short announcement');
  const notice=fs.readFileSync('gateway/public/arrow-whats-new.js','utf8');
  assert.match(notice,/arrow_whats_new_seen_public/);
  for(const center of ['orbit','relay','waypoint','atlas','ravin'])
@@ -37,5 +43,8 @@ test('gateway serves the complete release while keeping RAVIN API proxying intac
   const base='http://127.0.0.1:'+port;
   for(const route of ['/','/orbit/','/orbit/staff/','/relay/','/relay/login/','/relay/beta-access/','/waypoint/','/atlas/','/ravin/','/arrow-shell.js','/arrow-whats-new.js','/arrow-release-log.json','/arrow-quick-ravin.js','/autoPlanner.js','/release.json']){const response=await fetch(base+route);assert.equal(response.status,200,route);}
   const response=await fetch(base+'/ravin/api/health');assert.deepEqual(await response.json(),{path:'/api/health'});
+  const streamed=await fetch(base+'/ravin/api/v2/chat/stream',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:'test'})});
+  assert.equal(streamed.status,200,'RAVIN streaming requests must reach the upstream through the public gateway');
+  assert.deepEqual(await streamed.json(),{path:'/api/v2/chat/stream'});
  }finally{child.kill();await once(child,'exit');await new Promise(resolve=>upstream.close(resolve));}
 });
