@@ -18,7 +18,7 @@ test('release includes all five centers and matches pinned source',()=>{
  assert.match(shell,/if\s*\(!\(BETA_BASE \|\| ON_ENTERARROW\)\)/,'Quick RAVIN must launch on the public ARROW domain');
  const notes=history.current.groups.flatMap(group=>group.items);
  assert.ok(notes.length>=45,'What’s New must cover all major features');
- assert.equal(history.current.id,'arrow-workspace-nov-2026','Copy revision must not re-show an already-seen release');
+ assert.equal(history.current.id,'arrow-workspace-nov-2026-complete-release-notes','Expanded release must be unread even for users who dismissed the short announcement');
  const notice=fs.readFileSync('gateway/public/arrow-whats-new.js','utf8');
  assert.match(notice,/arrow_whats_new_seen_public/);
  for(const center of ['orbit','relay','waypoint','atlas','ravin'])
