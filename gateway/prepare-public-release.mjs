@@ -40,7 +40,7 @@ run(process.execPath,['--test','tests/account-safety.test.cjs','tests/daily-plan
 run(process.execPath,['--test','tests/waypoint-workflow.test.cjs'],relay,{ARROW_WAYPOINT_SOURCE:waypoint});
 const atlas=source('Resonant-Field',release.atlas);run(process.execPath,['--test','tests/account-safety.test.mjs'],atlas);copy(path.join(atlas,'apps/explorer'),path.join(output,'atlas'));
 const ravin=source('Project-R.A.V.I.N.-1.1',release.ravin);run(process.execPath,['--test','tests/arrow-account-safety.test.cjs'],ravin);run(process.execPath,['--test','tests/ravin-layout.test.cjs'],relay,{ARROW_RAVIN_SOURCE:ravin});copy(path.join(ravin,'ravin/public'),path.join(output,'ravin'));
-for(const name of ['arrow-shell.js','arrow-shell.css']){
+for(const name of ['arrow-shell.js','arrow-shell.css','arrow-quick-ravin.js','arrow-whats-new.js','arrow-release-log.json']){
  cpSync(path.join(relay,'public',name),path.join(output,name));
  cpSync(path.join(relay,'public',name),path.join(output,'orbit',name));
 }
@@ -50,6 +50,9 @@ function revisionHtml(dir){for(const entry of readdirSync(dir,{withFileTypes:tru
  const file=path.join(dir,entry.name);if(entry.isDirectory())revisionHtml(file);else if(entry.name.endsWith('.html')){
   const route=path.relative(output,file).split(path.sep).join('/');
   let html=readFileSync(file,'utf8');
+  // One account-scoped announcement across every public ARROW center.
+  if(/^(orbit|relay|waypoint|atlas|ravin)\//.test(route) && !html.includes('arrow-whats-new.js'))
+    html=html.replace(/<\/head>/i,'<script defer src="/arrow-whats-new.js"></script></head>');
   html=html.replace(/(<(?:script|link)\b[^>]*(?:src|href)=)(["'])([^"']+)\2/g,(match,start,quote,href)=>{
    const url=new URL(href,'https://enterarrow.com/'+route);
    if(url.origin!=='https://enterarrow.com'||! /\.(?:js|css)$/.test(url.pathname)||url.pathname.includes('/_next/'))return match;
